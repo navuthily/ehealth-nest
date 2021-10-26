@@ -1,4 +1,5 @@
-import bcrypt from 'bcrypt';
+/* eslint-disable padding-line-between-statements */
+// import bcrypt from 'bcrypt';
 
 import type { Optional } from '../types';
 
@@ -9,7 +10,8 @@ export class UtilsProvider {
    * @returns {string}
    */
   static generateHash(password: string): string {
-    return bcrypt.hashSync(password, 10);
+    // return bcrypt.hashSync(password, 10);
+    return password;
   }
 
   /**
@@ -37,6 +39,10 @@ export class UtilsProvider {
       return Promise.resolve(false);
     }
 
-    return bcrypt.compare(password, hash);
+    // return bcrypt.compare(password, hash);
+    if (password !== hash) {
+      return Promise.resolve(false);
+    }
+    return Promise.resolve(true);
   }
 }
