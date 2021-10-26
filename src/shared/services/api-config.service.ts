@@ -91,16 +91,17 @@ export class ApiConfigService {
       migrations,
       keepConnectionAlive: !this.isTest,
       dropSchema: this.isTest,
-      type: 'postgres',
+      type: 'mssql',
       host: this.getString('DB_HOST'),
       port: this.getNumber('DB_PORT'),
       username: this.getString('DB_USERNAME'),
       password: this.getString('DB_PASSWORD'),
       database: this.getString('DB_DATABASE'),
       subscribers: [UserSubscriber],
-      migrationsRun: true,
+      migrationsRun: false,
       logging: this.getBoolean('ENABLE_ORM_LOGS'),
       namingStrategy: new SnakeNamingStrategy(),
+      options: { encrypt: false },
     };
   }
 

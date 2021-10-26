@@ -7,7 +7,7 @@ import { SnakeNamingStrategy } from './src/snake-naming.strategy';
 
 const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } =
   {
-    type: 'postgres',
+    type: 'mssql',
     host: process.env.DB_HOST,
     port: Number(process.env.DB_PORT),
     username: process.env.DB_USERNAME,
@@ -19,6 +19,8 @@ const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } =
     migrations: ['src/database/migrations/*{.ts,.js}'],
     seeds: ['src/database/seeds/**/*{.ts,.js}'],
     factories: ['src/database/factories/**/*{.ts,.js}'],
+    options: { encrypt: false },
+    migrationsRun: false,
   };
 
 module.exports = configs;

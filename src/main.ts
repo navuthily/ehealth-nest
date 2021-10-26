@@ -12,6 +12,7 @@ import compression from 'compression';
 import RateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import path from 'path';
 import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
@@ -30,14 +31,14 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   const app = await NestFactory.create<NestExpressApplication>(
     AppModule,
     new ExpressAdapter(),
-    { cors: true },
+    { cors: false },
   );
-  app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-  app.use(helmet());
+  //   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+  //   app.use(helmet());
   app.use(
     RateLimit({
       windowMs: 15 * 60 * 1000, // 15 minutes
-      max: 100, // limit each IP to 100 requests per windowMs
+      max: 1_000_000, // limit each IP to 100 requests per windowMs
     }),
   );
   app.use(compression());
@@ -62,6 +63,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
       exceptionFactory: (errors) => new UnprocessableEntityException(errors),
     }),
   );
+
+  app.useStaticAssets(path.join(__dirname, '..', 'public'));
 
   const configService = app.select(SharedModule).get(ApiConfigService);
 
