@@ -5,6 +5,6 @@ import { UserEntity } from '../../modules/user/user.entity';
 
 export default class CreateUsers implements Seeder {
   public async run(factory: Factory): Promise<void> {
-    await factory(UserEntity)({ roles: [] }).createMany(1);
+    // await factory(UserEntity)({ roles: [] }).createMany(1);
   }
 }

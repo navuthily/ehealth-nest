@@ -1,0 +1,661 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type ThongTinLuotkham {
+  id: Float!
+  idBenhNhan: Float!
+  thoiGianVaoKham: DateTime!
+  dM_BenhNhan: DM_BenhNhan
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DM_BenhNhan {
+  id: Float!
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+  thongTinLuotKhams(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: ThongTinLuotkhamFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ThongTinLuotkhamSort!] = [{field: id, direction: ASC}]
+  ): DM_BenhNhanThongTinLuotKhamsConnection
+}
+
+input OffsetPaging {
+  """Limit the number of records returned"""
+  limit: Int
+
+  """Offset to start returning records from"""
+  offset: Int
+}
+
+input ThongTinLuotkhamFilter {
+  and: [ThongTinLuotkhamFilter!]
+  or: [ThongTinLuotkhamFilter!]
+  id: NumberFieldComparison
+  idBenhNhan: NumberFieldComparison
+  thoiGianVaoKham: DateFieldComparison
+  DM_BenhNhan: ThongTinLuotkhamFilterDM_BenhNhanFilter
+}
+
+input NumberFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  notIn: [Float!]
+  between: NumberFieldComparisonBetween
+  notBetween: NumberFieldComparisonBetween
+}
+
+input NumberFieldComparisonBetween {
+  lower: Float!
+  upper: Float!
+}
+
+input DateFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: DateTime
+  neq: DateTime
+  gt: DateTime
+  gte: DateTime
+  lt: DateTime
+  lte: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  between: DateFieldComparisonBetween
+  notBetween: DateFieldComparisonBetween
+}
+
+input DateFieldComparisonBetween {
+  lower: DateTime!
+  upper: DateTime!
+}
+
+input ThongTinLuotkhamFilterDM_BenhNhanFilter {
+  and: [ThongTinLuotkhamFilterDM_BenhNhanFilter!]
+  or: [ThongTinLuotkhamFilterDM_BenhNhanFilter!]
+  id: NumberFieldComparison
+  maBenhNhan: NumberFieldComparison
+  hoLotBenhNhan: StringFieldComparison
+  tenBenhNhan: StringFieldComparison
+  ngayThangNamSinh: DateFieldComparison
+  gioiTinh: NumberFieldComparison
+  dienThoai1: StringFieldComparison
+  dienThoai2: StringFieldComparison
+  diaChi: StringFieldComparison
+  tenNguoiLienHe: StringFieldComparison
+  quanHeVoiBN: StringFieldComparison
+  dienThoaiNguoiLienHe: StringFieldComparison
+  ghiChu: StringFieldComparison
+  idNguoiTao: StringFieldComparison
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
+input ThongTinLuotkhamSort {
+  field: ThongTinLuotkhamSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum ThongTinLuotkhamSortFields {
+  id
+  idBenhNhan
+  thoiGianVaoKham
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
+}
+
+type DM_BenhNhanDeleteResponse {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
+}
+
+type OffsetPageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+}
+
+type DM_BenhNhanConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [DM_BenhNhan!]!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type DM_BenhNhanAggregateGroupBy {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+type DM_BenhNhanCountAggregate {
+  id: Int
+  maBenhNhan: Int
+  hoLotBenhNhan: Int
+  tenBenhNhan: Int
+  ngayThangNamSinh: Int
+  gioiTinh: Int
+  dienThoai1: Int
+  dienThoai2: Int
+  diaChi: Int
+  tenNguoiLienHe: Int
+  quanHeVoiBN: Int
+  dienThoaiNguoiLienHe: Int
+  ghiChu: Int
+  idNguoiTao: Int
+}
+
+type DM_BenhNhanSumAggregate {
+  id: Float
+  maBenhNhan: Float
+  gioiTinh: Float
+}
+
+type DM_BenhNhanAvgAggregate {
+  id: Float
+  maBenhNhan: Float
+  gioiTinh: Float
+}
+
+type DM_BenhNhanMinAggregate {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+type DM_BenhNhanMaxAggregate {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+type DM_BenhNhanThongTinLuotKhamsConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [ThongTinLuotkham!]!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type ThongTinLuotkhamDeleteResponse {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+type ThongTinLuotkhamConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [ThongTinLuotkham!]!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type ThongTinLuotkhamAggregateGroupBy {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+type ThongTinLuotkhamCountAggregate {
+  id: Int
+  idBenhNhan: Int
+  thoiGianVaoKham: Int
+}
+
+type ThongTinLuotkhamSumAggregate {
+  id: Float
+  idBenhNhan: Float
+}
+
+type ThongTinLuotkhamAvgAggregate {
+  id: Float
+  idBenhNhan: Float
+}
+
+type ThongTinLuotkhamMinAggregate {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+type ThongTinLuotkhamMaxAggregate {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+type Query {
+  dM_BenhNhan(
+    """The id of the record to find."""
+    id: ID!
+  ): DM_BenhNhan
+  dM_BenhNhans(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: DM_BenhNhanFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DM_BenhNhanSort!] = []
+  ): DM_BenhNhanConnection!
+  thongTinLuotkham(
+    """The id of the record to find."""
+    id: ID!
+  ): ThongTinLuotkham
+  thongTinLuotkhams(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: ThongTinLuotkhamFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ThongTinLuotkhamSort!] = [{field: id, direction: ASC}]
+  ): ThongTinLuotkhamConnection!
+}
+
+input DM_BenhNhanFilter {
+  and: [DM_BenhNhanFilter!]
+  or: [DM_BenhNhanFilter!]
+  id: NumberFieldComparison
+  maBenhNhan: NumberFieldComparison
+  hoLotBenhNhan: StringFieldComparison
+  tenBenhNhan: StringFieldComparison
+  ngayThangNamSinh: DateFieldComparison
+  gioiTinh: NumberFieldComparison
+  dienThoai1: StringFieldComparison
+  dienThoai2: StringFieldComparison
+  diaChi: StringFieldComparison
+  tenNguoiLienHe: StringFieldComparison
+  quanHeVoiBN: StringFieldComparison
+  dienThoaiNguoiLienHe: StringFieldComparison
+  ghiChu: StringFieldComparison
+  idNguoiTao: StringFieldComparison
+  thongTinLuotKhams: DM_BenhNhanFilterThongTinLuotkhamFilter
+}
+
+input DM_BenhNhanFilterThongTinLuotkhamFilter {
+  and: [DM_BenhNhanFilterThongTinLuotkhamFilter!]
+  or: [DM_BenhNhanFilterThongTinLuotkhamFilter!]
+  id: NumberFieldComparison
+  idBenhNhan: NumberFieldComparison
+  thoiGianVaoKham: DateFieldComparison
+}
+
+input DM_BenhNhanSort {
+  field: DM_BenhNhanSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DM_BenhNhanSortFields {
+  id
+  maBenhNhan
+  hoLotBenhNhan
+  tenBenhNhan
+  ngayThangNamSinh
+  gioiTinh
+  dienThoai1
+  dienThoai2
+  diaChi
+  tenNguoiLienHe
+  quanHeVoiBN
+  dienThoaiNguoiLienHe
+  ghiChu
+  idNguoiTao
+}
+
+type Mutation {
+  addThongTinLuotKhamsToDM_BenhNhan(input: AddThongTinLuotKhamsToDM_BenhNhanInput!): DM_BenhNhan!
+  setThongTinLuotKhamsOnDM_BenhNhan(input: SetThongTinLuotKhamsOnDM_BenhNhanInput!): DM_BenhNhan!
+  removeThongTinLuotKhamsFromDM_BenhNhan(input: RemoveThongTinLuotKhamsFromDM_BenhNhanInput!): DM_BenhNhan!
+  createOneDM_BenhNhan(input: CreateOneDM_BenhNhanInput!): DM_BenhNhan!
+  createManyDM_BenhNhans(input: CreateManyDM_BenhNhansInput!): [DM_BenhNhan!]!
+  updateOneDM_BenhNhan(input: UpdateOneDM_BenhNhanInput!): DM_BenhNhan!
+  updateManyDM_BenhNhans(input: UpdateManyDM_BenhNhansInput!): UpdateManyResponse!
+  deleteOneDM_BenhNhan(input: DeleteOneDM_BenhNhanInput!): DM_BenhNhanDeleteResponse!
+  deleteManyDM_BenhNhans(input: DeleteManyDM_BenhNhansInput!): DeleteManyResponse!
+  setDM_BenhNhanOnThongTinLuotkham(input: SetDM_BenhNhanOnThongTinLuotkhamInput!): ThongTinLuotkham!
+  removeDM_BenhNhanFromThongTinLuotkham(input: RemoveDM_BenhNhanFromThongTinLuotkhamInput!): ThongTinLuotkham!
+  createOneThongTinLuotkham(input: CreateOneThongTinLuotkhamInput!): ThongTinLuotkham!
+  createManyThongTinLuotkhams(input: CreateManyThongTinLuotkhamsInput!): [ThongTinLuotkham!]!
+  updateOneThongTinLuotkham(input: UpdateOneThongTinLuotkhamInput!): ThongTinLuotkham!
+  updateManyThongTinLuotkhams(input: UpdateManyThongTinLuotkhamsInput!): UpdateManyResponse!
+  deleteOneThongTinLuotkham(input: DeleteOneThongTinLuotkhamInput!): ThongTinLuotkhamDeleteResponse!
+  deleteManyThongTinLuotkhams(input: DeleteManyThongTinLuotkhamsInput!): DeleteManyResponse!
+}
+
+input AddThongTinLuotKhamsToDM_BenhNhanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input SetThongTinLuotKhamsOnDM_BenhNhanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input RemoveThongTinLuotKhamsFromDM_BenhNhanInput {
+  """The id of the record."""
+  id: ID!
+
+  """The ids of the relations."""
+  relationIds: [ID!]!
+}
+
+input CreateOneDM_BenhNhanInput {
+  """The record to create"""
+  dM_BenhNhan: CreateDM_BenhNhan!
+}
+
+input CreateDM_BenhNhan {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+input CreateManyDM_BenhNhansInput {
+  """Array of records to create"""
+  dM_BenhNhans: [CreateDM_BenhNhan!]!
+}
+
+input UpdateOneDM_BenhNhanInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateDM_BenhNhan!
+}
+
+input UpdateDM_BenhNhan {
+  id: Float
+  maBenhNhan: Float
+  hoLotBenhNhan: String
+  tenBenhNhan: String
+  ngayThangNamSinh: DateTime
+  gioiTinh: Float
+  dienThoai1: String
+  dienThoai2: String
+  diaChi: String
+  tenNguoiLienHe: String
+  quanHeVoiBN: String
+  dienThoaiNguoiLienHe: String
+  ghiChu: String
+  idNguoiTao: String
+}
+
+input UpdateManyDM_BenhNhansInput {
+  """Filter used to find fields to update"""
+  filter: DM_BenhNhanUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateDM_BenhNhan!
+}
+
+input DM_BenhNhanUpdateFilter {
+  and: [DM_BenhNhanUpdateFilter!]
+  or: [DM_BenhNhanUpdateFilter!]
+  id: NumberFieldComparison
+  maBenhNhan: NumberFieldComparison
+  hoLotBenhNhan: StringFieldComparison
+  tenBenhNhan: StringFieldComparison
+  ngayThangNamSinh: DateFieldComparison
+  gioiTinh: NumberFieldComparison
+  dienThoai1: StringFieldComparison
+  dienThoai2: StringFieldComparison
+  diaChi: StringFieldComparison
+  tenNguoiLienHe: StringFieldComparison
+  quanHeVoiBN: StringFieldComparison
+  dienThoaiNguoiLienHe: StringFieldComparison
+  ghiChu: StringFieldComparison
+  idNguoiTao: StringFieldComparison
+}
+
+input DeleteOneDM_BenhNhanInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyDM_BenhNhansInput {
+  """Filter to find records to delete"""
+  filter: DM_BenhNhanDeleteFilter!
+}
+
+input DM_BenhNhanDeleteFilter {
+  and: [DM_BenhNhanDeleteFilter!]
+  or: [DM_BenhNhanDeleteFilter!]
+  id: NumberFieldComparison
+  maBenhNhan: NumberFieldComparison
+  hoLotBenhNhan: StringFieldComparison
+  tenBenhNhan: StringFieldComparison
+  ngayThangNamSinh: DateFieldComparison
+  gioiTinh: NumberFieldComparison
+  dienThoai1: StringFieldComparison
+  dienThoai2: StringFieldComparison
+  diaChi: StringFieldComparison
+  tenNguoiLienHe: StringFieldComparison
+  quanHeVoiBN: StringFieldComparison
+  dienThoaiNguoiLienHe: StringFieldComparison
+  ghiChu: StringFieldComparison
+  idNguoiTao: StringFieldComparison
+}
+
+input SetDM_BenhNhanOnThongTinLuotkhamInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input RemoveDM_BenhNhanFromThongTinLuotkhamInput {
+  """The id of the record."""
+  id: ID!
+
+  """The id of relation."""
+  relationId: ID!
+}
+
+input CreateOneThongTinLuotkhamInput {
+  """The record to create"""
+  thongTinLuotkham: CreateThongTinLuotkham!
+}
+
+input CreateThongTinLuotkham {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+input CreateManyThongTinLuotkhamsInput {
+  """Array of records to create"""
+  thongTinLuotkhams: [CreateThongTinLuotkham!]!
+}
+
+input UpdateOneThongTinLuotkhamInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: UpdateThongTinLuotkham!
+}
+
+input UpdateThongTinLuotkham {
+  id: Float
+  idBenhNhan: Float
+  thoiGianVaoKham: DateTime
+}
+
+input UpdateManyThongTinLuotkhamsInput {
+  """Filter used to find fields to update"""
+  filter: ThongTinLuotkhamUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: UpdateThongTinLuotkham!
+}
+
+input ThongTinLuotkhamUpdateFilter {
+  and: [ThongTinLuotkhamUpdateFilter!]
+  or: [ThongTinLuotkhamUpdateFilter!]
+  id: NumberFieldComparison
+  idBenhNhan: NumberFieldComparison
+  thoiGianVaoKham: DateFieldComparison
+}
+
+input DeleteOneThongTinLuotkhamInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyThongTinLuotkhamsInput {
+  """Filter to find records to delete"""
+  filter: ThongTinLuotkhamDeleteFilter!
+}
+
+input ThongTinLuotkhamDeleteFilter {
+  and: [ThongTinLuotkhamDeleteFilter!]
+  or: [ThongTinLuotkhamDeleteFilter!]
+  id: NumberFieldComparison
+  idBenhNhan: NumberFieldComparison
+  thoiGianVaoKham: DateFieldComparison
+}

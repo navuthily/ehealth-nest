@@ -1,4 +1,4 @@
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { AbstractEntity } from '../../common/abstract.entity';
 import { RoleType } from '../../common/constants/role-type';
@@ -7,30 +7,30 @@ import { VirtualColumn } from '../../decorators/virtual-column.decorator';
 import type { UserDtoOptions } from './dto/user-dto';
 import { UserDto } from './dto/user-dto';
 
-@Entity({ name: 'users' })
+@Entity({ name: 'DM_NhanVien' })
 @UseDto(UserDto)
 export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
-  @Column({ nullable: true })
-  firstName?: string;
+  @PrimaryGeneratedColumn({ name: 'ID_NhanVien' })
+  id?: string;
 
-  @Column({ nullable: true })
-  lastName?: string;
+  //   @Column({ nullable: true })
+  //   lastName?: string;
 
   //   @Column({ type: 'enum', enum: RoleType, default: RoleType.USER })
   //   role: RoleType;
 
-  @Column({ unique: true, nullable: true })
+  @Column({ unique: true, nullable: true, name: 'UserName' })
   email?: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: true, name: 'PassWord' })
   password?: string;
 
-  @Column({ nullable: true })
-  phone?: string;
+  //   @Column({ nullable: true })
+  //   phone?: string;
 
-  @Column({ nullable: true })
-  avatar?: string;
+  //   @Column({ nullable: true })
+  //   avatar?: string;
 
-  @VirtualColumn()
-  fullName?: string;
+  //   @VirtualColumn()
+  //   fullName?: string;
 }
