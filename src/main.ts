@@ -64,8 +64,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     }),
   );
 
-  app.useStaticAssets(path.join(__dirname, '..', 'public'));
-
+  app.useStaticAssets('public');
   const configService = app.select(SharedModule).get(ApiConfigService);
 
   // only start nats if it is enabled

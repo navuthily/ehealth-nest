@@ -11,18 +11,18 @@ export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  //   @PrimaryGeneratedColumn('uuid')
+  //   id: string;
 
-  @CreateDateColumn({
-    type: 'timestamp',
-  })
-  createdAt: Date;
+  //   @CreateDateColumn({
+  //     type: 'timestamp',
+  //   })
+  //   createdAt: Date;
 
-  @UpdateDateColumn({
-    type: 'timestamp',
-  })
-  updatedAt: Date;
+  //   @UpdateDateColumn({
+  //     type: 'timestamp',
+  //   })
+  //   updatedAt: Date;
 
   private dtoClass: Constructor<DTO, [AbstractEntity, O?]>;
 

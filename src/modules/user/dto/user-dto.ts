@@ -33,12 +33,12 @@ export class UserDto extends AbstractDto {
 
   constructor(user: UserEntity, options?: UserDtoOptions) {
     super(user);
-    this.firstName = user.firstName;
-    this.lastName = user.lastName;
+    // this.firstName = user.firstName;
+    // this.lastName = user.lastName;
     // this.role = user.role;
     this.email = user.email;
-    this.avatar = user.avatar;
-    this.phone = user.phone;
+    // this.avatar = user.avatar;
+    // this.phone = user.phone;
     this.isActive = options?.isActive;
   }
 }

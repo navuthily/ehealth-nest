@@ -6,28 +6,26 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
 // import { CreateDisciplineInput } from './dto/create-discipline.input';
-import { DMBenhNhanDTO } from './dto/dm_benhnhan.dto';
+import { ThongTinLuotKhamDTO } from './dto/thongtinluotkham.dto';
 // import { UpdateDisciplineInput } from './dto/update-discipline.input';
-import { DMBenhNhan } from './dm_benhnhan.entity';
-import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
+import { ThongTinLuotkham } from './thongtinluotkham.entity';
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([DMBenhNhan])],
+      imports: [NestjsQueryTypeOrmModule.forFeature([ThongTinLuotkham])],
       resolvers: [
         {
-          DTOClass: DMBenhNhanDTO,
-          EntityClass: DMBenhNhan,
+          DTOClass: ThongTinLuotKhamDTO,
+          EntityClass: ThongTinLuotkham,
           //   CreateDTOClass: CreateDisciplineInput,
           //   UpdateDTOClass: UpdateDisciplineInput,
           enableTotalCount: true,
           pagingStrategy: PagingStrategies.OFFSET,
-          guards: [JwtAuthGuard],
         },
       ],
     }),
   ],
   providers: [],
 })
-export class DMBenhNhanModule {}
+export class ThongTinLuotKhamModule {}

@@ -14,27 +14,37 @@ import { AuthModule } from './modules/auth/auth.module';
 import { DMBenhNhanModule } from './modules/dm_benhnhan/dm_benhnhan.module';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { PostModule } from './modules/post/post.module';
+import { ThongTinLuotKhamModule } from './modules/thongtinluotkham/thongtinluotkham.module';
 import { UserModule } from './modules/user/user.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
+
+interface HeadersContainer {
+  headers?: Record<string, string>;
+}
+interface ContextArgs {
+  req?: HeadersContainer;
+  connection?: { context: HeadersContainer };
+}
+
 @Module({
   imports: [
-    // ServeStaticModule.forRoot({
-    //   rootPath: path.join(__dirname, '.', 'client'),
-    //   serveStaticOptions: {
-    //     index: false,
-    //   },
-    // }),
     GraphQLModule.forRoot({
-      autoSchemaFile: true,
+      autoSchemaFile: 'schema.gql',
       playground: {
         cdnUrl: 'http://localhost:3000',
       },
+      context: ({ req, connection }: ContextArgs) => ({
+        req: { ...req, ...connection?.context },
+      }),
     }),
+    // Define Module
     AuthModule,
-    UserModule,
+    // UserModule,
     PostModule,
     DMBenhNhanModule,
+    ThongTinLuotKhamModule,
+    //
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',

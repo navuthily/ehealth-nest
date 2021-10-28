@@ -21,16 +21,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(args: {
-    userId: string;
+    id: string;
     role: RoleType;
     type: TokenType;
   }): Promise<UserEntity> {
-    if (args.type !== TokenType.ACCESS_TOKEN) {
-      throw new UnauthorizedException();
-    }
+    // if (args.type !== TokenType.ACCESS_TOKEN) {
+    //   throw new UnauthorizedException();
+    // }
+    // console.log(args);
 
     const user = await this.userService.findOne({
-      id: args.userId,
+      id: args.id,
       //   role: args.role,
     });
 
