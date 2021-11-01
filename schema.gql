@@ -5,21 +5,19 @@
 type ThongTinLuotkham {
   id: Float!
   idBenhNhan: Float!
-  thoiGianVaoKham: DateTime!
+  thoiGianVaoKham: Date!
   dM_BenhNhan: DM_BenhNhan
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
+"""Date custom scalar type"""
+scalar Date
 
 type DM_BenhNhan {
   id: Float!
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -29,6 +27,7 @@ type DM_BenhNhan {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
   thongTinLuotKhams(
     """Limit or page results."""
     paging: OffsetPaging = {limit: 10}
@@ -93,6 +92,11 @@ input DateFieldComparison {
   notBetween: DateFieldComparisonBetween
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 input DateFieldComparisonBetween {
   lower: DateTime!
   upper: DateTime!
@@ -115,6 +119,7 @@ input ThongTinLuotkhamFilterDM_BenhNhanFilter {
   dienThoaiNguoiLienHe: StringFieldComparison
   ghiChu: StringFieldComparison
   idNguoiTao: StringFieldComparison
+  ngaytao: DateFieldComparison
 }
 
 input StringFieldComparison {
@@ -168,7 +173,7 @@ type DM_BenhNhanDeleteResponse {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -178,6 +183,7 @@ type DM_BenhNhanDeleteResponse {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 type UpdateManyResponse {
@@ -209,7 +215,7 @@ type DM_BenhNhanAggregateGroupBy {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -219,6 +225,7 @@ type DM_BenhNhanAggregateGroupBy {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 type DM_BenhNhanCountAggregate {
@@ -236,6 +243,7 @@ type DM_BenhNhanCountAggregate {
   dienThoaiNguoiLienHe: Int
   ghiChu: Int
   idNguoiTao: Int
+  ngaytao: Int
 }
 
 type DM_BenhNhanSumAggregate {
@@ -255,7 +263,7 @@ type DM_BenhNhanMinAggregate {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -265,6 +273,7 @@ type DM_BenhNhanMinAggregate {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 type DM_BenhNhanMaxAggregate {
@@ -272,7 +281,7 @@ type DM_BenhNhanMaxAggregate {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -282,6 +291,7 @@ type DM_BenhNhanMaxAggregate {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 type DM_BenhNhanThongTinLuotKhamsConnection {
@@ -298,7 +308,7 @@ type DM_BenhNhanThongTinLuotKhamsConnection {
 type ThongTinLuotkhamDeleteResponse {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
 }
 
 type ThongTinLuotkhamConnection {
@@ -315,7 +325,7 @@ type ThongTinLuotkhamConnection {
 type ThongTinLuotkhamAggregateGroupBy {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
 }
 
 type ThongTinLuotkhamCountAggregate {
@@ -337,13 +347,92 @@ type ThongTinLuotkhamAvgAggregate {
 type ThongTinLuotkhamMinAggregate {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
 }
 
 type ThongTinLuotkhamMaxAggregate {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
+}
+
+type Gd2_PhieuXuatNoiBo {
+  id: Float!
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoDeleteResponse {
+  id: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [Gd2_PhieuXuatNoiBo!]!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type Gd2_PhieuXuatNoiBoAggregateGroupBy {
+  id: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoCountAggregate {
+  id: Int
+  idNguoiTao: Int
+  ngaygiotao: Int
+  sophieu: Int
+  nguoichot: Int
+  ngaychot: Int
+}
+
+type Gd2_PhieuXuatNoiBoSumAggregate {
+  id: Float
+  idNguoiTao: Float
+  sophieu: Float
+  nguoichot: Float
+}
+
+type Gd2_PhieuXuatNoiBoAvgAggregate {
+  id: Float
+  idNguoiTao: Float
+  sophieu: Float
+  nguoichot: Float
+}
+
+type Gd2_PhieuXuatNoiBoMinAggregate {
+  id: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoMaxAggregate {
+  id: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
 }
 
 type Query {
@@ -375,6 +464,20 @@ type Query {
     """Specify to sort results."""
     sorting: [ThongTinLuotkhamSort!] = [{field: id, direction: ASC}]
   ): ThongTinLuotkhamConnection!
+  gd2_PhieuXuatNoiBo(
+    """The id of the record to find."""
+    id: ID!
+  ): Gd2_PhieuXuatNoiBo
+  gd2_PhieuXuatNoiBos(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: Gd2_PhieuXuatNoiBoFilter = {}
+
+    """Specify to sort results."""
+    sorting: [Gd2_PhieuXuatNoiBoSort!] = []
+  ): Gd2_PhieuXuatNoiBoConnection!
 }
 
 input DM_BenhNhanFilter {
@@ -394,6 +497,7 @@ input DM_BenhNhanFilter {
   dienThoaiNguoiLienHe: StringFieldComparison
   ghiChu: StringFieldComparison
   idNguoiTao: StringFieldComparison
+  ngaytao: DateFieldComparison
   thongTinLuotKhams: DM_BenhNhanFilterThongTinLuotkhamFilter
 }
 
@@ -426,6 +530,33 @@ enum DM_BenhNhanSortFields {
   dienThoaiNguoiLienHe
   ghiChu
   idNguoiTao
+  ngaytao
+}
+
+input Gd2_PhieuXuatNoiBoFilter {
+  and: [Gd2_PhieuXuatNoiBoFilter!]
+  or: [Gd2_PhieuXuatNoiBoFilter!]
+  id: NumberFieldComparison
+  idNguoiTao: NumberFieldComparison
+  ngaygiotao: DateFieldComparison
+  sophieu: NumberFieldComparison
+  nguoichot: NumberFieldComparison
+  ngaychot: DateFieldComparison
+}
+
+input Gd2_PhieuXuatNoiBoSort {
+  field: Gd2_PhieuXuatNoiBoSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum Gd2_PhieuXuatNoiBoSortFields {
+  id
+  idNguoiTao
+  ngaygiotao
+  sophieu
+  nguoichot
+  ngaychot
 }
 
 type Mutation {
@@ -446,6 +577,13 @@ type Mutation {
   updateManyThongTinLuotkhams(input: UpdateManyThongTinLuotkhamsInput!): UpdateManyResponse!
   deleteOneThongTinLuotkham(input: DeleteOneThongTinLuotkhamInput!): ThongTinLuotkhamDeleteResponse!
   deleteManyThongTinLuotkhams(input: DeleteManyThongTinLuotkhamsInput!): DeleteManyResponse!
+  updateChotPhieu(id: Float!): Gd2_PhieuXuatNoiBo!
+  createOneGd2_PhieuXuatNoiBo(input: CreateOneGd2_PhieuXuatNoiBoInput!): Gd2_PhieuXuatNoiBo!
+  createManyGd2_PhieuXuatNoiBos(input: CreateManyGd2_PhieuXuatNoiBosInput!): [Gd2_PhieuXuatNoiBo!]!
+  updateOneGd2_PhieuXuatNoiBo(input: UpdateOneGd2_PhieuXuatNoiBoInput!): Gd2_PhieuXuatNoiBo!
+  updateManyGd2_PhieuXuatNoiBos(input: UpdateManyGd2_PhieuXuatNoiBosInput!): UpdateManyResponse!
+  deleteOneGd2_PhieuXuatNoiBo(input: DeleteOneGd2_PhieuXuatNoiBoInput!): Gd2_PhieuXuatNoiBoDeleteResponse!
+  deleteManyGd2_PhieuXuatNoiBos(input: DeleteManyGd2_PhieuXuatNoiBosInput!): DeleteManyResponse!
 }
 
 input AddThongTinLuotKhamsToDM_BenhNhanInput {
@@ -482,7 +620,7 @@ input CreateDM_BenhNhan {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -492,6 +630,7 @@ input CreateDM_BenhNhan {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 input CreateManyDM_BenhNhansInput {
@@ -512,7 +651,7 @@ input UpdateDM_BenhNhan {
   maBenhNhan: Float
   hoLotBenhNhan: String
   tenBenhNhan: String
-  ngayThangNamSinh: DateTime
+  ngayThangNamSinh: Date
   gioiTinh: Float
   dienThoai1: String
   dienThoai2: String
@@ -522,6 +661,7 @@ input UpdateDM_BenhNhan {
   dienThoaiNguoiLienHe: String
   ghiChu: String
   idNguoiTao: String
+  ngaytao: Date
 }
 
 input UpdateManyDM_BenhNhansInput {
@@ -549,6 +689,7 @@ input DM_BenhNhanUpdateFilter {
   dienThoaiNguoiLienHe: StringFieldComparison
   ghiChu: StringFieldComparison
   idNguoiTao: StringFieldComparison
+  ngaytao: DateFieldComparison
 }
 
 input DeleteOneDM_BenhNhanInput {
@@ -578,6 +719,7 @@ input DM_BenhNhanDeleteFilter {
   dienThoaiNguoiLienHe: StringFieldComparison
   ghiChu: StringFieldComparison
   idNguoiTao: StringFieldComparison
+  ngaytao: DateFieldComparison
 }
 
 input SetDM_BenhNhanOnThongTinLuotkhamInput {
@@ -604,7 +746,7 @@ input CreateOneThongTinLuotkhamInput {
 input CreateThongTinLuotkham {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
 }
 
 input CreateManyThongTinLuotkhamsInput {
@@ -623,7 +765,7 @@ input UpdateOneThongTinLuotkhamInput {
 input UpdateThongTinLuotkham {
   id: Float
   idBenhNhan: Float
-  thoiGianVaoKham: DateTime
+  thoiGianVaoKham: Date
 }
 
 input UpdateManyThongTinLuotkhamsInput {
@@ -658,4 +800,71 @@ input ThongTinLuotkhamDeleteFilter {
   id: NumberFieldComparison
   idBenhNhan: NumberFieldComparison
   thoiGianVaoKham: DateFieldComparison
+}
+
+input CreateOneGd2_PhieuXuatNoiBoInput {
+  """The record to create"""
+  gd2_PhieuXuatNoiBo: PhieuXuatNoiBoInput!
+}
+
+input PhieuXuatNoiBoInput {
+  sophieu: Float!
+}
+
+input CreateManyGd2_PhieuXuatNoiBosInput {
+  """Array of records to create"""
+  gd2_PhieuXuatNoiBos: [PhieuXuatNoiBoInput!]!
+}
+
+input UpdateOneGd2_PhieuXuatNoiBoInput {
+  """The id of the record to update"""
+  id: ID!
+
+  """The update to apply."""
+  update: PhieuXuatNoiBoUpdate!
+}
+
+input PhieuXuatNoiBoUpdate {
+  id: Float
+  sophieu: Float!
+}
+
+input UpdateManyGd2_PhieuXuatNoiBosInput {
+  """Filter used to find fields to update"""
+  filter: Gd2_PhieuXuatNoiBoUpdateFilter!
+
+  """The update to apply to all records found using the filter"""
+  update: PhieuXuatNoiBoUpdate!
+}
+
+input Gd2_PhieuXuatNoiBoUpdateFilter {
+  and: [Gd2_PhieuXuatNoiBoUpdateFilter!]
+  or: [Gd2_PhieuXuatNoiBoUpdateFilter!]
+  id: NumberFieldComparison
+  idNguoiTao: NumberFieldComparison
+  ngaygiotao: DateFieldComparison
+  sophieu: NumberFieldComparison
+  nguoichot: NumberFieldComparison
+  ngaychot: DateFieldComparison
+}
+
+input DeleteOneGd2_PhieuXuatNoiBoInput {
+  """The id of the record to delete."""
+  id: ID!
+}
+
+input DeleteManyGd2_PhieuXuatNoiBosInput {
+  """Filter to find records to delete"""
+  filter: Gd2_PhieuXuatNoiBoDeleteFilter!
+}
+
+input Gd2_PhieuXuatNoiBoDeleteFilter {
+  and: [Gd2_PhieuXuatNoiBoDeleteFilter!]
+  or: [Gd2_PhieuXuatNoiBoDeleteFilter!]
+  id: NumberFieldComparison
+  idNguoiTao: NumberFieldComparison
+  ngaygiotao: DateFieldComparison
+  sophieu: NumberFieldComparison
+  nguoichot: NumberFieldComparison
+  ngaychot: DateFieldComparison
 }

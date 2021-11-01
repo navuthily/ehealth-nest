@@ -1,6 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
-import { RoleType } from '../../../common/constants/role-type';
 import { AbstractDto } from '../../../common/dto/abstract.dto';
 import type { UserEntity } from '../user.entity';
 

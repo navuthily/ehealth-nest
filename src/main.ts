@@ -10,9 +10,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import compression from 'compression';
 import RateLimit from 'express-rate-limit';
-import helmet from 'helmet';
 import morgan from 'morgan';
-import path from 'path';
 import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
@@ -44,6 +42,10 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   app.use(compression());
   app.use(morgan('combined'));
   app.enableVersioning();
+
+  Date.prototype.toJSON = function () {
+    return this.valueOf();
+  };
 
   const reflector = app.get(Reflector);
 

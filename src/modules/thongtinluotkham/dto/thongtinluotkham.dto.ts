@@ -6,7 +6,7 @@ import {
   PagingStrategies,
   QueryOptions,
 } from '@nestjs-query/query-graphql';
-import { ID, ObjectType } from '@nestjs/graphql';
+import { ObjectType } from '@nestjs/graphql';
 import { DMBenhNhanDTO } from '../../dm_benhnhan/dto/dm_benhnhan.dto';
 
 @ObjectType('ThongTinLuotkham')
