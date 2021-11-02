@@ -30,8 +30,10 @@ module.exports = {
     'import',
     'unicorn',
     'sonarjs',
+    'unused-imports',
   ],
   rules: {
+    'unused-imports/no-unused-imports-ts': 2,
     'sonarjs/cognitive-complexity': 'error',
     'sonarjs/no-identical-expressions': 'error',
     'sonarjs/no-duplicate-string': 'off',
@@ -39,7 +41,10 @@ module.exports = {
     'import/newline-after-import': 'error',
     'import/no-absolute-path': 'error',
     'import/no-duplicates': 'error',
-    'prettier/prettier': ['error', { singleQuote: true, trailingComma: 'all', tabWidth: 2 }],
+    'prettier/prettier': [
+      'error',
+      { singleQuote: true, trailingComma: 'all', tabWidth: 2 },
+    ],
     '@typescript-eslint/camelcase': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
     '@typescript-eslint/no-unused-vars-experimental': [
@@ -63,25 +68,26 @@ module.exports = {
       'error',
       {
         types: {
-          'Object': {
+          Object: {
             message: 'Avoid using the `Object` type. Did you mean `object`?',
           },
-          'Function': {
-            message: 'Avoid using the `Function` type. Prefer a specific function type, like `() => void`.',
+          Function: {
+            message:
+              'Avoid using the `Function` type. Prefer a specific function type, like `() => void`.',
           },
-          'Boolean': {
+          Boolean: {
             message: 'Avoid using the `Boolean` type. Did you mean `boolean`?',
             fixWith: 'boolean',
           },
-          'Number': {
+          Number: {
             message: 'Avoid using the `Number` type. Did you mean `number`?',
             fixWith: 'number',
           },
-          'Symbol': {
+          Symbol: {
             message: 'Avoid using the `Symbol` type. Did you mean `symbol`?',
             fixWith: 'symbol',
           },
-          'String': {
+          String: {
             message: 'Avoid using the `String` type. Did you mean `string`?',
             fixWith: 'string',
           },
@@ -89,7 +95,7 @@ module.exports = {
             message: 'Use Record<K, V> instead',
             fixWith: 'Record<K, V>',
           },
-          'object': {
+          object: {
             message: 'Use Record<K, V> instead',
             fixWith: 'Record<K, V>',
           },
@@ -198,15 +204,15 @@ module.exports = {
     '@typescript-eslint/unified-signatures': 'error',
     'arrow-body-style': 'error',
     'arrow-parens': ['error', 'always'],
-    'camelcase': 'off',
-    'complexity': 'off',
+    camelcase: 'off',
+    complexity: 'off',
     'no-restricted-imports': [
       'error',
       {
         paths: [
           {
             name: 'rxjs/Rx',
-            message: 'Please import directly from \'rxjs\' instead',
+            message: "Please import directly from 'rxjs' instead",
           },
         ],
       },
@@ -219,12 +225,12 @@ module.exports = {
     'no-else-return': 'error',
     'no-implicit-coercion': 'error',
     'constructor-super': 'error',
-    'yoda': 'error',
-    'strict': ['error', 'never'],
-    'curly': 'error',
+    yoda: 'error',
+    strict: ['error', 'never'],
+    curly: 'error',
     'dot-notation': 'error',
     'eol-last': 'error',
-    'eqeqeq': ['error', 'smart'],
+    eqeqeq: ['error', 'smart'],
     'guard-for-in': 'error',
     'id-match': 'error',
     'import/no-default-export': 'error',
@@ -310,7 +316,7 @@ module.exports = {
     'prefer-const': 'error',
     'prefer-object-spread': 'error',
     'quote-props': ['error', 'consistent-as-needed'],
-    'radix': 'error',
+    radix: 'error',
     'use-isnan': 'error',
     'valid-typeof': 'off',
     'space-before-function-paren': 'off',

@@ -6,25 +6,26 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLModule } from '@nestjs/graphql';
 // import { ServeStaticModule } from '@nestjs/serve-static';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { CommonModule } from 'common/scalar/common.module';
+import { PhieuXuatNoiBoModule } from 'modules/phieuxuatnoibo/phieuxuatnoibo.module';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import path from 'path';
 
 import { contextMiddleware } from './middlewares';
 import { AuthModule } from './modules/auth/auth.module';
-import { DMBenhNhanModule } from './modules/dm_benhnhan/dm_benhnhan.module';
+import { DMBenhNhanModule } from './modules/dm-benhnhan/dm-benhnhan.module';
 import { HealthCheckerModule } from './modules/health-checker/health-checker.module';
 import { PostModule } from './modules/post/post.module';
 import { ThongTinLuotKhamModule } from './modules/thongtinluotkham/thongtinluotkham.module';
-import { UserModule } from './modules/user/user.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
 
-interface HeadersContainer {
+interface IHeadersContainer {
   headers?: Record<string, string>;
 }
-interface ContextArgs {
-  req?: HeadersContainer;
-  connection?: { context: HeadersContainer };
+interface IContextArgs {
+  req?: IHeadersContainer;
+  connection?: { context: IHeadersContainer };
 }
 
 @Module({
@@ -34,7 +35,7 @@ interface ContextArgs {
       playground: {
         cdnUrl: 'http://localhost:3000',
       },
-      context: ({ req, connection }: ContextArgs) => ({
+      context: ({ req, connection }: IContextArgs) => ({
         req: { ...req, ...connection?.context },
       }),
     }),
@@ -44,6 +45,8 @@ interface ContextArgs {
     PostModule,
     DMBenhNhanModule,
     ThongTinLuotKhamModule,
+    PhieuXuatNoiBoModule,
+    CommonModule,
     //
     ConfigModule.forRoot({
       isGlobal: true,

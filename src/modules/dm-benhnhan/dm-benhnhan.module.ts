@@ -6,9 +6,9 @@ import {
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
 // import { CreateDisciplineInput } from './dto/create-discipline.input';
-import { DMBenhNhanDTO } from './dto/dm_benhnhan.dto';
+import { DMBenhNhanDTO } from './dto/dm-benhnhan.dto';
 // import { UpdateDisciplineInput } from './dto/update-discipline.input';
-import { DMBenhNhan } from './dm_benhnhan.entity';
+import { DMBenhNhan } from './dm-benhnhan.entity';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 
 @Module({

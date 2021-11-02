@@ -1,9 +1,8 @@
+import { Exclude } from 'class-transformer';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 import { AbstractEntity } from '../../common/abstract.entity';
-import { RoleType } from '../../common/constants/role-type';
 import { UseDto } from '../../decorators/use-dto.decorator';
-import { VirtualColumn } from '../../decorators/virtual-column.decorator';
 import type { UserDtoOptions } from './dto/user-dto';
 import { UserDto } from './dto/user-dto';
 
@@ -22,8 +21,12 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ unique: true, nullable: true, name: 'UserName' })
   email?: string;
 
+  @Exclude()
   @Column({ nullable: true, name: 'PassWord' })
   password?: string;
+
+  @Column({ nullable: true, name: 'TenNhanVien' })
+  tenNhanVien: string;
 
   //   @Column({ nullable: true })
   //   phone?: string;

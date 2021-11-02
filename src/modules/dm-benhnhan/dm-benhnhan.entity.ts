@@ -1,6 +1,8 @@
 // eslint-disable-next-line unicorn/filename-case
 import {
+  BeforeInsert,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
@@ -52,6 +54,14 @@ export class DMBenhNhan {
 
   @Column({ name: 'ID_NguoiTao' })
   idNguoiTao?: string;
+
+  @CreateDateColumn({ name: 'NgayTao' })
+  ngaytao!: Date;
+
+  @BeforeInsert()
+  insertNgayTao(): void {
+    this.ngaytao = new Date();
+  }
 
   @OneToMany(
     () => ThongTinLuotkham,
