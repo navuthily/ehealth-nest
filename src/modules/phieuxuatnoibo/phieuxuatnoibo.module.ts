@@ -28,12 +28,15 @@ import { PhieuXuatNoiBoService } from './phieuxuatnoibo.service';
       //     },
       //   ],
       // Tạo ra các method có sẵn
+      services: [PhieuXuatNoiBoService],
       resolvers: [
         {
           DTOClass: PhieuXuatNoiBoDTO,
           EntityClass: PhieuXuatNoiBoEntity,
+          ServiceClass: PhieuXuatNoiBoService,
           CreateDTOClass: PhieuXuatNoiBoInputDTO,
           UpdateDTOClass: PhieuXuatNoiBoUpdateDTO,
+
           enableTotalCount: true,
           pagingStrategy: PagingStrategies.OFFSET,
           guards: [JwtAuthGuard],
@@ -42,8 +45,9 @@ import { PhieuXuatNoiBoService } from './phieuxuatnoibo.service';
     }),
   ],
   // Muốn custom theo chuẩn
-  providers: [PhieuXuatNoiBoResolver, PhieuXuatNoiBoService],
-  exports: [PhieuXuatNoiBoService],
+  //   providers: [PhieuXuatNoiBoResolver, PhieuXuatNoiBoService],
+  //   exports: [PhieuXuatNoiBoService],
+  providers: [PhieuXuatNoiBoResolver],
   //
 })
 export class PhieuXuatNoiBoModule {}

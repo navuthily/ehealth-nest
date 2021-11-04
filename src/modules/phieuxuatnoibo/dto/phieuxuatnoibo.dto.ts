@@ -2,19 +2,23 @@
 import type { CreateOneInputType } from '@nestjs-query/query-graphql';
 import { BeforeCreateOne, FilterableField } from '@nestjs-query/query-graphql';
 import { ObjectType } from '@nestjs/graphql';
+import { AbstractUserDto } from 'common/dto/abstract-user.dto';
+import { AbstractDto } from 'common/dto/abstract.dto';
 import type { UserContext } from 'modules/auth/auth.interfaces';
 // import { CustomDateScalar } from '../../../common/custom-date.scalar';
 
 @ObjectType('Gd2_PhieuXuatNoiBo')
-@BeforeCreateOne(
-  (input: CreateOneInputType<PhieuXuatNoiBoDTO>, context: UserContext) => {
-    if (typeof context.req.user.id === 'number') {
-      input.input.idNguoiTao = context.req.user.id;
-    }
+// @BeforeCreateOne(
+//   (input: CreateOneInputType<PhieuXuatNoiBoDTO>, context: UserContext) => {
+//     console.log(context.req.user);
 
-    return input;
-  },
-)
+//     if (typeof context.req.user.id === 'number') {
+//       input.input.idNguoiTao = context.req.user.id;
+//     }
+
+//     return input;
+//   },
+// )
 // @BeforeUpdateOne(
 //   (input: UpdateOneInputType<PhieuXuatNoiBoDTO>, context: UserContext) => {
 //     console.log(input);
@@ -24,9 +28,9 @@ import type { UserContext } from 'modules/auth/auth.interfaces';
 //     return input;
 //   },
 // )
-export class PhieuXuatNoiBoDTO {
-  @FilterableField()
-  id: number;
+export class PhieuXuatNoiBoDTO extends AbstractUserDto {
+  @FilterableField({ nullable: true })
+  phieuxuatnoiboId: number;
 
   @FilterableField({ nullable: true })
   idNguoiTao: number;

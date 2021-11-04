@@ -7,7 +7,7 @@ import {
   QueryOptions,
 } from '@nestjs-query/query-graphql';
 import { ObjectType } from '@nestjs/graphql';
-import { DMBenhNhanDTO } from '../../dm_benhnhan/dto/dm_benhnhan.dto';
+import { DMBenhNhanDTO } from '../../dm-benhnhan/dto/dm-benhnhan.dto';
 
 @ObjectType('ThongTinLuotkham')
 @FilterableRelation('DM_BenhNhan', () => DMBenhNhanDTO, {

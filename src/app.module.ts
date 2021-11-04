@@ -19,6 +19,11 @@ import { PostModule } from './modules/post/post.module';
 import { ThongTinLuotKhamModule } from './modules/thongtinluotkham/thongtinluotkham.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
+import { TestModule } from './test/test.module';
+import { TestModule } from './src/test/test.module';
+import { TestModule } from './modules/test/test.module';
+import { TestService } from './test/test.service';
+import { TestController } from './src/test/test.controller';
 
 interface IHeadersContainer {
   headers?: Record<string, string>;
@@ -71,7 +76,10 @@ interface IContextArgs {
       inject: [ApiConfigService],
     }),
     HealthCheckerModule,
+    TestModule,
   ],
+  providers: [TestService],
+  controllers: [TestController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {

@@ -19,9 +19,5 @@ import type { PhieuXuatNoiBoDTO } from './phieuxuatnoibo.dto';
 )
 export class PhieuXuatNoiBoUpdateChotPhieuDTO {
   @Field({ nullable: true })
-  id: number;
-  //   @Field({ nullable: true })
-  //   nguoichot?: number;
-  //   @Field({ nullable: true })
-  //   ngaychot?: Date;
+  phieuxuatnoiboId: number;
 }

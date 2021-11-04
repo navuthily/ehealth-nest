@@ -5,23 +5,28 @@ import { Repository } from 'typeorm';
 
 import { PhieuXuatNoiBoEntity } from './phieuxuatnoibo.entity';
 import { PhieuXuatNoiBoDTO } from './dto/phieuxuatnoibo.dto';
+import { QueryService } from '@nestjs-query/core';
+import { TypeOrmQueryService } from '@nestjs-query/query-typeorm';
 
-export class PhieuXuatNoiBoService {
+@QueryService(PhieuXuatNoiBoEntity)
+export class PhieuXuatNoiBoService extends TypeOrmQueryService<PhieuXuatNoiBoEntity> {
   constructor(
     @InjectRepository(PhieuXuatNoiBoEntity)
     private phieuxuatnoiboRepository: Repository<PhieuXuatNoiBoEntity>,
     @Inject(REQUEST) private ctx: any,
-  ) {}
+  ) {
+    super(phieuxuatnoiboRepository, { useSoftDelete: true });
+  }
 
-  async updateChotPhieu(id: number): Promise<PhieuXuatNoiBoDTO> {
+  async updateChotPhieu(phieuxuatnoiboId: number): Promise<PhieuXuatNoiBoDTO> {
     const phieuxuatnoibo = await this.phieuxuatnoiboRepository.findOne({
-      id,
+      phieuxuatnoiboId,
     });
 
     // console.log(this.ctx.req.user);
     if (!phieuxuatnoibo) {
       throw new NotFoundException(
-        `PhieuXuatNoiBo with ID_PhieuXuatNoiBo "${id}" not found`,
+        `PhieuXuatNoiBo with ID_PhieuXuatNoiBo "${phieuxuatnoiboId}" not found`,
       );
     }
 

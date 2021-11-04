@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { DMBenhNhan } from '../dm_benhnhan/dm_benhnhan.entity';
+import { DMBenhNhanEntity } from '../dm-benhnhan/dm-benhnhan.entity';
 
 @Entity('ThongTinLuotKham')
 export class ThongTinLuotkham {
@@ -20,7 +20,7 @@ export class ThongTinLuotkham {
   @Column({ name: 'ThoiGianVaoKham' })
   thoiGianVaoKham: Date;
 
-  @ManyToOne(() => DMBenhNhan, { cascade: true })
+  @ManyToOne(() => DMBenhNhanEntity, { cascade: true })
   @JoinColumn({ name: 'ID_BenhNhan' })
-  dmBenhNhan: DMBenhNhan;
+  dmBenhNhan: DMBenhNhanEntity;
 }

@@ -2,15 +2,142 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Gd2_PhieuXuatNoiBo {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type DeleteManyResponse {
+  """The number of records deleted."""
+  deletedCount: Int!
+}
+
+type Gd2_PhieuXuatNoiBoDeleteResponse {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type UpdateManyResponse {
+  """The number of records updated."""
+  updatedCount: Int!
+}
+
+type OffsetPageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+}
+
+type Gd2_PhieuXuatNoiBoConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [Gd2_PhieuXuatNoiBo!]!
+
+  """Fetch total count of records"""
+  totalCount: Int!
+}
+
+type Gd2_PhieuXuatNoiBoAggregateGroupBy {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoCountAggregate {
+  id: Int
+  createdAt: Int
+  updatedAt: Int
+  createdBy: Int
+  updatedBy: Int
+  phieuxuatnoiboId: Int
+  idNguoiTao: Int
+  ngaygiotao: Int
+  sophieu: Int
+  nguoichot: Int
+  ngaychot: Int
+}
+
+type Gd2_PhieuXuatNoiBoSumAggregate {
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  sophieu: Float
+  nguoichot: Float
+}
+
+type Gd2_PhieuXuatNoiBoAvgAggregate {
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  sophieu: Float
+  nguoichot: Float
+}
+
+type Gd2_PhieuXuatNoiBoMinAggregate {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
+type Gd2_PhieuXuatNoiBoMaxAggregate {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  phieuxuatnoiboId: Float
+  idNguoiTao: Float
+  ngaygiotao: Date
+  sophieu: Float
+  nguoichot: Float
+  ngaychot: Date
+}
+
 type ThongTinLuotkham {
   id: Float!
   idBenhNhan: Float!
   thoiGianVaoKham: Date!
   dM_BenhNhan: DM_BenhNhan
 }
-
-"""Date custom scalar type"""
-scalar Date
 
 type DM_BenhNhan {
   id: Float!
@@ -163,11 +290,6 @@ enum SortNulls {
   NULLS_LAST
 }
 
-type DeleteManyResponse {
-  """The number of records deleted."""
-  deletedCount: Int!
-}
-
 type DM_BenhNhanDeleteResponse {
   id: Float
   maBenhNhan: Float
@@ -184,19 +306,6 @@ type DM_BenhNhanDeleteResponse {
   ghiChu: String
   idNguoiTao: String
   ngaytao: Date
-}
-
-type UpdateManyResponse {
-  """The number of records updated."""
-  updatedCount: Int!
-}
-
-type OffsetPageInfo {
-  """true if paging forward and there are more records."""
-  hasNextPage: Boolean
-
-  """true if paging backwards and there are more records."""
-  hasPreviousPage: Boolean
 }
 
 type DM_BenhNhanConnection {
@@ -356,85 +465,6 @@ type ThongTinLuotkhamMaxAggregate {
   thoiGianVaoKham: Date
 }
 
-type Gd2_PhieuXuatNoiBo {
-  id: Float!
-  idNguoiTao: Float
-  ngaygiotao: Date
-  sophieu: Float
-  nguoichot: Float
-  ngaychot: Date
-}
-
-type Gd2_PhieuXuatNoiBoDeleteResponse {
-  id: Float
-  idNguoiTao: Float
-  ngaygiotao: Date
-  sophieu: Float
-  nguoichot: Float
-  ngaychot: Date
-}
-
-type Gd2_PhieuXuatNoiBoConnection {
-  """Paging information"""
-  pageInfo: OffsetPageInfo!
-
-  """Array of nodes."""
-  nodes: [Gd2_PhieuXuatNoiBo!]!
-
-  """Fetch total count of records"""
-  totalCount: Int!
-}
-
-type Gd2_PhieuXuatNoiBoAggregateGroupBy {
-  id: Float
-  idNguoiTao: Float
-  ngaygiotao: Date
-  sophieu: Float
-  nguoichot: Float
-  ngaychot: Date
-}
-
-type Gd2_PhieuXuatNoiBoCountAggregate {
-  id: Int
-  idNguoiTao: Int
-  ngaygiotao: Int
-  sophieu: Int
-  nguoichot: Int
-  ngaychot: Int
-}
-
-type Gd2_PhieuXuatNoiBoSumAggregate {
-  id: Float
-  idNguoiTao: Float
-  sophieu: Float
-  nguoichot: Float
-}
-
-type Gd2_PhieuXuatNoiBoAvgAggregate {
-  id: Float
-  idNguoiTao: Float
-  sophieu: Float
-  nguoichot: Float
-}
-
-type Gd2_PhieuXuatNoiBoMinAggregate {
-  id: Float
-  idNguoiTao: Float
-  ngaygiotao: Date
-  sophieu: Float
-  nguoichot: Float
-  ngaychot: Date
-}
-
-type Gd2_PhieuXuatNoiBoMaxAggregate {
-  id: Float
-  idNguoiTao: Float
-  ngaygiotao: Date
-  sophieu: Float
-  nguoichot: Float
-  ngaychot: Date
-}
-
 type Query {
   dM_BenhNhan(
     """The id of the record to find."""
@@ -536,7 +566,12 @@ enum DM_BenhNhanSortFields {
 input Gd2_PhieuXuatNoiBoFilter {
   and: [Gd2_PhieuXuatNoiBoFilter!]
   or: [Gd2_PhieuXuatNoiBoFilter!]
-  id: NumberFieldComparison
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  phieuxuatnoiboId: NumberFieldComparison
   idNguoiTao: NumberFieldComparison
   ngaygiotao: DateFieldComparison
   sophieu: NumberFieldComparison
@@ -552,6 +587,11 @@ input Gd2_PhieuXuatNoiBoSort {
 
 enum Gd2_PhieuXuatNoiBoSortFields {
   id
+  createdAt
+  updatedAt
+  createdBy
+  updatedBy
+  phieuxuatnoiboId
   idNguoiTao
   ngaygiotao
   sophieu
@@ -825,7 +865,7 @@ input UpdateOneGd2_PhieuXuatNoiBoInput {
 }
 
 input PhieuXuatNoiBoUpdate {
-  id: Float
+  phieuxuatnoiboId: Float
   sophieu: Float!
 }
 
@@ -840,7 +880,12 @@ input UpdateManyGd2_PhieuXuatNoiBosInput {
 input Gd2_PhieuXuatNoiBoUpdateFilter {
   and: [Gd2_PhieuXuatNoiBoUpdateFilter!]
   or: [Gd2_PhieuXuatNoiBoUpdateFilter!]
-  id: NumberFieldComparison
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  phieuxuatnoiboId: NumberFieldComparison
   idNguoiTao: NumberFieldComparison
   ngaygiotao: DateFieldComparison
   sophieu: NumberFieldComparison
@@ -861,7 +906,12 @@ input DeleteManyGd2_PhieuXuatNoiBosInput {
 input Gd2_PhieuXuatNoiBoDeleteFilter {
   and: [Gd2_PhieuXuatNoiBoDeleteFilter!]
   or: [Gd2_PhieuXuatNoiBoDeleteFilter!]
-  id: NumberFieldComparison
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  phieuxuatnoiboId: NumberFieldComparison
   idNguoiTao: NumberFieldComparison
   ngaygiotao: DateFieldComparison
   sophieu: NumberFieldComparison

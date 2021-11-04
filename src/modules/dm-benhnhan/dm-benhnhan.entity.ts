@@ -12,7 +12,7 @@ import {
 import { ThongTinLuotkham } from '../thongtinluotkham/thongtinluotkham.entity';
 
 @Entity('DM_BenhNhan')
-export class DMBenhNhan {
+export class DMBenhNhanEntity {
   @PrimaryGeneratedColumn({ name: 'ID_BenhNhan' })
   id: number;
 

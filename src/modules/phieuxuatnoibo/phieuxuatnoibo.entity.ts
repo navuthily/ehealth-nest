@@ -1,21 +1,24 @@
 // eslint-disable-next-line unicorn/filename-case
-import {
-  BeforeInsert,
-  BeforeUpdate,
-  Column,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Type } from 'class-transformer';
+import { AbstractUserEntity } from 'common/abstract-user.entity';
+import { AbstractEntity } from 'common/abstract.entity';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { v4 as uuid } from 'uuid';
+import { PhieuXuatNoiBoDTO } from './dto/phieuxuatnoibo.dto';
+
+import { AbstractUserDto } from 'common/dto/abstract-user.dto';
+import { Inject } from '@nestjs/common';
 
 @Entity('Gd2_PhieuXuatNoiBo')
-export class PhieuXuatNoiBoEntity {
+export class PhieuXuatNoiBoEntity extends AbstractUserEntity {
   @PrimaryGeneratedColumn({ name: 'ID_PhieuXuatNoiBo' })
-  id: number;
+  phieuxuatnoiboId: number;
 
   @Column({ name: 'Id_NguoiTao' })
   idNguoiTao: number;
 
-  @Column({ name: 'NgaygioTao' })
+  @Column({ type: 'datetime2' })
   ngaygiotao: Date;
 
   @Column({ name: 'SoPhieu' })
@@ -26,14 +29,4 @@ export class PhieuXuatNoiBoEntity {
 
   @Column({ name: 'NgayChot' })
   ngaychot?: Date;
-
-  @BeforeInsert()
-  insertNgayTao(): void {
-    this.ngaygiotao = new Date();
-  }
-
-  @BeforeUpdate()
-  updateNgayChot(): void {
-    this.ngaychot = new Date();
-  }
 }

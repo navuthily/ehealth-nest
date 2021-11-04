@@ -8,17 +8,20 @@ import { Module } from '@nestjs/common';
 // import { CreateDisciplineInput } from './dto/create-discipline.input';
 import { DMBenhNhanDTO } from './dto/dm-benhnhan.dto';
 // import { UpdateDisciplineInput } from './dto/update-discipline.input';
-import { DMBenhNhan } from './dm-benhnhan.entity';
+import { DMBenhNhanEntity } from './dm-benhnhan.entity';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
+import { DMBenhNhanService } from './dm-benhnhan.service';
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
-      imports: [NestjsQueryTypeOrmModule.forFeature([DMBenhNhan])],
+      imports: [NestjsQueryTypeOrmModule.forFeature([DMBenhNhanEntity])],
+      services: [DMBenhNhanService],
       resolvers: [
         {
           DTOClass: DMBenhNhanDTO,
-          EntityClass: DMBenhNhan,
+          EntityClass: DMBenhNhanEntity,
+          ServiceClass: DMBenhNhanService,
           //   CreateDTOClass: CreateDisciplineInput,
           //   UpdateDTOClass: UpdateDisciplineInput,
           enableTotalCount: true,
