@@ -28,6 +28,8 @@ export class DateScalar implements CustomScalar<any, Date> {
       pad(date.getMinutes()) +
       ':' +
       pad(date.getSeconds()) +
+      '.' +
+      date.getMilliseconds() +
       dif +
       pad(tzo / 60) +
       ':' +

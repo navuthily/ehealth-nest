@@ -5,7 +5,7 @@ import type { UserEntity } from '../user.entity';
 
 export type UserDtoOptions = Partial<{ isActive: boolean }>;
 
-export class UserDto extends AbstractDto {
+export class UserDtoo extends AbstractDto {
   @ApiPropertyOptional()
   firstName?: string;
 
@@ -20,6 +20,8 @@ export class UserDto extends AbstractDto {
 
   @ApiPropertyOptional()
   phone?: string;
+  @ApiPropertyOptional()
+  email?: string;
 
   @ApiPropertyOptional()
   isActive?: boolean;
@@ -27,7 +29,7 @@ export class UserDto extends AbstractDto {
   // Sử dụng khi gọi .toDto()
   constructor(user: UserEntity, options?: UserDtoOptions) {
     super(user);
-    // this.firstName = user.firstName;
+    this.email = user.email;
     // this.lastName = user.lastName;
     // this.role = user.role;
     this.username = user.username;

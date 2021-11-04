@@ -5,7 +5,7 @@ export class UserLoginDto {
   @IsString()
   //   @IsEmail()
   @ApiProperty()
-  readonly email: string;
+  readonly username: string;
 
   @IsString()
   @ApiProperty()

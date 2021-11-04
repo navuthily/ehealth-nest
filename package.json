@@ -49,6 +49,7 @@
         "@nestjs/microservices": "^8.0.6",
         "@nestjs/passport": "^8.0.1",
         "@nestjs/platform-express": "^8.0.6",
+        "@nestjs/schematics": "^8.0.4",
         "@nestjs/serve-static": "^2.2.2",
         "@nestjs/swagger": "^5.0.9",
         "@nestjs/terminus": "^8.0.0",

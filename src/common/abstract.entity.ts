@@ -1,22 +1,33 @@
+import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
 import type { Constructor } from '../types';
 import type { AbstractDto } from './dto/abstract.dto';
+import type { AbstractUserEntity } from './abstract-user.entity';
+import { v4 as uuid } from 'uuid';
 
 export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  //   @PrimaryGeneratedColumn('uuid')
-  //   id: string;
+  @Column('uuid')
+  id: string;
 
-  //   @CreateDateColumn({
-  //     type: 'timestamp',
-  //   })
-  //   createdAt: Date;
+  @Column({ type: 'datetime2' })
+  createdAt: Date;
 
-  //   @UpdateDateColumn({
-  //     type: 'timestamp',
-  //   })
-  //   updatedAt: Date;
+  @Column({ type: 'datetime2' })
+  updatedAt: Date;
+
+  @BeforeInsert()
+  beforeInsert(): void {
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+    this.id = uuid();
+  }
+
+  @BeforeUpdate()
+  beforeUpdate(): void {
+    this.updatedAt = new Date();
+  }
 
   private dtoClass: Constructor<DTO, [AbstractEntity, O?]>;
 
