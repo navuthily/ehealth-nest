@@ -24,6 +24,8 @@ import { AbstractDto } from './abstract.dto';
   },
 )
 export class AbstractUserInput {
+  @FilterableField({ nullable: true })
   createdBy?: string;
+  @FilterableField({ nullable: true })
   updatedBy?: string;
 }

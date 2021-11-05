@@ -10,6 +10,7 @@ import type { NestExpressApplication } from '@nestjs/platform-express';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import compression from 'compression';
 import RateLimit from 'express-rate-limit';
+import { LoggingInterceptor } from 'interceptors/logging.interceptor';
 import morgan from 'morgan';
 import {
   initializeTransactionalContext,
@@ -35,7 +36,7 @@ export async function bootstrap(): Promise<NestExpressApplication> {
   //   app.use(helmet());
   app.use(
     RateLimit({
-      windowMs: 15 * 60 * 1000, // 15 minutes
+      windowMs: 15 * 60 * 1000, // 15 minuteDs
       max: 1_000_000, // limit each IP to 100 requests per windowMs
     }),
   );
@@ -54,7 +55,8 @@ export async function bootstrap(): Promise<NestExpressApplication> {
     new QueryFailedFilter(reflector),
   );
 
-  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+  //   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+  app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({

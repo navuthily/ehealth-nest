@@ -5,9 +5,9 @@ import { AbstractEntity } from './abstract.entity';
 import type { AbstractUserDto } from './dto/abstract-user.dto';
 
 export abstract class AbstractUserEntity extends AbstractEntity {
-  @Column()
+  @Column({ nullable: true })
   createdBy: string;
 
-  @Column()
+  @Column({ nullable: true })
   updatedBy: string;
 }

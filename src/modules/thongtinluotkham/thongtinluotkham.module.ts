@@ -5,9 +5,8 @@ import {
 } from '@nestjs-query/query-graphql';
 import { NestjsQueryTypeOrmModule } from '@nestjs-query/query-typeorm';
 import { Module } from '@nestjs/common';
-// import { CreateDisciplineInput } from './dto/create-discipline.input';
+import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { ThongTinLuotKhamDTO } from './dto/thongtinluotkham.dto';
-// import { UpdateDisciplineInput } from './dto/update-discipline.input';
 import { ThongTinLuotkham } from './thongtinluotkham.entity';
 
 @Module({
@@ -18,10 +17,9 @@ import { ThongTinLuotkham } from './thongtinluotkham.entity';
         {
           DTOClass: ThongTinLuotKhamDTO,
           EntityClass: ThongTinLuotkham,
-          //   CreateDTOClass: CreateDisciplineInput,
-          //   UpdateDTOClass: UpdateDisciplineInput,
           enableTotalCount: true,
           pagingStrategy: PagingStrategies.OFFSET,
+          guards: [JwtAuthGuard],
         },
       ],
     }),

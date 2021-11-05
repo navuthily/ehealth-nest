@@ -70,8 +70,8 @@ export class UserService {
     pageOptionsDto: UsersPageOptionsDto,
   ): Promise<PageDto<UserDto>> {
     const queryBuilder = this.userRepository.createQueryBuilder('user');
-    const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
 
+    const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
     return items.toPageDto(pageMetaDto);
   }
 

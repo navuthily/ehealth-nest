@@ -1,4 +1,10 @@
-import { BeforeInsert, BeforeUpdate, Column } from 'typeorm';
+import {
+  BeforeInsert,
+  BeforeUpdate,
+  Column,
+  PrimaryColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import type { Constructor } from '../types';
 import type { AbstractDto } from './dto/abstract.dto';
 import type { AbstractUserEntity } from './abstract-user.entity';
@@ -8,13 +14,13 @@ export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  @Column('uuid')
+  @PrimaryColumn()
   id: string;
 
-  @Column({ type: 'datetime2' })
+  @Column({ nullable: true, type: 'datetime2' })
   createdAt: Date;
 
-  @Column({ type: 'datetime2' })
+  @Column({ nullable: true, type: 'datetime2' })
   updatedAt: Date;
 
   @BeforeInsert()

@@ -19,11 +19,7 @@ import { PostModule } from './modules/post/post.module';
 import { ThongTinLuotKhamModule } from './modules/thongtinluotkham/thongtinluotkham.module';
 import { ApiConfigService } from './shared/services/api-config.service';
 import { SharedModule } from './shared/shared.module';
-import { TestModule } from './test/test.module';
-import { TestModule } from './src/test/test.module';
-import { TestModule } from './modules/test/test.module';
-import { TestService } from './test/test.service';
-import { TestController } from './src/test/test.controller';
+import { UserModule } from 'modules/user/user.module';
 
 interface IHeadersContainer {
   headers?: Record<string, string>;
@@ -46,7 +42,7 @@ interface IContextArgs {
     }),
     // Define Module
     AuthModule,
-    // UserModule,
+    UserModule,
     PostModule,
     DMBenhNhanModule,
     ThongTinLuotKhamModule,
@@ -63,6 +59,7 @@ interface IContextArgs {
         configService.typeOrmConfig,
       inject: [ApiConfigService],
     }),
+
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
@@ -76,10 +73,7 @@ interface IContextArgs {
       inject: [ApiConfigService],
     }),
     HealthCheckerModule,
-    TestModule,
   ],
-  providers: [TestService],
-  controllers: [TestController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): MiddlewareConsumer | void {

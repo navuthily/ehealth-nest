@@ -7,9 +7,7 @@ import { PhieuXuatNoiBoService } from './phieuxuatnoibo.service';
 
 @Resolver(() => PhieuXuatNoiBoDTO)
 export class PhieuXuatNoiBoResolver {
-  constructor(private phieuxuatnoiboService: PhieuXuatNoiBoService) {
-    // super(service);
-  }
+  constructor(private phieuxuatnoiboService: PhieuXuatNoiBoService) {}
 
   @Mutation((returns) => PhieuXuatNoiBoDTO)
   @UseGuards(JwtAuthGuard)

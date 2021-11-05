@@ -1,14 +1,6 @@
 // eslint-disable-next-line unicorn/filename-case
-import { Type } from 'class-transformer';
 import { AbstractUserEntity } from 'common/abstract-user.entity';
-import { AbstractEntity } from 'common/abstract.entity';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-import { v4 as uuid } from 'uuid';
-import { PhieuXuatNoiBoDTO } from './dto/phieuxuatnoibo.dto';
-
-import { AbstractUserDto } from 'common/dto/abstract-user.dto';
-import { Inject } from '@nestjs/common';
 
 @Entity('Gd2_PhieuXuatNoiBo')
 export class PhieuXuatNoiBoEntity extends AbstractUserEntity {
@@ -29,4 +21,6 @@ export class PhieuXuatNoiBoEntity extends AbstractUserEntity {
 
   @Column({ name: 'NgayChot' })
   ngaychot?: Date;
+
+  
 }

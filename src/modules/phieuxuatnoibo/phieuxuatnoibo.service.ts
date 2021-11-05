@@ -22,17 +22,13 @@ export class PhieuXuatNoiBoService extends TypeOrmQueryService<PhieuXuatNoiBoEnt
     const phieuxuatnoibo = await this.phieuxuatnoiboRepository.findOne({
       phieuxuatnoiboId,
     });
-
-    // console.log(this.ctx.req.user);
     if (!phieuxuatnoibo) {
       throw new NotFoundException(
         `PhieuXuatNoiBo with ID_PhieuXuatNoiBo "${phieuxuatnoiboId}" not found`,
       );
     }
-
     phieuxuatnoibo.nguoichot = this.ctx.req.user.id;
     phieuxuatnoibo.ngaychot = new Date();
-
     return this.phieuxuatnoiboRepository.save(phieuxuatnoibo);
   }
 }
