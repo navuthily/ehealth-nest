@@ -7,7 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLFederationModule, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
-import path from 'path';
+import path, { join } from 'path';
 import { contextMiddleware } from '@libs/middlewares';
 import { ApiConfigService } from '@libs/shared/services/api-config.service';
 import { SharedModule } from '@libs/shared/shared.module';
@@ -48,7 +48,7 @@ interface IContextArgs {
       // name: 'db_EhealthRea_dev',
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
-        console.log(__dirname, '/i18n/');
+        // console.log(join(__dirname, '../../../../../../', 'public'));
         
         const configDB = { ...configService.typeOrmConfig };
         configDB.entities = [ThongTinLuotKhamEntity, UserEntity];
