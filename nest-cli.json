@@ -1,16 +1,41 @@
 {
-    "language": "ts",
-    "collection": "@nestjs/schematics",
-    "sourceRoot": "src",
-    "compilerOptions": {
-        "plugins": [
-            "@nestjs/swagger/plugin"
-        ],
-        "assets": [
-            {
-                "include": "i18n/*.json",
-                "outDir": "dist/src"
-            }
-        ]
+  "language": "ts",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/gateway",
+  "compilerOptions": {
+    "plugins": ["@nestjs/swagger/plugin"],
+    "tsConfigPath": "apps/gateway/tsconfig.json"
+  },
+  "monorepo": false,
+  "root": "apps/gateway",
+  "projects": {
+    "service-ehealth": {
+      "type": "application",
+      "root": "apps/service-ehealth",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-ehealth/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-ehealth/tsconfig.json"
+      }
+    },
+    "service-family": {
+      "type": "application",
+      "root": "apps/service-family",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-family/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-family/tsconfig.json"
+      }
+    },
+
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.json"
+      }
     }
+  }
 }
