@@ -13,17 +13,14 @@
     "target": "ES2017",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "incremental": true,
     "strictNullChecks": true,
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "paths": {
+      "@libs/*": ["libs/*"],
+    }
   },
-  "include": [
-    "src/**/*",
-    "test/**/*",
-    "ormconfig.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["src/**/*", "test/**/*", "ormconfig.ts", "libs/common"],
+  "exclude": ["node_modules", "dist"]
 }
