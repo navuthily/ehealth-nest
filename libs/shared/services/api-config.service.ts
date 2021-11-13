@@ -56,7 +56,7 @@ export class ApiConfigService {
     return this.getString('FALLBACK_LANGUAGE').toLowerCase();
   }
 
-  get typeOrmConfig(): TypeOrmModuleOptions {
+  typeOrmConfig(serverName): TypeOrmModuleOptions {
     let entities = [__dirname + '/../../modules/**/*.entity{.ts,.js}'];
     let migrations = [__dirname + '/../../database/migrations/*{.ts,.js}'];
 
@@ -92,18 +92,18 @@ export class ApiConfigService {
       keepConnectionAlive: !this.isTest,
       dropSchema: this.isTest,
       type: 'mssql',
-      host: this.getString('DB_HOST'),
+      host: this.getString(serverName + 'DB_HOST'),
       // port: this.getNumber('DB_PORT'),
-      username: this.getString('DB_USERNAME'),
-      password: this.getString('DB_PASSWORD'),
-      database: this.getString('DB_DATABASE'),
-      pool:{
-        max:100
+      username: this.getString(serverName + 'DB_USERNAME'),
+      password: this.getString(serverName + 'DB_PASSWORD'),
+      database: this.getString(serverName + 'DB_DATABASE'),
+      pool: {
+        max: 100,
       },
       // subscribers: [UserSubscriber],
       migrationsRun: false,
       synchronize: false, // Create table
-      logging: "all",
+      logging: 'all',
       namingStrategy: new SnakeNamingStrategy(),
       options: { encrypt: false },
     };

@@ -1,10 +1,8 @@
-// import './boilerplate.polyfill';
 import '@libs/boilerplate.polyfill';
-
 import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { GraphQLFederationModule, GraphQLModule } from '@nestjs/graphql';
+import { GraphQLFederationModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import path, { join } from 'path';
@@ -28,9 +26,13 @@ interface IContextArgs {
 @Module({
   imports: [
     GraphQLFederationModule.forRoot({
-      autoSchemaFile: 'C:\\Users\\HUNGLV-EMR\\Desktop\\NestJS\\EhealthNestjsGrapql\\apps\\service-ehealth\\schema.gql',
+      autoSchemaFile: join(
+        __dirname,
+        '../../../../../../',
+        'apps/schemas/schema-ehealth.gpl',
+      ),
       playground: {
-        cdnUrl: 'http://localhost:3001',
+        cdnUrl: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}`,
       },
       context: ({ req, connection }: IContextArgs) => ({
         req: { ...req, ...connection?.context },
@@ -45,38 +47,22 @@ interface IContextArgs {
     }),
 
     TypeOrmModule.forRootAsync({
-      // name: 'db_EhealthRea_dev',
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
-        // console.log(join(__dirname, '../../../../../../', 'public'));
-        
-        const configDB = { ...configService.typeOrmConfig };
+        const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
         configDB.entities = [ThongTinLuotKhamEntity, UserEntity];
+        console.log(process.env.SV_EHEALTH_IP);
+        
         return configDB;
       },
       inject: [ApiConfigService],
     }),
 
-    // TypeOrmModule.forRootAsync({
-    //   name: 'db_FAMILY_WRK',
-    //   imports: [SharedModule],
-    //   useFactory: (configService: ApiConfigService) => {
-    //     {
-    //       const configDB = {
-    //         ...configService.typeOrmConfig,
-    //       };
-    //       configDB.database = 'FAMILY_WRK'; // config name database
-    //       return configDB;
-    //     }
-    //   },
-    //   inject: [ApiConfigService],
-    // }),
-
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
         parserOptions: {
-          path: path.join("C:\\Users\\HUNGLV-EMR\\Desktop\\NestJS\\EhealthNestjsGrapql\\libs\\i18n"),
+          path: path.join(__dirname, '../../../../../../', 'libs/i18n'),
           watch: configService.isDevelopment,
         },
       }),
