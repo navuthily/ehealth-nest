@@ -64,6 +64,7 @@
         "class-validator": "^0.13.1",
         "compression": "^1.7.4",
         "dataloader": "^2.0.0",
+        "dotenv": "^10.0.0",
         "eslint-plugin-unused-imports": "^1.1.5",
         "express": "^4.17.1",
         "express-jwt": "^6.1.0",

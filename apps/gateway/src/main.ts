@@ -1,8 +1,4 @@
 import { NestFactory } from '@nestjs/core';
-import {
-  ExpressAdapter,
-  NestExpressApplication,
-} from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import {
   FastifyAdapter,
@@ -10,7 +6,9 @@ import {
 } from '@nestjs/platform-fastify';
 import { join } from 'path';
 
-async function bootstrap(): Promise<void> {
+// require('dotenv').config()
+
+async function bootstrap():  Promise<NestFastifyApplication> {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
@@ -21,7 +19,8 @@ async function bootstrap(): Promise<void> {
     root: join(__dirname, '../../../', 'public'),
     prefix: '/',
   });
-  // app.useStaticAssets('C:/Users/HUNGLV-EMR/Desktop/NestJS/EhealthNestjsGrapql/public/');
-  await app.listen(3000);
+  
+  app.listen(`${process.env.SV_GATEWAY_PORT}`);
+  return app;
 }
 void bootstrap();

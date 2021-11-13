@@ -1,13 +1,10 @@
 import {
-  ClassSerializerInterceptor,
   HttpStatus,
   UnprocessableEntityException,
   ValidationPipe,
 } from '@nestjs/common';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
-import type { NestExpressApplication } from '@nestjs/platform-express';
-import { ExpressAdapter } from '@nestjs/platform-express';
 import compression from 'compression';
 import RateLimit from 'express-rate-limit';
 import { LoggingInterceptor } from '@libs/interceptors/logging.interceptor';
@@ -16,7 +13,6 @@ import {
   initializeTransactionalContext,
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
-
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from '@libs/filters/bad-request.filter';
 import { QueryFailedFilter } from '@libs/filters/query-failed.filter';
@@ -37,8 +33,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     new FastifyAdapter(),
     { cors: false },
   );
-  //   app.enable('trust proxy'); // only if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
-  //   app.use(helmet());
+
   app.use(
     RateLimit({
       windowMs: 15 * 60 * 1000, // 15 minuteDs
@@ -60,7 +55,6 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     new QueryFailedFilter(reflector),
   );
 
-  //   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useGlobalPipes(
@@ -73,7 +67,6 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     }),
   );
 
-  // app.useStaticAssets('public');
   app.useStaticAssets({
     root: join(__dirname, '../../../', 'public'),
     prefix: '/',
@@ -98,10 +91,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     setupSwagger(app);
   }
 
-  // const port = configService.appConfig.port;
-  await app.listen(3001);
-
-  // console.info(`server running on port ${port}`);
+  await app.listen(`${process.env.SV_EHEALTH_PORT}`);
 
   return app;
 }
