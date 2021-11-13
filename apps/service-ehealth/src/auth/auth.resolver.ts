@@ -18,14 +18,12 @@ export class AuthResolver {
     @Args('username') username: string,
     @Args('password') password: string,
   ): Promise<LoginPayloadDto> {
-
     const userEntity = await this.authService.validateUser({
       username,
       password,
     });
-
     const token = await this.authService.createToken(userEntity);
-
+    
     return new LoginPayloadDto(userEntity.toDto(), token);
   }
 }

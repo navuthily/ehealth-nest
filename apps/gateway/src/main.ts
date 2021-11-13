@@ -5,7 +5,7 @@ import {
   NestFastifyApplication,
 } from '@nestjs/platform-fastify';
 import { join } from 'path';
-
+import {FastifyJWT} from 'fastify-jwt';
 // require('dotenv').config()
 
 async function bootstrap():  Promise<NestFastifyApplication> {
@@ -19,7 +19,7 @@ async function bootstrap():  Promise<NestFastifyApplication> {
     root: join(__dirname, '../../../', 'public'),
     prefix: '/',
   });
-  
+
   app.listen(`${process.env.SV_GATEWAY_PORT}`);
   return app;
 }

@@ -34,9 +34,15 @@ interface IContextArgs {
       playground: {
         cdnUrl: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}`,
       },
-      context: ({ req, connection }: IContextArgs) => ({
-        req: { ...req, ...connection?.context },
-      }),
+      context: ({ req, connection }: IContextArgs) => {
+        // console.log(req);
+        
+        // console.log(connection);
+
+        return {
+          req: { ...req, ...connection?.context },
+        };
+      },
     }),
     ThongTinLuotKhamModule,
     AuthModule,
@@ -52,7 +58,7 @@ interface IContextArgs {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
         configDB.entities = [ThongTinLuotKhamEntity, UserEntity];
         console.log(process.env.SV_EHEALTH_IP);
-        
+
         return configDB;
       },
       inject: [ApiConfigService],

@@ -19,9 +19,15 @@ export class AuthService {
   ) {}
 
   async createToken(user: UserEntity | UserDto): Promise<TokenPayloadDto> {
+    // console.log(user);
+
     return new TokenPayloadDto({
       expiresIn: this.configService.authConfig.jwtExpirationTime,
-      accessToken: await this.jwtService.signAsync({ id: user.id }),
+      accessToken: await this.jwtService.signAsync({
+        id: user.id,
+        holotNhanVien: user.holotNhanVien,
+        tenNhanVien: user.tennhanvien,
+      }, {secret: process.env.JWT_SECRET_KEY}),
     });
   }
 
