@@ -97,6 +97,9 @@ export class ApiConfigService {
       username: this.getString('DB_USERNAME'),
       password: this.getString('DB_PASSWORD'),
       database: this.getString('DB_DATABASE'),
+      pool:{
+        max:100
+      },
       // subscribers: [UserSubscriber],
       migrationsRun: false,
       synchronize: false, // Create table
