@@ -23,6 +23,9 @@ import { TranslationService } from '@libs/shared/services/translation.service';
           DTOClass: UserDto,
           EntityClass: UserEntity,
           enableTotalCount: true,
+          create: { disabled: true },
+          update: { disabled: true },
+          delete: { disabled: true },
           //   pagingStrategy: PagingStrategies.OFFSET,
           // guards: [JwtAuthGuard],
         },
@@ -31,6 +34,6 @@ import { TranslationService } from '@libs/shared/services/translation.service';
   ],
   controllers: [UserController],
   exports: [UserService, TranslationService],
-  providers: [ UserService, TranslationService],
+  providers: [UserService, TranslationService],
 })
 export class UserModule {}

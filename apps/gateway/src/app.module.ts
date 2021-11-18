@@ -19,7 +19,7 @@ interface IContextArgs {
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const payload = await decode(context.jwt);
-    console.log(payload);
+    // console.log(payload);
     request.http.headers.set('x-user-id', payload);
   }
 }
@@ -49,19 +49,17 @@ class BuildServiceModule {}
         gateway: {
           serviceList: [
             {
-              name: 'thongtinluotkham',
-              // url: 'http://localhost:3001/graphql'
+              name: 'SV_EHEALTH',
               url: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}/graphql`,
             },
             {
-              name: 'posph66EhH',
-              // url: 'http://localhost:3002/graphql'
+              name: 'SV_FAMILY',
               url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
             },
           ],
         },
         server: {
-          context: ({request}) => {
+          context: ({ request }) => {
             return {
               jwt: request?.headers?.authorization,
             };

@@ -55,7 +55,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
     new QueryFailedFilter(reflector),
   );
 
-  app.useGlobalInterceptors(new LoggingInterceptor());
+  // app.useGlobalInterceptors(new LoggingInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -68,7 +68,7 @@ export async function bootstrap(): Promise<NestFastifyApplication> {
   );
 
   app.useStaticAssets({
-    root: join(__dirname, '../../../', 'public'),
+    root: join(__dirname, '../../../../../../', 'public'),
     prefix: '/',
   });
   const configService = app.select(SharedModule).get(ApiConfigService);
