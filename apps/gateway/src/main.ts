@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { LoggingInterceptor } from '@libs/interceptors/logging.interceptor';
 import { AppModule } from './app.module';
 import {
   FastifyAdapter,
@@ -14,12 +15,12 @@ async function bootstrap():  Promise<NestFastifyApplication> {
     new FastifyAdapter(),
     { cors: false },
   );
-
+    
   app.useStaticAssets({
-    root: join(__dirname, '../../../', 'public'),
+    root: join(__dirname, '../../../../../../', 'public'),
     prefix: '/',
   });
-
+  // app.useGlobalInterceptors(new LoggingInterceptor());
   app.listen(`${process.env.SV_GATEWAY_PORT}`);
   return app;
 }

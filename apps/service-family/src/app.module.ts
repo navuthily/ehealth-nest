@@ -1,5 +1,4 @@
 import '@libs/boilerplate.polyfill';
-
 import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -10,9 +9,14 @@ import path from 'path';
 import { contextMiddleware } from '@libs/middlewares';
 import { ApiConfigService } from '@libs/shared/services/api-config.service';
 import { SharedModule } from '@libs/shared/shared.module';
-import { Posph66EhModule } from './pos$ph66-eh/pos$ph66-eh.module';
-import { Posph66EhEntity } from './pos$ph66-eh/pos$ph66-eh.entity';
+import { SuatAnModule } from './suatan/suatan.module';
+import { SuatAnEntity } from './suatan/suatan.entity';
 import { join } from 'path';
+import { CommonModule } from '@libs/common/scalar/common.module';
+import { SuatAnChiTietModule } from './suatanchitiet/suatanchitiet.module';
+import { SuatAnChiTietEntity } from './suatanchitiet/suatanchitiet.entity';
+import { DMVatTuDTO } from './dmvt2/dto/dmvt2.dto';
+import { DMVatTuEntity } from './dmvt2/dmvt2.entity';
 
 interface IHeadersContainer {
   headers?: Record<string, string>;
@@ -38,7 +42,10 @@ interface IContextArgs {
       }),
     }),
 
-    Posph66EhModule,
+    SuatAnModule,
+    SuatAnChiTietModule,
+    DMVatTuDTO,
+    CommonModule,
 
     ConfigModule.forRoot({
       isGlobal: true,
@@ -52,7 +59,11 @@ interface IContextArgs {
           const configDB = {
             ...configService.typeOrmConfig('SV_FAMILY_'),
           };
-          configDB.entities = [Posph66EhEntity];
+          configDB.entities = [
+            SuatAnEntity,
+            SuatAnChiTietEntity,
+            DMVatTuEntity,
+          ];
           return configDB;
         }
       },

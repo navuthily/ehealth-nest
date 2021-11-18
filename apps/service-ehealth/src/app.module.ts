@@ -5,7 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { GraphQLFederationModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
-import path, { join } from 'path';
+import { join } from 'path';
 import { contextMiddleware } from '@libs/middlewares';
 import { ApiConfigService } from '@libs/shared/services/api-config.service';
 import { SharedModule } from '@libs/shared/shared.module';
@@ -14,6 +14,13 @@ import { ThongTinLuotKhamEntity } from './thongtinluotkham/thongtinluotkham.enti
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/user.entity';
+import { DMBenhNhanModule } from './dmbenhnhan/dmbenhnhan.module';
+import { DMBenhNhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
+import { CommonModule } from '@libs/common/scalar/common.module';
+import { BenhAnGiuongBenhModule } from './BenhAnGiuongBenh/BenhAnGiuongBenh.module';
+import { BenhAnGiuongBenhEntity } from './BenhAnGiuongBenh/BenhAnGiuongBenh.entity';
+import { DMBuongGiuongBenhModule } from './DMBuongGiuongBenh/DMBuongGiuongBenh.module';
+import { DMBuongGiuongBenhEntity } from './DMBuongGiuongBenh/DMBuongGiuongBenh.entity';
 
 interface IHeadersContainer {
   headers?: Record<string, string>;
@@ -36,7 +43,7 @@ interface IContextArgs {
       },
       context: ({ req, connection }: IContextArgs) => {
         // console.log(req);
-        
+
         // console.log(connection);
 
         return {
@@ -45,8 +52,12 @@ interface IContextArgs {
       },
     }),
     ThongTinLuotKhamModule,
+    DMBenhNhanModule,
+    BenhAnGiuongBenhModule,
+    DMBuongGiuongBenhModule,
     AuthModule,
     UserModule,
+    CommonModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
@@ -56,7 +67,13 @@ interface IContextArgs {
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
-        configDB.entities = [ThongTinLuotKhamEntity, UserEntity];
+        configDB.entities = [
+          ThongTinLuotKhamEntity,
+          DMBenhNhanEntity,
+          UserEntity,
+          BenhAnGiuongBenhEntity,
+          DMBuongGiuongBenhEntity,
+        ];
         console.log(process.env.SV_EHEALTH_IP);
 
         return configDB;
@@ -68,7 +85,7 @@ interface IContextArgs {
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
         parserOptions: {
-          path: path.join(__dirname, '../../../../../../', 'libs/i18n'),
+          path: join(__dirname, '../../../../../../', 'libs/i18n'),
           watch: configService.isDevelopment,
         },
       }),

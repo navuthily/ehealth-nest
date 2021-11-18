@@ -5,7 +5,7 @@ import {
   ROUTE_ARGS_METADATA,
 } from '@nestjs/common/constants';
 import { RouteParamtypes } from '@nestjs/common/enums/route-paramtypes.enum';
-import { FileInterceptor } from '@nestjs/platform-express';
+// import { file } from '@nestjs/platform-fastify';
 import {
   ApiBody,
   ApiConsumes,
@@ -112,14 +112,15 @@ export function ApiFile(
   options: Partial<{ isRequired: boolean }> = {},
 ): MethodDecorator {
   const filesArray = _.castArray(files);
-  const apiFileInterceptors = filesArray.map((file) =>
-    UseInterceptors(FileInterceptor(file.name)),
-  );
+  // const apiFileInterceptors = filesArray.map((file) =>
+  //   UseInterceptors(FileInterceptor(file.name)),
+  // );
 
   return applyDecorators(
     RegisterModels(),
     ApiConsumes('multipart/form-data'),
     ApiFileDecorator(filesArray, options),
-    ...apiFileInterceptors,
+   
+    // ...apiFileInterceptors,
   );
 }

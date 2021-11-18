@@ -12,142 +12,83 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
-type thongtinluotkham {
+type ThongTinLuotKham {
+  luotkhamId: ID!
+}
+
+type DMVatTu {
+  maVT: ID!
+  tenVT: String!
+  soTT: Float!
+}
+
+type SuatAnChiTiet {
+  id: ID!
+  phieuId: Float!
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+  suatan: SuatAn!
+  vattu: DMVatTu!
+}
+
+type SuatAn {
+  phieuId: ID!
   luotkhamId: Float!
-}
-
-type Posph66EhH {
-  id: Float!
-  luotkhamId: Float!
-  ngay_ct: DateTime!
-  thongtinluotkham: thongtinluotkham
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type DeleteManyResponse {
-  """The number of records deleted."""
-  deletedCount: Int!
-}
-
-type Posph66EhHDeleteResponse {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-type UpdateManyResponse {
-  """The number of records updated."""
-  updatedCount: Int!
-}
-
-type Posph66EhHEdge {
-  """The node containing the Posph66EhH"""
-  node: Posph66EhH!
-
-  """Cursor for this node."""
-  cursor: ConnectionCursor!
-}
-
-"""Cursor for paging through collections"""
-scalar ConnectionCursor
-
-type PageInfo {
-  """true if paging forward and there are more records."""
-  hasNextPage: Boolean
-
-  """true if paging backwards and there are more records."""
-  hasPreviousPage: Boolean
-
-  """The cursor of the first returned record."""
-  startCursor: ConnectionCursor
-
-  """The cursor of the last returned record."""
-  endCursor: ConnectionCursor
-}
-
-type Posph66EhHConnection {
-  """Paging information"""
-  pageInfo: PageInfo!
-
-  """Array of edges."""
-  edges: [Posph66EhHEdge!]!
-}
-
-type Posph66EhHAggregateGroupBy {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-type Posph66EhHCountAggregate {
-  id: Int
-  luotkhamId: Int
-  ngay_ct: Int
-}
-
-type Posph66EhHSumAggregate {
-  id: Float
-  luotkhamId: Float
-}
-
-type Posph66EhHAvgAggregate {
-  id: Float
-  luotkhamId: Float
-}
-
-type Posph66EhHMinAggregate {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-type Posph66EhHMaxAggregate {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-type Query {
-  posph66EhH(
-    """The id of the record to find."""
-    id: ID!
-  ): Posph66EhH
-  posph66EhHS(
+  benhnhanId: Float!
+  buoiId: Float!
+  buoi: String!
+  diengiai: String
+  ngaygioduyet: Date
+  thongtinluotkham: ThongTinLuotKham
+  suatanchitiets(
     """Limit or page results."""
-    paging: CursorPaging = {first: 10}
+    paging: OffsetPaging = {limit: 10}
 
     """Specify to filter the records returned."""
-    filter: Posph66EhHFilter = {}
+    filter: SuatAnChiTietFilter = {}
 
     """Specify to sort results."""
-    sorting: [Posph66EhHSort!] = []
-  ): Posph66EhHConnection!
+    sorting: [SuatAnChiTietSort!] = []
+  ): SuatAnSuatanchitietsConnection!
 }
 
-input CursorPaging {
-  """Paginate before opaque cursor"""
-  before: ConnectionCursor
+"""Date custom scalar type"""
+scalar Date
 
-  """Paginate after opaque cursor"""
-  after: ConnectionCursor
+input OffsetPaging {
+  """Limit the number of records returned"""
+  limit: Int
 
-  """Paginate first"""
-  first: Int
-
-  """Paginate last"""
-  last: Int
+  """Offset to start returning records from"""
+  offset: Int
 }
 
-input Posph66EhHFilter {
-  and: [Posph66EhHFilter!]
-  or: [Posph66EhHFilter!]
-  id: NumberFieldComparison
-  luotkhamId: NumberFieldComparison
-  ngay_ct: DateFieldComparison
+input SuatAnChiTietFilter {
+  and: [SuatAnChiTietFilter!]
+  or: [SuatAnChiTietFilter!]
+  id: IDFilterComparison
+  phieuId: NumberFieldComparison
+  soluong: NumberFieldComparison
+  gia: NumberFieldComparison
+  thanhtien: NumberFieldComparison
+}
+
+input IDFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: ID
+  neq: ID
+  gt: ID
+  gte: ID
+  lt: ID
+  lte: ID
+  like: ID
+  notLike: ID
+  iLike: ID
+  notILike: ID
+  in: [ID!]
+  notIn: [ID!]
 }
 
 input NumberFieldComparison {
@@ -170,6 +111,221 @@ input NumberFieldComparisonBetween {
   upper: Float!
 }
 
+input SuatAnChiTietSort {
+  field: SuatAnChiTietSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum SuatAnChiTietSortFields {
+  id
+  phieuId
+  soluong
+  gia
+  thanhtien
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+type OffsetPageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+}
+
+type SuatAnConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [SuatAn!]!
+}
+
+type SuatAnAggregateGroupBy {
+  phieuId: ID
+  luotkhamId: Float
+  benhnhanId: Float
+  buoiId: Float
+  diengiai: String
+  ngaygioduyet: Date
+}
+
+type SuatAnCountAggregate {
+  phieuId: Int
+  luotkhamId: Int
+  benhnhanId: Int
+  buoiId: Int
+  diengiai: Int
+  ngaygioduyet: Int
+}
+
+type SuatAnSumAggregate {
+  phieuId: Float
+  luotkhamId: Float
+  benhnhanId: Float
+  buoiId: Float
+}
+
+type SuatAnAvgAggregate {
+  phieuId: Float
+  luotkhamId: Float
+  benhnhanId: Float
+  buoiId: Float
+}
+
+type SuatAnMinAggregate {
+  phieuId: ID
+  luotkhamId: Float
+  benhnhanId: Float
+  buoiId: Float
+  diengiai: String
+  ngaygioduyet: Date
+}
+
+type SuatAnMaxAggregate {
+  phieuId: ID
+  luotkhamId: Float
+  benhnhanId: Float
+  buoiId: Float
+  diengiai: String
+  ngaygioduyet: Date
+}
+
+type SuatAnSuatanchitietsConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [SuatAnChiTiet!]!
+}
+
+type SuatAnChiTietConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [SuatAnChiTiet!]!
+}
+
+type SuatAnChiTietAggregateGroupBy {
+  id: ID
+  phieuId: Float
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+}
+
+type SuatAnChiTietCountAggregate {
+  id: Int
+  phieuId: Int
+  soluong: Int
+  gia: Int
+  thanhtien: Int
+}
+
+type SuatAnChiTietSumAggregate {
+  id: Float
+  phieuId: Float
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+}
+
+type SuatAnChiTietAvgAggregate {
+  id: Float
+  phieuId: Float
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+}
+
+type SuatAnChiTietMinAggregate {
+  id: ID
+  phieuId: Float
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+}
+
+type SuatAnChiTietMaxAggregate {
+  id: ID
+  phieuId: Float
+  soluong: Float
+  gia: Float
+  thanhtien: Float
+}
+
+type Query {
+  suatAn(
+    """The id of the record to find."""
+    id: ID!
+  ): SuatAn
+  suatAns(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: SuatAnFilter = {}
+
+    """Specify to sort results."""
+    sorting: [SuatAnSort!] = []
+  ): SuatAnConnection!
+  suatAnChiTiet(
+    """The id of the record to find."""
+    id: ID!
+  ): SuatAnChiTiet
+  suatAnChiTiets(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: SuatAnChiTietFilter = {}
+
+    """Specify to sort results."""
+    sorting: [SuatAnChiTietSort!] = []
+  ): SuatAnChiTietConnection!
+}
+
+input SuatAnFilter {
+  and: [SuatAnFilter!]
+  or: [SuatAnFilter!]
+  phieuId: IDFilterComparison
+  luotkhamId: NumberFieldComparison
+  benhnhanId: NumberFieldComparison
+  buoiId: NumberFieldComparison
+  diengiai: StringFieldComparison
+  ngaygioduyet: DateFieldComparison
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
 input DateFieldComparison {
   is: Boolean
   isNot: Boolean
@@ -185,104 +341,27 @@ input DateFieldComparison {
   notBetween: DateFieldComparisonBetween
 }
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 input DateFieldComparisonBetween {
   lower: DateTime!
   upper: DateTime!
 }
 
-input Posph66EhHSort {
-  field: Posph66EhHSortFields!
+input SuatAnSort {
+  field: SuatAnSortFields!
   direction: SortDirection!
   nulls: SortNulls
 }
 
-enum Posph66EhHSortFields {
-  id
+enum SuatAnSortFields {
+  phieuId
   luotkhamId
-  ngay_ct
-}
-
-"""Sort Directions"""
-enum SortDirection {
-  ASC
-  DESC
-}
-
-"""Sort Nulls Options"""
-enum SortNulls {
-  NULLS_FIRST
-  NULLS_LAST
-}
-
-type Mutation {
-  createOnePosph66EhH(input: CreateOnePosph66EhHInput!): Posph66EhH!
-  createManyPosph66EhHS(input: CreateManyPosph66EhHSInput!): [Posph66EhH!]!
-  updateOnePosph66EhH(input: UpdateOnePosph66EhHInput!): Posph66EhH!
-  updateManyPosph66EhHS(input: UpdateManyPosph66EhHSInput!): UpdateManyResponse!
-  deleteOnePosph66EhH(input: DeleteOnePosph66EhHInput!): Posph66EhHDeleteResponse!
-  deleteManyPosph66EhHS(input: DeleteManyPosph66EhHSInput!): DeleteManyResponse!
-}
-
-input CreateOnePosph66EhHInput {
-  """The record to create"""
-  posph66EhH: CreatePosph66EhH!
-}
-
-input CreatePosph66EhH {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-input CreateManyPosph66EhHSInput {
-  """Array of records to create"""
-  posph66EhHS: [CreatePosph66EhH!]!
-}
-
-input UpdateOnePosph66EhHInput {
-  """The id of the record to update"""
-  id: ID!
-
-  """The update to apply."""
-  update: UpdatePosph66EhH!
-}
-
-input UpdatePosph66EhH {
-  id: Float
-  luotkhamId: Float
-  ngay_ct: DateTime
-}
-
-input UpdateManyPosph66EhHSInput {
-  """Filter used to find fields to update"""
-  filter: Posph66EhHUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: UpdatePosph66EhH!
-}
-
-input Posph66EhHUpdateFilter {
-  and: [Posph66EhHUpdateFilter!]
-  or: [Posph66EhHUpdateFilter!]
-  id: NumberFieldComparison
-  luotkhamId: NumberFieldComparison
-  ngay_ct: DateFieldComparison
-}
-
-input DeleteOnePosph66EhHInput {
-  """The id of the record to delete."""
-  id: ID!
-}
-
-input DeleteManyPosph66EhHSInput {
-  """Filter to find records to delete"""
-  filter: Posph66EhHDeleteFilter!
-}
-
-input Posph66EhHDeleteFilter {
-  and: [Posph66EhHDeleteFilter!]
-  or: [Posph66EhHDeleteFilter!]
-  id: NumberFieldComparison
-  luotkhamId: NumberFieldComparison
-  ngay_ct: DateFieldComparison
+  benhnhanId
+  buoiId
+  diengiai
+  ngaygioduyet
 }

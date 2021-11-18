@@ -12,12 +12,131 @@ directive @requires(fields: String!) on FIELD_DEFINITION
 
 directive @provides(fields: String!) on FIELD_DEFINITION
 
-type thongtinluotkham {
+type DMBuongGiuongBenh {
+  buongiuongId: ID!
+  tenbuongiuong: Float!
+}
+
+type BenhAnGiuongBenh {
+  benhangiuongbenhId: ID!
   luotkhamId: Float!
-  thoigianvaokham: DateTime
+  buongiuongId: Float!
+  trangthai: String!
+  ngaygiobatdauSuDung: Date!
+  buonggiuongbenh: DMBuongGiuongBenh!
+}
+
+"""Date custom scalar type"""
+scalar Date
+
+type DMBenhNhan {
+  benhnhanId: ID!
+  namsinh: Float
+  ngaythangnamsinh: Date
+  tuoi: String
+}
+
+type ThongTinLuotKham {
+  luotkhamId: ID!
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
+  dmBenhNhan: DMBenhNhan
+  buonggiuongbenhs(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 1}
+
+    """Specify to filter the records returned."""
+    filter: BenhAnGiuongBenhFilter = {trangthai: {neq: "Hủy bỏ"}}
+
+    """Specify to sort results."""
+    sorting: [BenhAnGiuongBenhSort!] = [{field: ngaygiobatdauSuDung, direction: DESC}]
+  ): ThongTinLuotKhamBuonggiuongbenhsConnection
+}
+
+input OffsetPaging {
+  """Limit the number of records returned"""
+  limit: Int
+
+  """Offset to start returning records from"""
+  offset: Int
+}
+
+input BenhAnGiuongBenhFilter {
+  and: [BenhAnGiuongBenhFilter!]
+  or: [BenhAnGiuongBenhFilter!]
+  benhangiuongbenhId: IDFilterComparison
+  luotkhamId: NumberFieldComparison
+  buongiuongId: NumberFieldComparison
+  trangthai: StringFieldComparison
+  ngaygiobatdauSuDung: DateFieldComparison
+}
+
+input IDFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: ID
+  neq: ID
+  gt: ID
+  gte: ID
+  lt: ID
+  lte: ID
+  like: ID
+  notLike: ID
+  iLike: ID
+  notILike: ID
+  in: [ID!]
+  notIn: [ID!]
+}
+
+input NumberFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  notIn: [Float!]
+  between: NumberFieldComparisonBetween
+  notBetween: NumberFieldComparisonBetween
+}
+
+input NumberFieldComparisonBetween {
+  lower: Float!
+  upper: Float!
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
+input DateFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: DateTime
+  neq: DateTime
+  gt: DateTime
+  gte: DateTime
+  lt: DateTime
+  lte: DateTime
+  in: [DateTime!]
+  notIn: [DateTime!]
+  between: DateFieldComparisonBetween
+  notBetween: DateFieldComparisonBetween
 }
 
 """
@@ -25,27 +144,40 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type DeleteManyResponse {
-  """The number of records deleted."""
-  deletedCount: Int!
+input DateFieldComparisonBetween {
+  lower: DateTime!
+  upper: DateTime!
 }
 
-type ThongtinluotkhamDeleteResponse {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
-  benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
+input BenhAnGiuongBenhSort {
+  field: BenhAnGiuongBenhSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
 }
 
-type UpdateManyResponse {
-  """The number of records updated."""
-  updatedCount: Int!
+enum BenhAnGiuongBenhSortFields {
+  benhangiuongbenhId
+  luotkhamId
+  buongiuongId
+  trangthai
+  ngaygiobatdauSuDung
 }
 
-type thongtinluotkhamEdge {
-  """The node containing the thongtinluotkham"""
-  node: thongtinluotkham!
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}
+
+type ThongTinLuotKhamEdge {
+  """The node containing the ThongTinLuotKham"""
+  node: ThongTinLuotKham!
 
   """Cursor for this node."""
   cursor: ConnectionCursor!
@@ -68,246 +200,42 @@ type PageInfo {
   endCursor: ConnectionCursor
 }
 
-type ThongtinluotkhamConnection {
+type ThongTinLuotKhamConnection {
   """Paging information"""
   pageInfo: PageInfo!
 
   """Array of edges."""
-  edges: [thongtinluotkhamEdge!]!
+  edges: [ThongTinLuotKhamEdge!]!
 }
 
-type thongtinluotkhamAggregateGroupBy {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
+type ThongTinLuotKhamAggregateGroupBy {
+  luotkhamId: ID
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
 }
 
-type thongtinluotkhamCountAggregate {
+type ThongTinLuotKhamCountAggregate {
   luotkhamId: Int
-  thoigianvaokham: Int
   benhnhanId: Int
-  bsyeucau: Int
-  phanloai: Int
 }
 
-type thongtinluotkhamSumAggregate {
+type ThongTinLuotKhamSumAggregate {
   luotkhamId: Float
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
 }
 
-type thongtinluotkhamAvgAggregate {
+type ThongTinLuotKhamAvgAggregate {
   luotkhamId: Float
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
 }
 
-type thongtinluotkhamMinAggregate {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
+type ThongTinLuotKhamMinAggregate {
+  luotkhamId: ID
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
 }
 
-type thongtinluotkhamMaxAggregate {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
+type ThongTinLuotKhamMaxAggregate {
+  luotkhamId: ID
   benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
-}
-
-type User {
-  id: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  createdBy: String
-  updatedBy: String
-  donviId: Float
-  bophanId: Float
-  phongbanId: Float
-  holotNhanVien: String
-  tennhanvien: String
-  hinhNhanVien: String
-  gioitinh: Boolean
-  dantocId: Float
-  quoctichId: Float
-  cmnd: String
-  hochieu: String
-  chucvuId: Float
-  chucdanhId: Float
-  diachi: String
-  mobile: String
-  homePhone: String
-  email: String
-  yahooId: String
-  skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
-  trinhdoId: Float
-  loaitinhluongId: Float
-  chamcongbangmay: Boolean
-  taikhoanNganHang: String
-  nganhangId: Float
-  masothuecanhan: String
-  sobaohiem: String
-  ghichu: String
-  danghiviec: Boolean
-  hinhchuky: String
-  isDoctor: Boolean
-  isCongTacVienBenNgoai: Boolean
-  allowLogin: Boolean
-  nickname: String
-  extfield1: Boolean
-  extfield2: Boolean
-  username: String
-  password: String
-  disable: Boolean
-  hideLich: Boolean
-  ngaycapCMND: DateTime
-  nhomLSPId: Float
-  manhanvien: Float
-  isCoHuu: Boolean
-  bsdaidienId: Float
-  ngonngu: Float
-  passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
-  coTinhLuongKeToan: Boolean
-  hopdongId: Float
-  thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
-  goibenhId: Float
-  chuyenkhoaId: Float
-  tinhtranghonnhanId: Float
-  noicapCMND: Float
-  ghichu1: String
-  chungchihanhnghe: Boolean
-  ngaynghiviec: DateTime
-  isLichBacSy: Boolean
-  soChungChiHanhNghe: String
-  noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
-  phamvihoatdongChungChiHanhNghe: Float
-  noidaotao: Float
-  nguoiduyetdonId: Float
-  nhomAnhVanId: Float
-  phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
-  passwordOLD: String
-  chucvukhacId: Float
-  muchamdiemId: Float
-  rememberToken: String
-  accessToken: String
-  expireToken: String
-  apiToken: String
-  appPassWord: String
-  nhomLSPDeNghiId: Float
-  loaikhoiId: Float
-  hesodiemNN: Float
-  ghichuReview: String
-  ghichuPhongVan: String
-  isLuongLSP: Boolean
-}
-
-type UserDeleteResponse {
-  id: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  createdBy: String
-  updatedBy: String
-  donviId: Float
-  bophanId: Float
-  phongbanId: Float
-  holotNhanVien: String
-  tennhanvien: String
-  hinhNhanVien: String
-  gioitinh: Boolean
-  dantocId: Float
-  quoctichId: Float
-  cmnd: String
-  hochieu: String
-  chucvuId: Float
-  chucdanhId: Float
-  diachi: String
-  mobile: String
-  homePhone: String
-  email: String
-  yahooId: String
-  skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
-  trinhdoId: Float
-  loaitinhluongId: Float
-  chamcongbangmay: Boolean
-  taikhoanNganHang: String
-  nganhangId: Float
-  masothuecanhan: String
-  sobaohiem: String
-  ghichu: String
-  danghiviec: Boolean
-  hinhchuky: String
-  isDoctor: Boolean
-  isCongTacVienBenNgoai: Boolean
-  allowLogin: Boolean
-  nickname: String
-  extfield1: Boolean
-  extfield2: Boolean
-  username: String
-  password: String
-  disable: Boolean
-  hideLich: Boolean
-  ngaycapCMND: DateTime
-  nhomLSPId: Float
-  manhanvien: Float
-  isCoHuu: Boolean
-  bsdaidienId: Float
-  ngonngu: Float
-  passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
-  coTinhLuongKeToan: Boolean
-  hopdongId: Float
-  thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
-  goibenhId: Float
-  chuyenkhoaId: Float
-  tinhtranghonnhanId: Float
-  noicapCMND: Float
-  ghichu1: String
-  chungchihanhnghe: Boolean
-  ngaynghiviec: DateTime
-  isLichBacSy: Boolean
-  soChungChiHanhNghe: String
-  noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
-  phamvihoatdongChungChiHanhNghe: Float
-  noidaotao: Float
-  nguoiduyetdonId: Float
-  nhomAnhVanId: Float
-  phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
-  passwordOLD: String
-  chucvukhacId: Float
-  muchamdiemId: Float
-  rememberToken: String
-  accessToken: String
-  expireToken: String
-  apiToken: String
-  appPassWord: String
-  nhomLSPDeNghiId: Float
-  loaikhoiId: Float
-  hesodiemNN: Float
-  ghichuReview: String
-  ghichuPhongVan: String
-  isLuongLSP: Boolean
 }
 
 type OffsetPageInfo {
@@ -316,6 +244,108 @@ type OffsetPageInfo {
 
   """true if paging backwards and there are more records."""
   hasPreviousPage: Boolean
+}
+
+type ThongTinLuotKhamBuonggiuongbenhsConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [BenhAnGiuongBenh!]!
+}
+
+type User {
+  id: String
+  createdAt: Date
+  updatedAt: Date
+  createdBy: String
+  updatedBy: String
+  donviId: Float
+  bophanId: Float
+  phongbanId: Float
+  holotNhanVien: String
+  tennhanvien: String
+  hinhNhanVien: String
+  gioitinh: Boolean
+  dantocId: Float
+  quoctichId: Float
+  cmnd: String
+  hochieu: String
+  chucvuId: Float
+  chucdanhId: Float
+  diachi: String
+  mobile: String
+  homePhone: String
+  email: String
+  yahooId: String
+  skypeId: String
+  ngaysinh: Date
+  ngayvaolam: Date
+  trinhdoId: Float
+  loaitinhluongId: Float
+  chamcongbangmay: Boolean
+  taikhoanNganHang: String
+  nganhangId: Float
+  masothuecanhan: String
+  sobaohiem: String
+  ghichu: String
+  danghiviec: Boolean
+  hinhchuky: String
+  isDoctor: Boolean
+  isCongTacVienBenNgoai: Boolean
+  allowLogin: Boolean
+  nickname: String
+  extfield1: Boolean
+  extfield2: Boolean
+  username: String
+  password: String
+  disable: Boolean
+  hideLich: Boolean
+  ngaycapCMND: Date
+  nhomLSPId: Float
+  manhanvien: Float
+  isCoHuu: Boolean
+  bsdaidienId: Float
+  ngonngu: Float
+  passwordProtect: String
+  kinhnghiem: Date
+  createOn: Date
+  coTinhLuongKeToan: Boolean
+  hopdongId: Float
+  thoihanHopDongId: Float
+  ngaybatdauHopDong: Date
+  ngayketthucHopDong: Date
+  goibenhId: Float
+  chuyenkhoaId: Float
+  tinhtranghonnhanId: Float
+  noicapCMND: Float
+  ghichu1: String
+  chungchihanhnghe: Boolean
+  ngaynghiviec: Date
+  isLichBacSy: Boolean
+  soChungChiHanhNghe: String
+  noicapChungChiHanhNghe: Float
+  ngaycapChungChiHanhNghe: Date
+  phamvihoatdongChungChiHanhNghe: Float
+  noidaotao: Float
+  nguoiduyetdonId: Float
+  nhomAnhVanId: Float
+  phamviHanhNgheBoSung: Float
+  ngayganbo: Date
+  passwordOLD: String
+  chucvukhacId: Float
+  muchamdiemId: Float
+  rememberToken: String
+  accessToken: String
+  expireToken: String
+  apiToken: String
+  appPassWord: String
+  nhomLSPDeNghiId: Float
+  loaikhoiId: Float
+  hesodiemNN: Float
+  ghichuReview: String
+  ghichuPhongVan: String
+  isLuongLSP: Boolean
 }
 
 type UserConnection {
@@ -331,8 +361,8 @@ type UserConnection {
 
 type UserAggregateGroupBy {
   id: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: Date
+  updatedAt: Date
   createdBy: String
   updatedBy: String
   donviId: Float
@@ -354,8 +384,8 @@ type UserAggregateGroupBy {
   email: String
   yahooId: String
   skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
+  ngaysinh: Date
+  ngayvaolam: Date
   trinhdoId: Float
   loaitinhluongId: Float
   chamcongbangmay: Boolean
@@ -376,37 +406,37 @@ type UserAggregateGroupBy {
   password: String
   disable: Boolean
   hideLich: Boolean
-  ngaycapCMND: DateTime
+  ngaycapCMND: Date
   nhomLSPId: Float
   manhanvien: Float
   isCoHuu: Boolean
   bsdaidienId: Float
   ngonngu: Float
   passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
+  kinhnghiem: Date
+  createOn: Date
   coTinhLuongKeToan: Boolean
   hopdongId: Float
   thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
+  ngaybatdauHopDong: Date
+  ngayketthucHopDong: Date
   goibenhId: Float
   chuyenkhoaId: Float
   tinhtranghonnhanId: Float
   noicapCMND: Float
   ghichu1: String
   chungchihanhnghe: Boolean
-  ngaynghiviec: DateTime
+  ngaynghiviec: Date
   isLichBacSy: Boolean
   soChungChiHanhNghe: String
   noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
+  ngaycapChungChiHanhNghe: Date
   phamvihoatdongChungChiHanhNghe: Float
   noidaotao: Float
   nguoiduyetdonId: Float
   nhomAnhVanId: Float
   phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
+  ngayganbo: Date
   passwordOLD: String
   chucvukhacId: Float
   muchamdiemId: Float
@@ -587,8 +617,8 @@ type UserAvgAggregate {
 
 type UserMinAggregate {
   id: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: Date
+  updatedAt: Date
   createdBy: String
   updatedBy: String
   donviId: Float
@@ -609,8 +639,8 @@ type UserMinAggregate {
   email: String
   yahooId: String
   skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
+  ngaysinh: Date
+  ngayvaolam: Date
   trinhdoId: Float
   loaitinhluongId: Float
   taikhoanNganHang: String
@@ -622,33 +652,33 @@ type UserMinAggregate {
   nickname: String
   username: String
   password: String
-  ngaycapCMND: DateTime
+  ngaycapCMND: Date
   nhomLSPId: Float
   manhanvien: Float
   bsdaidienId: Float
   ngonngu: Float
   passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
+  kinhnghiem: Date
+  createOn: Date
   hopdongId: Float
   thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
+  ngaybatdauHopDong: Date
+  ngayketthucHopDong: Date
   goibenhId: Float
   chuyenkhoaId: Float
   tinhtranghonnhanId: Float
   noicapCMND: Float
   ghichu1: String
-  ngaynghiviec: DateTime
+  ngaynghiviec: Date
   soChungChiHanhNghe: String
   noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
+  ngaycapChungChiHanhNghe: Date
   phamvihoatdongChungChiHanhNghe: Float
   noidaotao: Float
   nguoiduyetdonId: Float
   nhomAnhVanId: Float
   phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
+  ngayganbo: Date
   passwordOLD: String
   chucvukhacId: Float
   muchamdiemId: Float
@@ -666,8 +696,8 @@ type UserMinAggregate {
 
 type UserMaxAggregate {
   id: String
-  createdAt: DateTime
-  updatedAt: DateTime
+  createdAt: Date
+  updatedAt: Date
   createdBy: String
   updatedBy: String
   donviId: Float
@@ -688,8 +718,8 @@ type UserMaxAggregate {
   email: String
   yahooId: String
   skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
+  ngaysinh: Date
+  ngayvaolam: Date
   trinhdoId: Float
   loaitinhluongId: Float
   taikhoanNganHang: String
@@ -701,33 +731,33 @@ type UserMaxAggregate {
   nickname: String
   username: String
   password: String
-  ngaycapCMND: DateTime
+  ngaycapCMND: Date
   nhomLSPId: Float
   manhanvien: Float
   bsdaidienId: Float
   ngonngu: Float
   passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
+  kinhnghiem: Date
+  createOn: Date
   hopdongId: Float
   thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
+  ngaybatdauHopDong: Date
+  ngayketthucHopDong: Date
   goibenhId: Float
   chuyenkhoaId: Float
   tinhtranghonnhanId: Float
   noicapCMND: Float
   ghichu1: String
-  ngaynghiviec: DateTime
+  ngaynghiviec: Date
   soChungChiHanhNghe: String
   noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
+  ngaycapChungChiHanhNghe: Date
   phamvihoatdongChungChiHanhNghe: Float
   noidaotao: Float
   nguoiduyetdonId: Float
   nhomAnhVanId: Float
   phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
+  ngayganbo: Date
   passwordOLD: String
   chucvukhacId: Float
   muchamdiemId: Float
@@ -753,21 +783,219 @@ type LoginPayloadDto {
   token: TokenPayloadDto
 }
 
+type DMBenhNhanEdge {
+  """The node containing the DMBenhNhan"""
+  node: DMBenhNhan!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type DMBenhNhanConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [DMBenhNhanEdge!]!
+}
+
+type DMBenhNhanAggregateGroupBy {
+  benhnhanId: ID
+  namsinh: Float
+  ngaythangnamsinh: Date
+}
+
+type DMBenhNhanCountAggregate {
+  benhnhanId: Int
+  namsinh: Int
+  ngaythangnamsinh: Int
+}
+
+type DMBenhNhanSumAggregate {
+  benhnhanId: Float
+  namsinh: Float
+}
+
+type DMBenhNhanAvgAggregate {
+  benhnhanId: Float
+  namsinh: Float
+}
+
+type DMBenhNhanMinAggregate {
+  benhnhanId: ID
+  namsinh: Float
+  ngaythangnamsinh: Date
+}
+
+type DMBenhNhanMaxAggregate {
+  benhnhanId: ID
+  namsinh: Float
+  ngaythangnamsinh: Date
+}
+
+type BenhAnGiuongBenhEdge {
+  """The node containing the BenhAnGiuongBenh"""
+  node: BenhAnGiuongBenh!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type BenhAnGiuongBenhConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [BenhAnGiuongBenhEdge!]!
+}
+
+type BenhAnGiuongBenhAggregateGroupBy {
+  benhangiuongbenhId: ID
+  luotkhamId: Float
+  buongiuongId: Float
+  trangthai: String
+  ngaygiobatdauSuDung: Date
+}
+
+type BenhAnGiuongBenhCountAggregate {
+  benhangiuongbenhId: Int
+  luotkhamId: Int
+  buongiuongId: Int
+  trangthai: Int
+  ngaygiobatdauSuDung: Int
+}
+
+type BenhAnGiuongBenhSumAggregate {
+  benhangiuongbenhId: Float
+  luotkhamId: Float
+  buongiuongId: Float
+}
+
+type BenhAnGiuongBenhAvgAggregate {
+  benhangiuongbenhId: Float
+  luotkhamId: Float
+  buongiuongId: Float
+}
+
+type BenhAnGiuongBenhMinAggregate {
+  benhangiuongbenhId: ID
+  luotkhamId: Float
+  buongiuongId: Float
+  trangthai: String
+  ngaygiobatdauSuDung: Date
+}
+
+type BenhAnGiuongBenhMaxAggregate {
+  benhangiuongbenhId: ID
+  luotkhamId: Float
+  buongiuongId: Float
+  trangthai: String
+  ngaygiobatdauSuDung: Date
+}
+
+type DMBuongGiuongBenhEdge {
+  """The node containing the DMBuongGiuongBenh"""
+  node: DMBuongGiuongBenh!
+
+  """Cursor for this node."""
+  cursor: ConnectionCursor!
+}
+
+type DMBuongGiuongBenhConnection {
+  """Paging information"""
+  pageInfo: PageInfo!
+
+  """Array of edges."""
+  edges: [DMBuongGiuongBenhEdge!]!
+}
+
+type DMBuongGiuongBenhAggregateGroupBy {
+  buongiuongId: ID
+  tenbuongiuong: Float
+}
+
+type DMBuongGiuongBenhCountAggregate {
+  buongiuongId: Int
+  tenbuongiuong: Int
+}
+
+type DMBuongGiuongBenhSumAggregate {
+  buongiuongId: Float
+  tenbuongiuong: Float
+}
+
+type DMBuongGiuongBenhAvgAggregate {
+  buongiuongId: Float
+  tenbuongiuong: Float
+}
+
+type DMBuongGiuongBenhMinAggregate {
+  buongiuongId: ID
+  tenbuongiuong: Float
+}
+
+type DMBuongGiuongBenhMaxAggregate {
+  buongiuongId: ID
+  tenbuongiuong: Float
+}
+
 type Query {
-  thongtinluotkham(
+  thongTinLuotKham(
     """The id of the record to find."""
     id: ID!
-  ): thongtinluotkham
-  thongtinluotkhams(
+  ): ThongTinLuotKham
+  thongTinLuotKhams(
     """Limit or page results."""
     paging: CursorPaging = {first: 10}
 
     """Specify to filter the records returned."""
-    filter: thongtinluotkhamFilter = {}
+    filter: ThongTinLuotKhamFilter = {}
 
     """Specify to sort results."""
-    sorting: [thongtinluotkhamSort!] = []
-  ): ThongtinluotkhamConnection!
+    sorting: [ThongTinLuotKhamSort!] = [{field: benhnhanId, direction: ASC}]
+  ): ThongTinLuotKhamConnection!
+  dMBenhNhan(
+    """The id of the record to find."""
+    id: ID!
+  ): DMBenhNhan
+  dMBenhNhans(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: DMBenhNhanFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DMBenhNhanSort!] = []
+  ): DMBenhNhanConnection!
+  benhAnGiuongBenh(
+    """The id of the record to find."""
+    id: ID!
+  ): BenhAnGiuongBenh
+  benhAnGiuongBenhs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: BenhAnGiuongBenhFilter = {}
+
+    """Specify to sort results."""
+    sorting: [BenhAnGiuongBenhSort!] = []
+  ): BenhAnGiuongBenhConnection!
+  dMBuongGiuongBenh(
+    """The id of the record to find."""
+    id: ID!
+  ): DMBuongGiuongBenh
+  dMBuongGiuongBenhs(
+    """Limit or page results."""
+    paging: CursorPaging = {first: 10}
+
+    """Specify to filter the records returned."""
+    filter: DMBuongGiuongBenhFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DMBuongGiuongBenhSort!] = []
+  ): DMBuongGiuongBenhConnection!
   user(
     """The id of the record to find."""
     id: ID!
@@ -798,88 +1026,80 @@ input CursorPaging {
   last: Int
 }
 
-input thongtinluotkhamFilter {
-  and: [thongtinluotkhamFilter!]
-  or: [thongtinluotkhamFilter!]
-  luotkhamId: NumberFieldComparison
-  thoigianvaokham: DateFieldComparison
+input ThongTinLuotKhamFilter {
+  and: [ThongTinLuotKhamFilter!]
+  or: [ThongTinLuotKhamFilter!]
+  luotkhamId: IDFilterComparison
   benhnhanId: NumberFieldComparison
-  bsyeucau: NumberFieldComparison
-  phanloai: NumberFieldComparison
+  dmBenhNhan: ThongTinLuotKhamFilterDMBenhNhanFilter
+  buonggiuongbenhs: ThongTinLuotKhamFilterBenhAnGiuongBenhFilter
 }
 
-input NumberFieldComparison {
-  is: Boolean
-  isNot: Boolean
-  eq: Float
-  neq: Float
-  gt: Float
-  gte: Float
-  lt: Float
-  lte: Float
-  in: [Float!]
-  notIn: [Float!]
-  between: NumberFieldComparisonBetween
-  notBetween: NumberFieldComparisonBetween
+input ThongTinLuotKhamFilterDMBenhNhanFilter {
+  and: [ThongTinLuotKhamFilterDMBenhNhanFilter!]
+  or: [ThongTinLuotKhamFilterDMBenhNhanFilter!]
+  benhnhanId: IDFilterComparison
+  namsinh: NumberFieldComparison
+  ngaythangnamsinh: DateFieldComparison
 }
 
-input NumberFieldComparisonBetween {
-  lower: Float!
-  upper: Float!
+input ThongTinLuotKhamFilterBenhAnGiuongBenhFilter {
+  and: [ThongTinLuotKhamFilterBenhAnGiuongBenhFilter!]
+  or: [ThongTinLuotKhamFilterBenhAnGiuongBenhFilter!]
+  benhangiuongbenhId: IDFilterComparison
+  luotkhamId: NumberFieldComparison
+  buongiuongId: NumberFieldComparison
+  trangthai: StringFieldComparison
+  ngaygiobatdauSuDung: DateFieldComparison
 }
 
-input DateFieldComparison {
-  is: Boolean
-  isNot: Boolean
-  eq: DateTime
-  neq: DateTime
-  gt: DateTime
-  gte: DateTime
-  lt: DateTime
-  lte: DateTime
-  in: [DateTime!]
-  notIn: [DateTime!]
-  between: DateFieldComparisonBetween
-  notBetween: DateFieldComparisonBetween
-}
-
-input DateFieldComparisonBetween {
-  lower: DateTime!
-  upper: DateTime!
-}
-
-input thongtinluotkhamSort {
-  field: thongtinluotkhamSortFields!
+input ThongTinLuotKhamSort {
+  field: ThongTinLuotKhamSortFields!
   direction: SortDirection!
   nulls: SortNulls
 }
 
-enum thongtinluotkhamSortFields {
+enum ThongTinLuotKhamSortFields {
   luotkhamId
-  thoigianvaokham
   benhnhanId
-  bsyeucau
-  phanloai
 }
 
-"""Sort Directions"""
-enum SortDirection {
-  ASC
-  DESC
+input DMBenhNhanFilter {
+  and: [DMBenhNhanFilter!]
+  or: [DMBenhNhanFilter!]
+  benhnhanId: IDFilterComparison
+  namsinh: NumberFieldComparison
+  ngaythangnamsinh: DateFieldComparison
 }
 
-"""Sort Nulls Options"""
-enum SortNulls {
-  NULLS_FIRST
-  NULLS_LAST
+input DMBenhNhanSort {
+  field: DMBenhNhanSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
 }
 
-input OffsetPaging {
-  """Limit the number of records returned"""
-  limit: Int
+enum DMBenhNhanSortFields {
+  benhnhanId
+  namsinh
+  ngaythangnamsinh
+}
 
-  """Offset to start returning records from"""
-  offset: Int
+input DMBuongGiuongBenhFilter {
+  and: [DMBuongGiuongBenhFilter!]
+  or: [DMBuongGiuongBenhFilter!]
+  buongiuongId: IDFilterComparison
+  tenbuongiuong: NumberFieldComparison
+}
+
+input DMBuongGiuongBenhSort {
+  field: DMBuongGiuongBenhSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DMBuongGiuongBenhSortFields {
+  buongiuongId
+  tenbuongiuong
 }
 
 input UserFilter {
@@ -976,23 +1196,6 @@ input UserFilter {
   ghichuReview: StringFieldComparison
   ghichuPhongVan: StringFieldComparison
   isLuongLSP: BooleanFieldComparison
-}
-
-input StringFieldComparison {
-  is: Boolean
-  isNot: Boolean
-  eq: String
-  neq: String
-  gt: String
-  gte: String
-  lt: String
-  lte: String
-  like: String
-  notLike: String
-  iLike: String
-  notILike: String
-  in: [String!]
-  notIn: [String!]
 }
 
 input BooleanFieldComparison {
@@ -1101,505 +1304,5 @@ enum UserSortFields {
 }
 
 type Mutation {
-  createOneThongtinluotkham(input: CreateOneThongtinluotkhamInput!): thongtinluotkham!
-  createManyThongtinluotkhams(input: CreateManyThongtinluotkhamsInput!): [thongtinluotkham!]!
-  updateOneThongtinluotkham(input: UpdateOneThongtinluotkhamInput!): thongtinluotkham!
-  updateManyThongtinluotkhams(input: UpdateManyThongtinluotkhamsInput!): UpdateManyResponse!
-  deleteOneThongtinluotkham(input: DeleteOneThongtinluotkhamInput!): ThongtinluotkhamDeleteResponse!
-  deleteManyThongtinluotkhams(input: DeleteManyThongtinluotkhamsInput!): DeleteManyResponse!
   login(password: String!, username: String!): LoginPayloadDto!
-  createOneUser(input: CreateOneUserInput!): User!
-  createManyUsers(input: CreateManyUsersInput!): [User!]!
-  updateOneUser(input: UpdateOneUserInput!): User!
-  updateManyUsers(input: UpdateManyUsersInput!): UpdateManyResponse!
-  deleteOneUser(input: DeleteOneUserInput!): UserDeleteResponse!
-  deleteManyUsers(input: DeleteManyUsersInput!): DeleteManyResponse!
-}
-
-input CreateOneThongtinluotkhamInput {
-  """The record to create"""
-  thongtinluotkham: CreateThongtinluotkham!
-}
-
-input CreateThongtinluotkham {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
-  benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
-}
-
-input CreateManyThongtinluotkhamsInput {
-  """Array of records to create"""
-  thongtinluotkhams: [CreateThongtinluotkham!]!
-}
-
-input UpdateOneThongtinluotkhamInput {
-  """The id of the record to update"""
-  id: ID!
-
-  """The update to apply."""
-  update: UpdateThongtinluotkham!
-}
-
-input UpdateThongtinluotkham {
-  luotkhamId: Float
-  thoigianvaokham: DateTime
-  benhnhanId: Float
-  bsyeucau: Float
-  phanloai: Float
-}
-
-input UpdateManyThongtinluotkhamsInput {
-  """Filter used to find fields to update"""
-  filter: thongtinluotkhamUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: UpdateThongtinluotkham!
-}
-
-input thongtinluotkhamUpdateFilter {
-  and: [thongtinluotkhamUpdateFilter!]
-  or: [thongtinluotkhamUpdateFilter!]
-  luotkhamId: NumberFieldComparison
-  thoigianvaokham: DateFieldComparison
-  benhnhanId: NumberFieldComparison
-  bsyeucau: NumberFieldComparison
-  phanloai: NumberFieldComparison
-}
-
-input DeleteOneThongtinluotkhamInput {
-  """The id of the record to delete."""
-  id: ID!
-}
-
-input DeleteManyThongtinluotkhamsInput {
-  """Filter to find records to delete"""
-  filter: thongtinluotkhamDeleteFilter!
-}
-
-input thongtinluotkhamDeleteFilter {
-  and: [thongtinluotkhamDeleteFilter!]
-  or: [thongtinluotkhamDeleteFilter!]
-  luotkhamId: NumberFieldComparison
-  thoigianvaokham: DateFieldComparison
-  benhnhanId: NumberFieldComparison
-  bsyeucau: NumberFieldComparison
-  phanloai: NumberFieldComparison
-}
-
-input CreateOneUserInput {
-  """The record to create"""
-  user: CreateUser!
-}
-
-input CreateUser {
-  id: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  createdBy: String
-  updatedBy: String
-  donviId: Float
-  bophanId: Float
-  phongbanId: Float
-  holotNhanVien: String
-  tennhanvien: String
-  hinhNhanVien: String
-  gioitinh: Boolean
-  dantocId: Float
-  quoctichId: Float
-  cmnd: String
-  hochieu: String
-  chucvuId: Float
-  chucdanhId: Float
-  diachi: String
-  mobile: String
-  homePhone: String
-  email: String
-  yahooId: String
-  skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
-  trinhdoId: Float
-  loaitinhluongId: Float
-  chamcongbangmay: Boolean
-  taikhoanNganHang: String
-  nganhangId: Float
-  masothuecanhan: String
-  sobaohiem: String
-  ghichu: String
-  danghiviec: Boolean
-  hinhchuky: String
-  isDoctor: Boolean
-  isCongTacVienBenNgoai: Boolean
-  allowLogin: Boolean
-  nickname: String
-  extfield1: Boolean
-  extfield2: Boolean
-  username: String
-  password: String
-  disable: Boolean
-  hideLich: Boolean
-  ngaycapCMND: DateTime
-  nhomLSPId: Float
-  manhanvien: Float
-  isCoHuu: Boolean
-  bsdaidienId: Float
-  ngonngu: Float
-  passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
-  coTinhLuongKeToan: Boolean
-  hopdongId: Float
-  thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
-  goibenhId: Float
-  chuyenkhoaId: Float
-  tinhtranghonnhanId: Float
-  noicapCMND: Float
-  ghichu1: String
-  chungchihanhnghe: Boolean
-  ngaynghiviec: DateTime
-  isLichBacSy: Boolean
-  soChungChiHanhNghe: String
-  noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
-  phamvihoatdongChungChiHanhNghe: Float
-  noidaotao: Float
-  nguoiduyetdonId: Float
-  nhomAnhVanId: Float
-  phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
-  passwordOLD: String
-  chucvukhacId: Float
-  muchamdiemId: Float
-  rememberToken: String
-  accessToken: String
-  expireToken: String
-  apiToken: String
-  appPassWord: String
-  nhomLSPDeNghiId: Float
-  loaikhoiId: Float
-  hesodiemNN: Float
-  ghichuReview: String
-  ghichuPhongVan: String
-  isLuongLSP: Boolean
-}
-
-input CreateManyUsersInput {
-  """Array of records to create"""
-  users: [CreateUser!]!
-}
-
-input UpdateOneUserInput {
-  """The id of the record to update"""
-  id: ID!
-
-  """The update to apply."""
-  update: UpdateUser!
-}
-
-input UpdateUser {
-  id: String
-  createdAt: DateTime
-  updatedAt: DateTime
-  createdBy: String
-  updatedBy: String
-  donviId: Float
-  bophanId: Float
-  phongbanId: Float
-  holotNhanVien: String
-  tennhanvien: String
-  hinhNhanVien: String
-  gioitinh: Boolean
-  dantocId: Float
-  quoctichId: Float
-  cmnd: String
-  hochieu: String
-  chucvuId: Float
-  chucdanhId: Float
-  diachi: String
-  mobile: String
-  homePhone: String
-  email: String
-  yahooId: String
-  skypeId: String
-  ngaysinh: DateTime
-  ngayvaolam: DateTime
-  trinhdoId: Float
-  loaitinhluongId: Float
-  chamcongbangmay: Boolean
-  taikhoanNganHang: String
-  nganhangId: Float
-  masothuecanhan: String
-  sobaohiem: String
-  ghichu: String
-  danghiviec: Boolean
-  hinhchuky: String
-  isDoctor: Boolean
-  isCongTacVienBenNgoai: Boolean
-  allowLogin: Boolean
-  nickname: String
-  extfield1: Boolean
-  extfield2: Boolean
-  username: String
-  password: String
-  disable: Boolean
-  hideLich: Boolean
-  ngaycapCMND: DateTime
-  nhomLSPId: Float
-  manhanvien: Float
-  isCoHuu: Boolean
-  bsdaidienId: Float
-  ngonngu: Float
-  passwordProtect: String
-  kinhnghiem: DateTime
-  createOn: DateTime
-  coTinhLuongKeToan: Boolean
-  hopdongId: Float
-  thoihanHopDongId: Float
-  ngaybatdauHopDong: DateTime
-  ngayketthucHopDong: DateTime
-  goibenhId: Float
-  chuyenkhoaId: Float
-  tinhtranghonnhanId: Float
-  noicapCMND: Float
-  ghichu1: String
-  chungchihanhnghe: Boolean
-  ngaynghiviec: DateTime
-  isLichBacSy: Boolean
-  soChungChiHanhNghe: String
-  noicapChungChiHanhNghe: Float
-  ngaycapChungChiHanhNghe: DateTime
-  phamvihoatdongChungChiHanhNghe: Float
-  noidaotao: Float
-  nguoiduyetdonId: Float
-  nhomAnhVanId: Float
-  phamviHanhNgheBoSung: Float
-  ngayganbo: DateTime
-  passwordOLD: String
-  chucvukhacId: Float
-  muchamdiemId: Float
-  rememberToken: String
-  accessToken: String
-  expireToken: String
-  apiToken: String
-  appPassWord: String
-  nhomLSPDeNghiId: Float
-  loaikhoiId: Float
-  hesodiemNN: Float
-  ghichuReview: String
-  ghichuPhongVan: String
-  isLuongLSP: Boolean
-}
-
-input UpdateManyUsersInput {
-  """Filter used to find fields to update"""
-  filter: UserUpdateFilter!
-
-  """The update to apply to all records found using the filter"""
-  update: UpdateUser!
-}
-
-input UserUpdateFilter {
-  and: [UserUpdateFilter!]
-  or: [UserUpdateFilter!]
-  id: StringFieldComparison
-  createdAt: DateFieldComparison
-  updatedAt: DateFieldComparison
-  createdBy: StringFieldComparison
-  updatedBy: StringFieldComparison
-  donviId: NumberFieldComparison
-  bophanId: NumberFieldComparison
-  phongbanId: NumberFieldComparison
-  holotNhanVien: StringFieldComparison
-  tennhanvien: StringFieldComparison
-  hinhNhanVien: StringFieldComparison
-  gioitinh: BooleanFieldComparison
-  dantocId: NumberFieldComparison
-  quoctichId: NumberFieldComparison
-  cmnd: StringFieldComparison
-  hochieu: StringFieldComparison
-  chucvuId: NumberFieldComparison
-  chucdanhId: NumberFieldComparison
-  diachi: StringFieldComparison
-  mobile: StringFieldComparison
-  homePhone: StringFieldComparison
-  email: StringFieldComparison
-  yahooId: StringFieldComparison
-  skypeId: StringFieldComparison
-  ngaysinh: DateFieldComparison
-  ngayvaolam: DateFieldComparison
-  trinhdoId: NumberFieldComparison
-  loaitinhluongId: NumberFieldComparison
-  chamcongbangmay: BooleanFieldComparison
-  taikhoanNganHang: StringFieldComparison
-  nganhangId: NumberFieldComparison
-  masothuecanhan: StringFieldComparison
-  sobaohiem: StringFieldComparison
-  ghichu: StringFieldComparison
-  danghiviec: BooleanFieldComparison
-  hinhchuky: StringFieldComparison
-  isDoctor: BooleanFieldComparison
-  isCongTacVienBenNgoai: BooleanFieldComparison
-  allowLogin: BooleanFieldComparison
-  nickname: StringFieldComparison
-  extfield1: BooleanFieldComparison
-  extfield2: BooleanFieldComparison
-  username: StringFieldComparison
-  password: StringFieldComparison
-  disable: BooleanFieldComparison
-  hideLich: BooleanFieldComparison
-  ngaycapCMND: DateFieldComparison
-  nhomLSPId: NumberFieldComparison
-  manhanvien: NumberFieldComparison
-  isCoHuu: BooleanFieldComparison
-  bsdaidienId: NumberFieldComparison
-  ngonngu: NumberFieldComparison
-  passwordProtect: StringFieldComparison
-  kinhnghiem: DateFieldComparison
-  createOn: DateFieldComparison
-  coTinhLuongKeToan: BooleanFieldComparison
-  hopdongId: NumberFieldComparison
-  thoihanHopDongId: NumberFieldComparison
-  ngaybatdauHopDong: DateFieldComparison
-  ngayketthucHopDong: DateFieldComparison
-  goibenhId: NumberFieldComparison
-  chuyenkhoaId: NumberFieldComparison
-  tinhtranghonnhanId: NumberFieldComparison
-  noicapCMND: NumberFieldComparison
-  ghichu1: StringFieldComparison
-  chungchihanhnghe: BooleanFieldComparison
-  ngaynghiviec: DateFieldComparison
-  isLichBacSy: BooleanFieldComparison
-  soChungChiHanhNghe: StringFieldComparison
-  noicapChungChiHanhNghe: NumberFieldComparison
-  ngaycapChungChiHanhNghe: DateFieldComparison
-  phamvihoatdongChungChiHanhNghe: NumberFieldComparison
-  noidaotao: NumberFieldComparison
-  nguoiduyetdonId: NumberFieldComparison
-  nhomAnhVanId: NumberFieldComparison
-  phamviHanhNgheBoSung: NumberFieldComparison
-  ngayganbo: DateFieldComparison
-  passwordOLD: StringFieldComparison
-  chucvukhacId: NumberFieldComparison
-  muchamdiemId: NumberFieldComparison
-  rememberToken: StringFieldComparison
-  accessToken: StringFieldComparison
-  expireToken: StringFieldComparison
-  apiToken: StringFieldComparison
-  appPassWord: StringFieldComparison
-  nhomLSPDeNghiId: NumberFieldComparison
-  loaikhoiId: NumberFieldComparison
-  hesodiemNN: NumberFieldComparison
-  ghichuReview: StringFieldComparison
-  ghichuPhongVan: StringFieldComparison
-  isLuongLSP: BooleanFieldComparison
-}
-
-input DeleteOneUserInput {
-  """The id of the record to delete."""
-  id: ID!
-}
-
-input DeleteManyUsersInput {
-  """Filter to find records to delete"""
-  filter: UserDeleteFilter!
-}
-
-input UserDeleteFilter {
-  and: [UserDeleteFilter!]
-  or: [UserDeleteFilter!]
-  id: StringFieldComparison
-  createdAt: DateFieldComparison
-  updatedAt: DateFieldComparison
-  createdBy: StringFieldComparison
-  updatedBy: StringFieldComparison
-  donviId: NumberFieldComparison
-  bophanId: NumberFieldComparison
-  phongbanId: NumberFieldComparison
-  holotNhanVien: StringFieldComparison
-  tennhanvien: StringFieldComparison
-  hinhNhanVien: StringFieldComparison
-  gioitinh: BooleanFieldComparison
-  dantocId: NumberFieldComparison
-  quoctichId: NumberFieldComparison
-  cmnd: StringFieldComparison
-  hochieu: StringFieldComparison
-  chucvuId: NumberFieldComparison
-  chucdanhId: NumberFieldComparison
-  diachi: StringFieldComparison
-  mobile: StringFieldComparison
-  homePhone: StringFieldComparison
-  email: StringFieldComparison
-  yahooId: StringFieldComparison
-  skypeId: StringFieldComparison
-  ngaysinh: DateFieldComparison
-  ngayvaolam: DateFieldComparison
-  trinhdoId: NumberFieldComparison
-  loaitinhluongId: NumberFieldComparison
-  chamcongbangmay: BooleanFieldComparison
-  taikhoanNganHang: StringFieldComparison
-  nganhangId: NumberFieldComparison
-  masothuecanhan: StringFieldComparison
-  sobaohiem: StringFieldComparison
-  ghichu: StringFieldComparison
-  danghiviec: BooleanFieldComparison
-  hinhchuky: StringFieldComparison
-  isDoctor: BooleanFieldComparison
-  isCongTacVienBenNgoai: BooleanFieldComparison
-  allowLogin: BooleanFieldComparison
-  nickname: StringFieldComparison
-  extfield1: BooleanFieldComparison
-  extfield2: BooleanFieldComparison
-  username: StringFieldComparison
-  password: StringFieldComparison
-  disable: BooleanFieldComparison
-  hideLich: BooleanFieldComparison
-  ngaycapCMND: DateFieldComparison
-  nhomLSPId: NumberFieldComparison
-  manhanvien: NumberFieldComparison
-  isCoHuu: BooleanFieldComparison
-  bsdaidienId: NumberFieldComparison
-  ngonngu: NumberFieldComparison
-  passwordProtect: StringFieldComparison
-  kinhnghiem: DateFieldComparison
-  createOn: DateFieldComparison
-  coTinhLuongKeToan: BooleanFieldComparison
-  hopdongId: NumberFieldComparison
-  thoihanHopDongId: NumberFieldComparison
-  ngaybatdauHopDong: DateFieldComparison
-  ngayketthucHopDong: DateFieldComparison
-  goibenhId: NumberFieldComparison
-  chuyenkhoaId: NumberFieldComparison
-  tinhtranghonnhanId: NumberFieldComparison
-  noicapCMND: NumberFieldComparison
-  ghichu1: StringFieldComparison
-  chungchihanhnghe: BooleanFieldComparison
-  ngaynghiviec: DateFieldComparison
-  isLichBacSy: BooleanFieldComparison
-  soChungChiHanhNghe: StringFieldComparison
-  noicapChungChiHanhNghe: NumberFieldComparison
-  ngaycapChungChiHanhNghe: DateFieldComparison
-  phamvihoatdongChungChiHanhNghe: NumberFieldComparison
-  noidaotao: NumberFieldComparison
-  nguoiduyetdonId: NumberFieldComparison
-  nhomAnhVanId: NumberFieldComparison
-  phamviHanhNgheBoSung: NumberFieldComparison
-  ngayganbo: DateFieldComparison
-  passwordOLD: StringFieldComparison
-  chucvukhacId: NumberFieldComparison
-  muchamdiemId: NumberFieldComparison
-  rememberToken: StringFieldComparison
-  accessToken: StringFieldComparison
-  expireToken: StringFieldComparison
-  apiToken: StringFieldComparison
-  appPassWord: StringFieldComparison
-  nhomLSPDeNghiId: NumberFieldComparison
-  loaikhoiId: NumberFieldComparison
-  hesodiemNN: NumberFieldComparison
-  ghichuReview: StringFieldComparison
-  ghichuPhongVan: StringFieldComparison
-  isLuongLSP: BooleanFieldComparison
 }
