@@ -6,6 +6,8 @@ import {
   ApolloServerPluginInlineTrace,
 } from 'apollo-server-core';
 import { decode, JwtPayload } from 'jsonwebtoken';
+import { BullModule } from '@nestjs/bull';
+import { GoogleNotificationModule } from './google-notification/google-notification.module';
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -76,6 +78,13 @@ class BuildServiceModule {}
       imports: [BuildServiceModule],
       inject: [GATEWAY_BUILD_SERVICE],
     }),
+    BullModule.forRoot({
+      redis: {
+        host: 'localhost',
+        port: 6379,
+      },
+    }),
+    GoogleNotificationModule,
   ],
 })
 export class AppModule {}
