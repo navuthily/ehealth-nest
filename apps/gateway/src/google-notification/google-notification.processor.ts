@@ -1,17 +1,12 @@
 import { Process, Processor } from '@nestjs/bull';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Job } from 'bull';
-import { HttpService } from '@nestjs/axios';
-import { initializeApp } from 'firebase/app';
-import { getMessaging } from 'firebase/messaging';
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
 
 @Processor('google-notification')
 @Injectable()
 export class GoogleNotificationProcessor {
-  constructor(private httpService: HttpService) {}
-  // private readonly logger = new Logger(AudioProcessor.name);
   @Process('nhaxe')
   async handleTranscode(job: Job) {
     const data = job.data;
@@ -38,71 +33,12 @@ export class GoogleNotificationProcessor {
       credential: admin.credential.cert(serviceAccount),
       databaseURL: 'https://nhaxe-b3567.firebaseio.com',
     });
-    const a = await admin.messaging().sendToTopic(
-      'all',
-      {
-        notification: {
-          title: '$FooCorp up 1.43% on the day',
-          body: `{"condition": "('all' in topics)","notification" : {"body" : "Tầng: "${barcode_a}" - Slot:"${barcode_b}." \\nBiển số: "${plateNumber}" ","title": "Có xe mới"}}`,
-        },
+    const a = await admin.messaging().sendToTopic('all', {
+      notification: {
+        title: 'Có xe mới',
+        body: `Tầng: "${barcode_a}" - Slot:"${barcode_b}." \\nBiển số: "${plateNumber}"`,
       },
-      {
-        // dryRun: true,
-      },
-    );
+    });
     console.log(a);
-
-    // await admin
-    //   .messaging()
-    //   .sendToDevice(
-    //     fcmtoken,
-    //     `{"condition": "('all' in topics)","notification" : {"body" : "Tầng: "${barcode_a}" - Slot:"${barcode_b}." \\nBiển số: "${plateNumber}" ","title": "Có xe mới"}}`,
-    //   );
-    // this.httpService.post(
-    //   'https://fcm.googleapis.com/fcm/send',
-    //   `{"condition": "('all' in topics)","notification" : {"body" : "Tầng: "${barcode_a}" - Slot:"${barcode_b}." \\nBiển số: "${plateNumber}" ","title": "Có xe mới"}}`,
-    //   {
-    //     data:  `{"condition": "('all' in topics)","notification" : {"body" : "Tầng: "${barcode_a}" - Slot:"${barcode_b}." \\nBiển số: "${plateNumber}" ","title": "Có xe mới"}}`,
-    //     headers: {
-    //       Authorization:
-    //         'key=AAAAzrSe-nE:APA91bGBV0ZUPBu7GFtT5Jdlary-2BlL3frNITxldsbtuAjcLDwkFmy6K3MDD49PwmfauATXUE9GoDu60cNB0TZQixBm4iU65ioWKWj49qJMa0gR3aB5pEqdrdhwVTsTX9N2Kb1gB8T_',
-    //       'Content-Type': 'application/json',
-    //     },
-    //   },
-    // );
-    // console.log('DONE');
-
-    // const firebaseApp = initializeApp({
-    //   apiKey:
-    //     'AAAAzrSe-nE:APA91bGBV0ZUPBu7GFtT5Jdlary-2BlL3frNITxldsbtuAjcLDwkFmy6K3MDD49PwmfauATXUE9GoDu60cNB0TZQixBm4iU65ioWKWj49qJMa0gR3aB5pEqdrdhwVTsTX9N2Kb1gB8T_',
-    //   // authDomain: 'project-id.firebaseapp.com',
-    //   // databaseURL: 'https://project-id.firebaseio.com',
-    //   // projectId: 'project-id',
-    //   // storageBucket: 'project-id.appspot.com',
-    //   // messagingSenderId: 'sender-id',
-    //   // appId: 'app-id',
-    //   // measurementId: 'G-measurement-id',
-    // });
-    // const messaging = getMessaging(firebaseApp);
-
-    // const topic = 'topics';
-    // const message = {
-    //   notification: {
-    //     title: '$FooCorp up 1.43% on the day',
-    //     body: '$FooCorp gained 11.80 points to close at 835.67, up 1.43% on the day.'
-    //   },
-    //   condition: "('all' in topics)"
-    // };
-
-    // // Send a message to devices subscribed to the provided topic.
-    // getMessaging()
-    //   .send(message)
-    //   .then((response) => {
-    //     // Response is a message ID string.
-    //     console.log('Successfully sent message:', response);
-    //   })
-    //   .catch((error) => {
-    //     console.log('Error sending message:', error);
-    //   });
   }
 }
