@@ -22,11 +22,9 @@ export class XmlBHYTService {
   async handleCron() {
     const data = await this.connection.query('EXEC GD2_BHYT_xml_chuachuyen');
     for (let i = 0; i < data.length; i++) {
-      //   console.log(data[i]?.ID_ThuTraNo);
       this.xmlBHYTQueue.add('xml-bhyt', {
         ID_ThuTraNo: data[i]?.ID_ThuTraNo,
       });
     }
-    // console.log();
   }
 }
