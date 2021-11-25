@@ -8,6 +8,12 @@ import {
 import { decode, JwtPayload } from 'jsonwebtoken';
 import { BullModule } from '@nestjs/bull';
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
+import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApiConfigService } from '@libs/shared/services/api-config.service';
+import { SharedModule } from '@libs/shared/shared.module';
+import { ConfigModule } from '@nestjs/config';
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -84,7 +90,23 @@ class BuildServiceModule {}
         port: 6379,
       },
     }),
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
+        // console.log(process.env.SV_EHEALTH_IP);
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+    ScheduleModule.forRoot(),
     GoogleNotificationModule,
+    XmlBHYTModule,
   ],
 })
 export class AppModule {}
