@@ -1,0 +1,180 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+directive @key(fields: String!) on OBJECT | INTERFACE
+
+directive @extends on OBJECT | INTERFACE
+
+directive @external on OBJECT | FIELD_DEFINITION
+
+directive @requires(fields: String!) on FIELD_DEFINITION
+
+directive @provides(fields: String!) on FIELD_DEFINITION
+
+type ModuleThanhVien {
+  id: ID!
+  moduleName: String
+  nhomId: Float
+}
+
+type OffsetPageInfo {
+  """true if paging forward and there are more records."""
+  hasNextPage: Boolean
+
+  """true if paging backwards and there are more records."""
+  hasPreviousPage: Boolean
+}
+
+type ModuleThanhVienConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [ModuleThanhVien!]!
+}
+
+type ModuleThanhVienAggregateGroupBy {
+  id: ID
+  moduleName: String
+  nhomId: Float
+}
+
+type ModuleThanhVienCountAggregate {
+  id: Int
+  moduleName: Int
+  nhomId: Int
+}
+
+type ModuleThanhVienSumAggregate {
+  id: Float
+  nhomId: Float
+}
+
+type ModuleThanhVienAvgAggregate {
+  id: Float
+  nhomId: Float
+}
+
+type ModuleThanhVienMinAggregate {
+  id: ID
+  moduleName: String
+  nhomId: Float
+}
+
+type ModuleThanhVienMaxAggregate {
+  id: ID
+  moduleName: String
+  nhomId: Float
+}
+
+type Query {
+  moduleThanhVien(
+    """The id of the record to find."""
+    id: ID!
+  ): ModuleThanhVien
+  moduleThanhViens(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: ModuleThanhVienFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ModuleThanhVienSort!] = []
+  ): ModuleThanhVienConnection!
+}
+
+input OffsetPaging {
+  """Limit the number of records returned"""
+  limit: Int
+
+  """Offset to start returning records from"""
+  offset: Int
+}
+
+input ModuleThanhVienFilter {
+  and: [ModuleThanhVienFilter!]
+  or: [ModuleThanhVienFilter!]
+  id: IDFilterComparison
+  moduleName: StringFieldComparison
+  nhomId: NumberFieldComparison
+}
+
+input IDFilterComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: ID
+  neq: ID
+  gt: ID
+  gte: ID
+  lt: ID
+  lte: ID
+  like: ID
+  notLike: ID
+  iLike: ID
+  notILike: ID
+  in: [ID!]
+  notIn: [ID!]
+}
+
+input StringFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: String
+  neq: String
+  gt: String
+  gte: String
+  lt: String
+  lte: String
+  like: String
+  notLike: String
+  iLike: String
+  notILike: String
+  in: [String!]
+  notIn: [String!]
+}
+
+input NumberFieldComparison {
+  is: Boolean
+  isNot: Boolean
+  eq: Float
+  neq: Float
+  gt: Float
+  gte: Float
+  lt: Float
+  lte: Float
+  in: [Float!]
+  notIn: [Float!]
+  between: NumberFieldComparisonBetween
+  notBetween: NumberFieldComparisonBetween
+}
+
+input NumberFieldComparisonBetween {
+  lower: Float!
+  upper: Float!
+}
+
+input ModuleThanhVienSort {
+  field: ModuleThanhVienSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum ModuleThanhVienSortFields {
+  id
+  moduleName
+  nhomId
+}
+
+"""Sort Directions"""
+enum SortDirection {
+  ASC
+  DESC
+}
+
+"""Sort Nulls Options"""
+enum SortNulls {
+  NULLS_FIRST
+  NULLS_LAST
+}

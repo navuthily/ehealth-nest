@@ -1,19 +1,18 @@
 import { RemoteGraphQLDataSource } from '@apollo/gateway';
-import { Module } from '@nestjs/common';
-import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
-import {
-  ApolloServerPluginLandingPageGraphQLPlayground,
-  ApolloServerPluginInlineTrace,
-} from 'apollo-server-core';
-import { decode, JwtPayload } from 'jsonwebtoken';
-import { BullModule } from '@nestjs/bull';
-import { GoogleNotificationModule } from './google-notification/google-notification.module';
-import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
-import { ScheduleModule } from '@nestjs/schedule';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApiConfigService } from '@libs/shared/services/api-config.service';
 import { SharedModule } from '@libs/shared/shared.module';
+import { BullModule } from '@nestjs/bull';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
+import { ScheduleModule } from '@nestjs/schedule';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  ApolloServerPluginLandingPageGraphQLPlayground
+} from 'apollo-server-core';
+import { decode } from 'jsonwebtoken';
+import { GoogleNotificationModule } from './google-notification/google-notification.module';
+import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -63,6 +62,10 @@ class BuildServiceModule {}
             {
               name: 'SV_FAMILY',
               url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
+            },
+            {
+              name: 'SV_THANHVIEN',
+              url: `${process.env.SV_THANHVIEN_IP}:${process.env.SV_THANHVIEN_PORT}/graphql`,
             },
           ],
         },
