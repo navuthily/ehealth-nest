@@ -13,7 +13,7 @@ export class GoogleNotificationController {
 
   @Post('nhaxe')
   async nhaxe(@Body() nhaxe: NhaXeDTO) {
-    await this.googleNotificationQueue.add('nhaxe', nhaxe);
+    this.googleNotificationQueue.add('nhaxe', nhaxe);
     return 'Done';
   }
 }
