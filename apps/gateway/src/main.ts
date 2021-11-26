@@ -1,14 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { LoggingInterceptor } from '@libs/interceptors/logging.interceptor';
-import { AppModule } from './app.module';
 import {
   FastifyAdapter,
-  NestFastifyApplication,
+  NestFastifyApplication
 } from '@nestjs/platform-fastify';
-import { join } from 'path';
-import { FastifyJWT } from 'fastify-jwt';
-import { ServiceAccount } from 'firebase-admin';
 import * as admin from 'firebase-admin';
+import { ServiceAccount } from 'firebase-admin';
+import { join } from 'path';
+import { AppModule } from './app.module';
 // var serviceAccount = require('../../nhaxe.json');
 // require('dotenv').config()
 

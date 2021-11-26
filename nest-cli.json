@@ -27,7 +27,15 @@
         "tsConfigPath": "apps/service-family/tsconfig.json"
       }
     },
-
+    "service-thanhvien": {
+      "type": "application",
+      "root": "apps/service-thanhvien",
+      "entryFile": "main",
+      "sourceRoot": "apps/service-thanhvien/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/service-thanhvien/tsconfig.json"
+      }
+    },
     "gateway": {
       "type": "application",
       "root": "apps/gateway",
