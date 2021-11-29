@@ -13,6 +13,7 @@ import {
 import { HttpService } from '@nestjs/axios';
 import request from 'request';
 import rp from 'request-promise-native';
+import { XmlBHYTService } from './xml-bhyt.service';
 
 @Processor('xml-bhyt')
 @Injectable()
@@ -26,6 +27,7 @@ export class XmlBHYTProcessor {
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
     private httpService: HttpService,
+    private xmlService: XmlBHYTService,
   ) {}
 
   public get username(): string {
@@ -110,27 +112,32 @@ export class XmlBHYTProcessor {
   }
   @Process('xml-bhyt')
   async handle(job: Job) {
-    // console.log('job.data.ID_ThuTraNo');
+    console.log(job.data.ID_ThuTraNo);
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
-          this.get_thong_tin(job.data.ID_ThuTraNo, 'GD2_ThongTinLuotKhamBHYT'),
-          this.get_thong_tin(
-            job.data.ID_ThuTraNo,
-            'GD2_BHYT_ngoaithuoc_quyettoan',
-          ),
-          this.get_thong_tin(
-            job.data.ID_ThuTraNo,
-            'GD2_BHYT_ngoaicls_quyettoan',
-          ),
-          this.get_thong_tin(
-            job.data.ID_ThuTraNo,
-            'GD2_BHYT_ChisoCLS_quyettoan',
-          ),
-          this.get_thong_tin(
-            job.data.ID_ThuTraNo,
-            'GD2_BHYT_ChisoNoiTru_quyettoan',
-          ),
+          // this.xmlService.get_thong_tin(job.data.ID_ThuTraNo, 'GD2_ThongTinLuotKhamBHYT'),
+          // this.xmlService.get_thong_tin(
+          //   job.data.ID_ThuTraNo,
+          //   'GD2_BHYT_ngoaithuoc_quyettoan',
+          // ),
+          // this.xmlService.get_thong_tin(
+          //   job.data.ID_ThuTraNo,
+          //   'GD2_BHYT_ngoaicls_quyettoan',
+          // ),
+          // this.xmlService.get_thong_tin(
+          //   job.data.ID_ThuTraNo,
+          //   'GD2_BHYT_ChisoCLS_quyettoan',
+          // ),
+          // this.xmlService.get_thong_tin(
+          //   job.data.ID_ThuTraNo,
+          //   'GD2_BHYT_ChisoNoiTru_quyettoan',
+          // ),
+          this.xmlService.exec_xml_1_tonghop(job.data.ID_ThuTraNo),
+          this.xmlService.exec_xml_2_thuoc(job.data.ID_ThuTraNo),
+          this.xmlService.exec_xml_3_canlamsang(job.data.ID_ThuTraNo),
+          this.xmlService.exec_xml_4_chitietcls(job.data.ID_ThuTraNo),
+          this.xmlService.exec_xml_5_dienbienbenh(job.data.ID_ThuTraNo),
         ]);
 
       thongtin = thongtin[0];
@@ -236,12 +243,14 @@ export class XmlBHYTProcessor {
       console.log(err);
     }
   }
-  async get_thong_tin(id_thutrano: string, store_name: string) {
-    const data = await this.connection.query(
-      `EXEC ${store_name} ${id_thutrano}`,
-    );
-    return data;
-  }
+  // Bỏ qua service
+  // async get_thong_tin(id_thutrano: string, store_name: string) {
+  //   const data = await this.connection.query(
+  //     `EXEC ${store_name} ${id_thutrano}`,
+  //   );
+  //   return data;
+  // }
+  //////////////////
   xml_1_tonghop(
     thongtin,
     tongthuoc,
@@ -533,6 +542,8 @@ export class XmlBHYTProcessor {
         if (thongtinthuoc[i].T_BNTT) {
           T_BNTT = T_BNTT.plus(thongtinthuoc[i].T_BNTT);
         }
+        // console.log(thongtinthuoc[i].T_BNCCT);
+        
         if (thongtinthuoc[i].T_BNCCT) {
           T_BNCCT = T_BNCCT.plus(thongtinthuoc[i].T_BNCCT);
         }
