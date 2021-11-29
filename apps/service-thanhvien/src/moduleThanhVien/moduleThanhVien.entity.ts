@@ -6,8 +6,8 @@ export class ModuleThanhVienEntity {
   id!: number;
 
   @Column({ name: 'module_name' })
-  moduleName!: string;
+  moduleName?: string;
 
   @Column({ name: 'nhom_id' })
-  nhomId!: number;
+  nhomId?: number;
 }

@@ -19,7 +19,7 @@ import { ModuleThanhVienEntity } from './moduleThanhVien.entity';
           create: { disabled: true },
           update: { disabled: true },
           delete: { disabled: true },
-          // referenceBy: { key: 'luotkhamId' },
+          referenceBy: { key: 'id' },
         },
       ],
     }),
