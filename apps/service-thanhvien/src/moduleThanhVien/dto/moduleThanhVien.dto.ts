@@ -1,7 +1,8 @@
 import { FilterableField } from '@nestjs-query/query-graphql';
-import { ID, ObjectType } from '@nestjs/graphql';
+import { Directive, ID, ObjectType } from '@nestjs/graphql';
 
 @ObjectType('ModuleThanhVien')
+@Directive('@key(fields: "id")')
 export class ModuleThanhVienDTO {
   @FilterableField(() => ID)
   id!: number;

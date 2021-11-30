@@ -38,8 +38,6 @@ interface IContextArgs {
     }),
 
     ModuleThanhVienModule,
-    // SuatAnChiTietModule,
-    // DMVatTuDTO,
     CommonModule,
 
     ConfigModule.forRoot({
