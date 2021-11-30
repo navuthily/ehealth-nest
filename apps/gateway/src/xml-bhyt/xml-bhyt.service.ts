@@ -228,6 +228,9 @@ export class XmlBHYTService {
     )                                       TheTrang
     WHERE  ThongTinLuotKham.ID_LuotKham = @id_luotkham`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
   async exec_xml_2_thuoc(idThuTraNo: any) {
@@ -877,6 +880,9 @@ export class XmlBHYTService {
       WHERE  soluong<>0`,
       [idThuTraNo],
     );
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
   async exec_xml_3_canlamsang(idThuTraNo: any) {
@@ -1368,6 +1374,9 @@ export class XmlBHYTService {
           ,MaSoTheoDVBHYT
           ,T_BHTT  DESC`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
   async exec_xml_4_chitietcls(idThuTraNo: any) {
@@ -1427,6 +1436,9 @@ export class XmlBHYTService {
                 ON  dlk.ID_LoaiKham = k2.ID_LoaiKham
     WHERE  dlk.ID_NhomCLS<>20`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
   async exec_xml_5_dienbienbenh(idThuTraNo: any) {
@@ -1484,6 +1496,9 @@ export class XmlBHYTService {
         ORDER BY NGAY_YL
       END`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
   async exec_stored_filter_date(dataDate: any) {
