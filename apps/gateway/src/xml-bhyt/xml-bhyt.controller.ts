@@ -1,5 +1,5 @@
 import { InjectQueue } from '@nestjs/bull';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Queue } from 'bull';
 import { XmlBHYTService } from './xml-bhyt.service';
 
@@ -30,15 +30,13 @@ export class XmlBHYTController {
 
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
-    console.log(data);
-
     let idThuTraNo = JSON.parse(data.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
       this.xmlBHYTQueue.add('xml-bhyt', {
         ID_ThuTraNo: parseInt(idThuTraNo[i]),
       });
     }
-    // return 'done("Done")';
+    return {};
   }
 
   @Get('xml1/:id')
@@ -60,5 +58,11 @@ export class XmlBHYTController {
   @Get('xml5/:id')
   getXML5(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_5_dienbienbenh(id);
+  }
+
+  @Get('exec_stored_filter_date')
+  exec_stored_filter_date(@Query() dataDate: any) {
+    // console.log(dataDate);
+    return this.xmlService.exec_stored_filter_date(dataDate);
   }
 }

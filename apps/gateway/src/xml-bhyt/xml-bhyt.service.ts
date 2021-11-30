@@ -191,6 +191,7 @@ export class XmlBHYTService {
           ,GD2_BHYT_Xml.NgayQuyetToan    AS NgayQuyetToan
           -- Hưng bổ sung cột
           ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN '1' ELSE '0' END Is_NoiTru
+          --,ROW_NUMBER() OVER(ORDER BY gbant.ID_BenhAnNoiTru) id
     FROM   ThongTinLuotKham
            LEFT JOIN GD2_BenhAnNoiTru gbant
                 ON  gbant.ID_LuotKham = ThongTinLuotKham.ID_LuotKham
@@ -1483,6 +1484,15 @@ export class XmlBHYTService {
         ORDER BY NGAY_YL
       END`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    return data;
+  }
+  async exec_stored_filter_date(dataDate: any) {
+    let data = await this.connection.query(
+      `EXEC ${dataDate.stored} '${dataDate.tungay}', '${dataDate.denngay}'`,
+    );
+    data.map((item: any, index: number) => {
+      return (item.id = (index + 1).toString());
+    });
     return data;
   }
 }

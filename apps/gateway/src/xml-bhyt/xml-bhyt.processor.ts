@@ -112,7 +112,7 @@ export class XmlBHYTProcessor {
   }
   @Process('xml-bhyt')
   async handle(job: Job) {
-    console.log(job.data.ID_ThuTraNo);
+    // console.log(job.data.ID_ThuTraNo);
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
@@ -494,7 +494,7 @@ export class XmlBHYTProcessor {
     tonghop += '</TONG_HOP>';
     // eslint-disable-next-line no-buffer-constructor
     if (base64) {
-      tonghop = new Buffer(tonghop).toString('base64');
+      tonghop = Buffer.from(tonghop).toString('base64');
     }
     tonghop = `<?xml version="1.0" encoding="utf-8"?><GIAMDINHHS xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><THONGTINDONVI><MACSKCB>48195</MACSKCB></THONGTINDONVI><THONGTINHOSO><NGAYLAP>${NGAYLAP}</NGAYLAP><SOLUONGHOSO>1</SOLUONGHOSO><DANHSACHHOSO><HOSO><FILEHOSO><LOAIHOSO>XML1</LOAIHOSO><NOIDUNGFILE>${tonghop}`;
     tonghop += '</NOIDUNGFILE></FILEHOSO>';
@@ -543,7 +543,7 @@ export class XmlBHYTProcessor {
           T_BNTT = T_BNTT.plus(thongtinthuoc[i].T_BNTT);
         }
         // console.log(thongtinthuoc[i].T_BNCCT);
-        
+
         if (thongtinthuoc[i].T_BNCCT) {
           T_BNCCT = T_BNCCT.plus(thongtinthuoc[i].T_BNCCT);
         }
