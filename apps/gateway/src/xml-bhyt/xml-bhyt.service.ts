@@ -1281,12 +1281,12 @@ export class XmlBHYTService {
     ,k14 AS (
         SELECT *
         FROM   k12
-        --UNION ALL
-        --SELECT *
-        --FROM   k5
-        --UNION ALL
-        --SELECT *
-        --FROM   k6
+        UNION ALL
+        SELECT *
+        FROM   k5
+        UNION ALL
+        SELECT *
+        FROM   k6
     )
     ,k15 AS(
         SELECT k14.*
