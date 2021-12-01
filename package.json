@@ -62,6 +62,7 @@
     "apollo-server-fastify": "^3.5.0",
     "aws-sdk": "^2.989.0",
     "bull": "^4.1.1",
+    "cache-manager": "^3.6.0",
     "class-transformer": "^0.4.0",
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
