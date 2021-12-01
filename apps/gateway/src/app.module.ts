@@ -7,11 +7,10 @@ import { ConfigModule } from '@nestjs/config';
 import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import {
-  ApolloServerPluginLandingPageGraphQLPlayground
-} from 'apollo-server-core';
+import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { decode } from 'jsonwebtoken';
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
+import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 require('dotenv').config();
 
@@ -110,6 +109,7 @@ class BuildServiceModule {}
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
     XmlBHYTModule,
+    ThuocModule,
   ],
 })
 export class AppModule {}
