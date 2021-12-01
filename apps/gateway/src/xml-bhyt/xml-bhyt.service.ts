@@ -310,7 +310,7 @@ export class XmlBHYTService {
                      )
                  )                         AS CachDung
                 -- Hưng sửa và bổ sung 
-                ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHoanTat ELSE DonThuoc.NgayKeDon END NgayKeDon
+                ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayKeDon
                 ----------------------
                 ,HoatChat_BHYT
                 ,GD2_DM_NhomThuocBHYT.Phantram
@@ -325,7 +325,7 @@ export class XmlBHYTService {
                 ,gdtctmr.Gia_BHYTchitra
                 ,DM_NhanVien.NickName
                 ,DonThuocChiTiet.ID_DonThuocCT AS id_kham
-                ,1                         AS IsThuoc
+                ,1 AS IsThuoc
                 ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
                 ,gdtctmr.T_BNCCT
                 ,gdtctmr.MUC_HUONG
