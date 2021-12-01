@@ -364,9 +364,13 @@ export class XmlBHYTService {
                  LEFT JOIN GD2_DonThuocChiTietMoRong gdtctmr
                       ON  gdtctmr.ID_DonThuocChiTiet = DonThuocChiTiet.ID_DonThuocCT
                  OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-              DonThuoc.ID_BacSiChoToa
-             ,DonThuoc.NgayKeDon
-             ,CASE 
+              -- Hưng sửa và bổ sung
+              -- DonThuoc.ID_BacSiChoToa
+              CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.ID_NguoiHoanTat ELSE DonThuoc.ID_BacSiChoToa END
+              --,DonThuoc.NgayKeDon
+              ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END
+              ----------------------
+              ,CASE 
                    WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_LoaiKham
                    ELSE 10346
               END
