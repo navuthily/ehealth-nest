@@ -1,4 +1,8 @@
 import '@libs/boilerplate.polyfill';
+import { CommonModule } from '@libs/common/scalar/common.module';
+import { contextMiddleware } from '@libs/middlewares';
+import { ApiConfigService } from '@libs/shared/services/api-config.service';
+import { SharedModule } from '@libs/shared/shared.module';
 import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
@@ -6,22 +10,22 @@ import { GraphQLFederationModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
-import { contextMiddleware } from '@libs/middlewares';
-import { ApiConfigService } from '@libs/shared/services/api-config.service';
-import { SharedModule } from '@libs/shared/shared.module';
-import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
-import { ThongTinLuotKhamEntity } from './thongtinluotkham/thongtinluotkham.entity';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { UserEntity } from './user/user.entity';
-import { DMBenhNhanModule } from './dmbenhnhan/dmbenhnhan.module';
-import { DMBenhNhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
-import { CommonModule } from '@libs/common/scalar/common.module';
-import { BenhAnGiuongBenhModule } from './BenhAnGiuongBenh/BenhAnGiuongBenh.module';
 import { BenhAnGiuongBenhEntity } from './BenhAnGiuongBenh/BenhAnGiuongBenh.entity';
-import { DMBuongGiuongBenhModule } from './DMBuongGiuongBenh/DMBuongGiuongBenh.module';
+import { BenhAnGiuongBenhModule } from './BenhAnGiuongBenh/BenhAnGiuongBenh.module';
+import { DMLoaiKhamEntity } from './dm-loaikham/dm-loaikham.entity';
+import { DMLoaiKhamModule } from './dm-loaikham/dm-loaikham.module';
+import { DMModuleLoaiKhamEntity } from './dm-loaikham/dm-module-loaikham.entity';
+import { DMLoiKhuyenEntity } from './dm-loikhuyen/dm-loikhuyen.entity';
+import { DMLoiKhuyenModule } from './dm-loikhuyen/dm-loikhuyen.module';
+import { DMBenhNhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
+import { DMBenhNhanModule } from './dmbenhnhan/dmbenhnhan.module';
 import { DMBuongGiuongBenhEntity } from './DMBuongGiuongBenh/DMBuongGiuongBenh.entity';
-
+import { DMBuongGiuongBenhModule } from './DMBuongGiuongBenh/DMBuongGiuongBenh.module';
+import { ThongTinLuotKhamEntity } from './thongtinluotkham/thongtinluotkham.entity';
+import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
+import { UserEntity } from './user/user.entity';
+import { UserModule } from './user/user.module';
 interface IHeadersContainer {
   headers?: Record<string, string>;
 }
@@ -58,6 +62,8 @@ interface IContextArgs {
     AuthModule,
     UserModule,
     CommonModule,
+    DMLoaiKhamModule,
+    DMLoiKhuyenModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
@@ -73,6 +79,9 @@ interface IContextArgs {
           UserEntity,
           BenhAnGiuongBenhEntity,
           DMBuongGiuongBenhEntity,
+          DMLoaiKhamEntity,
+          DMLoiKhuyenEntity,
+          DMModuleLoaiKhamEntity
         ];
         console.log(process.env.SV_EHEALTH_IP);
 
