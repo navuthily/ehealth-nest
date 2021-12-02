@@ -317,9 +317,12 @@ export class XmlBHYTService {
                 ,4                         AS id_nhombhyt
                 ,dpb.Makhoa_BHYT
                 ,CASE 
-                      WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')<>'' THEN DM_NhanVien.SoChungChiHanhNghe
-                      WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')='' THEN 
-                           GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+			  -- Hưng sửa
+					WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE DM_NhanVien.SoChungChiHanhNghe
+                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')<>'' THEN DM_NhanVien.SoChungChiHanhNghe
+                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')='' THEN 
+                      --     GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+			  ----
                  END                          SoChungChiHanhNghe
                 ,DM_Thuoc.ThongTinThauBHYT
                 ,gdtctmr.Gia_BHYTchitra
