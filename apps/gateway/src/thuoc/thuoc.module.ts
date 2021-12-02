@@ -7,6 +7,7 @@ import { ThuocService } from './thuoc.service';
     CacheModule.register({
       max: 0,
       ttl: 60,
+      isGlobal: true,
     }),
   ],
   controllers: [ThuocController],
