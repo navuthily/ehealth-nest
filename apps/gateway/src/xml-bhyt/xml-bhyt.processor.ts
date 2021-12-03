@@ -850,4 +850,23 @@ export class XmlBHYTProcessor {
   wait(ms) {
     return new Promise((r) => setTimeout(r, ms));
   }
+  @Process({ name: 'kq_nhan_lichsu_kcb', concurrency: 5 })
+  async kq_nhan_lichsu_kcb(job: Job) {
+    var token = await this.token;
+
+    const data = await this.httpService
+      .request({
+        url: `http://egw.baohiemxahoi.gov.vn/api/egw/KQNhanLichSuKCB595?token=${token.APIKey.access_token}&id_token=${token.APIKey.id_token}&username=${this.username}&password=${this.password}`,
+        method: 'POST',
+        data: {
+          maThe: job.data.dataKCB.maThe,
+          hoTen: job.data.dataKCB.hoTen,
+          ngaySinh: job.data.dataKCB.ngaySinh,
+          gioiTinh: job.data.dataKCB.gioiTinh,
+          maCSKCB: job.data.dataKCB.maCSKCB,
+        },
+      })
+      .toPromise();
+    return data?.data;
+  }
 }
