@@ -850,7 +850,7 @@ export class XmlBHYTProcessor {
   wait(ms) {
     return new Promise((r) => setTimeout(r, ms));
   }
-  @Process('kq_nhan_lichsu_kcb')
+  @Process({ name: 'kq_nhan_lichsu_kcb', concurrency: 5 })
   async kq_nhan_lichsu_kcb(job: Job) {
     var token = await this.token;
 
