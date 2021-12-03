@@ -10,24 +10,6 @@ export class XmlBHYTController {
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
   ) {}
 
-  // @Get('xuatxml')
-  // async xuatxml(@Query() data: any) {
-  //   let data_new: string[];
-  //   if (typeof data['data[]'] === 'string') {
-  //     data_new = [data['data[]']];
-  //   } else {
-  //     data_new = [...data['data[]']];
-  //   }
-  //   // console.log(data['data[]'].length);
-
-  //   for (let i = 0; i < data_new.length; i++) {
-  //     this.xmlBHYTQueue.add('xml-bhyt', {
-  //       ID_ThuTraNo: data_new[i],
-  //     });
-  //   }
-  //   return 'done("Done")';
-  // }
-
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
     let idThuTraNo = JSON.parse(data.idThuTraNo);
@@ -37,6 +19,17 @@ export class XmlBHYTController {
       });
     }
     return {};
+  }
+
+  @Post('kq_nhan_lichsu_kcb')
+  async kq_nhan_lichsu_kcb(@Body() dataKCB: any) {
+    const job = await this.xmlBHYTQueue.add('kq_nhan_lichsu_kcb', {
+      dataKCB,
+    });
+    const result = await job.finished();
+    // console.log(result);
+    
+    return result;
   }
 
   @Get('xml1/:id')
@@ -62,7 +55,6 @@ export class XmlBHYTController {
 
   @Get('exec_stored_filter_date')
   exec_stored_filter_date(@Query() dataDate: any) {
-    // console.log(dataDate);
     return this.xmlService.exec_stored_filter_date(dataDate);
   }
 }
