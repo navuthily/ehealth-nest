@@ -1113,7 +1113,7 @@ export class XmlBHYTService {
               ,10                        AS ID_Nhom_BHYT
               --,DonThuoc.NgayKeDon        AS NgayGio
 			  -- Hưng sửa và bổ sung 
-			  ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHoanTat ELSE DonThuoc.NgayKeDon END NgayGio
+			  ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayGio
 			  ----------------------
               ,(GD2_DonThuocChiTietMoRong.Gia_BHYTchitra)/ISNULL(GD2_DonThuocChiTietMoRong.GiaBHYT ,DonThuocChiTiet.Gia) AS MUC_HUONG
               ,dnv.SoChungChiHanhNghe
