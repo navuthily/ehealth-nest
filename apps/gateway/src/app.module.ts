@@ -9,6 +9,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { decode } from 'jsonwebtoken';
+import { DanhSachCanLamSangModule } from './danhsachcanlamsang/danhsachcanlamsang.module';
 import { DanhSachLamSangModule } from './danhsachlamsang/danhsachlamsang.module';
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
 import { ThuocModule } from './thuoc/thuoc.module';
@@ -111,7 +112,8 @@ class BuildServiceModule {}
     GoogleNotificationModule,
     XmlBHYTModule,
     ThuocModule,
-    DanhSachLamSangModule
+    DanhSachLamSangModule,
+    DanhSachCanLamSangModule
   ],
 })
 export class AppModule {}

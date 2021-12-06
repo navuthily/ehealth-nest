@@ -1,14 +1,11 @@
 import {
   CacheInterceptor,
   CacheKey,
-  CacheTTL,
-  Controller,
-  Get,
-  UseInterceptors,
+  CacheTTL, CACHE_MANAGER, Controller,
+  Get, Inject, Injectable, UseInterceptors
 } from '@nestjs/common';
-import { DanhSachLamSangService } from './danhsachlamsang.service';
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cache } from 'cache-manager';
+import { DanhSachLamSangService } from './danhsachlamsang.service';
 
 @Controller('danhsachlamsang')
 @Injectable()

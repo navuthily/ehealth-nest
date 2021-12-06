@@ -1,18 +1,17 @@
+import { HttpService } from '@nestjs/axios';
 import { InjectQueue, Process, Processor } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
-import { Job, Queue } from 'bull';
-import { Connection } from 'typeorm';
 import Big from 'big.js';
+import { Job, Queue } from 'bull';
 import {
   differenceInDays,
   differenceInMonths,
   differenceInYears,
-  format,
+  format
 } from 'date-fns';
-import { HttpService } from '@nestjs/axios';
-import request from 'request';
 import rp from 'request-promise-native';
+import { Connection } from 'typeorm';
 import { XmlBHYTService } from './xml-bhyt.service';
 
 @Processor('xml-bhyt')
