@@ -18,7 +18,11 @@ import { UserDto } from '../../user/dto/user-dto';
   disableUpdate: true,
 })
 
-
+@FilterableRelation('thongtinbenhvien', () => ThongTinBenhVienDTO, {
+  nullable: true,
+  disableRemove: true,
+  disableUpdate: true,
+})
 
 export class DmLabelDTO {
   @FilterableField(() => ID)
