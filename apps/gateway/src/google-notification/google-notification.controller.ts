@@ -7,8 +7,7 @@ import { NhaXeDTO } from './dto/nhaxe.dto';
 @Controller('google-notification')
 export class GoogleNotificationController {
   constructor(
-    @InjectQueue('google-notification')
-    private readonly googleNotificationQueue: Queue,
+    @InjectQueue('google-notification') private readonly googleNotificationQueue: Queue,
   ) {}
 
   @Post('nhaxe')
