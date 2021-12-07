@@ -11,6 +11,7 @@ import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-co
 import { decode } from 'jsonwebtoken';
 import { DanhSachCanLamSangModule } from './danhsachcanlamsang/danhsachcanlamsang.module';
 import { DanhSachLamSangModule } from './danhsachlamsang/danhsachlamsang.module';
+import { DMLoaiKhamModule } from './dmloaikham/dmloaikham.module';
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
 import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
@@ -113,7 +114,8 @@ class BuildServiceModule {}
     XmlBHYTModule,
     ThuocModule,
     DanhSachLamSangModule,
-    DanhSachCanLamSangModule
+    DanhSachCanLamSangModule,
+    DMLoaiKhamModule
   ],
 })
 export class AppModule {}

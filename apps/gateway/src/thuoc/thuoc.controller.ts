@@ -19,13 +19,11 @@ export class ThuocController {
 
   @Get('dmthuoc')
   async getDmThuoc() {
-    // const data = await this.thuocService.exec_gd2_dmthuoc();
-    // return this.thuocService.trans_gd2_dmthuoc(data);
     var dataDMThuoc = await this.cacheManager.get('dataDMThuoc');
     if (!dataDMThuoc) {
       dataDMThuoc = await this.thuocService.exec_gd2_dmthuoc();
       await this.cacheManager.set('dataDMThuoc', dataDMThuoc, {
-        ttl: 120,
+        ttl: 60,
       });
     }
     return this.thuocService.trans_gd2_dmthuoc(dataDMThuoc);

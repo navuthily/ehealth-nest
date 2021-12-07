@@ -300,6 +300,10 @@ export class ThuocService {
       item['indent'] = item['nLevel'];
       item['NuocSanXuat'] = item['TenDayDu'];
       item['HangSanXuat'] = item['TenNhaSanXuat'];
+      item['ShowLoHanDung'] = item['Is_Print_Lohandung'];
+      item['hide'] = hide;
+      item['LaThuoc'] = item['LaThuoc'] == null ? '' : item['LaThuoc'] ? 1 : 0;
+      item['Active'] = item['Active'] == null ? '' : item['Active'] ? 1 : 0;
       if (item['DonGia']) {
         item['Giasauthue'] = Math.round(
           item['DonGia'] * (1 + item['PhanTramThue'] / 100),
@@ -307,7 +311,6 @@ export class ThuocService {
       } else {
         item['Giasauthue'] = null;
       }
-      item['ShowLoHanDung'] = item['Is_Print_Lohandung'];
       if (item['DonGia']) {
         item['Giaban'] = Math.round(
           item['DonGia'] *
@@ -317,16 +320,12 @@ export class ThuocService {
       } else {
         item['Giaban'] = null;
       }
-      item['hide'] = hide;
       item['GiaBHYTSoLe'] = item['GiaBHYTSoLe']
         ? item['GiaBHYTSoLe'].toFixed(2)
         : item['GiaBHYTSoLe'];
       item['HeSoDieuChinhGiaBan'] = item['HeSoDieuChinhGiaBan']
         ? item['HeSoDieuChinhGiaBan'].toFixed(2)
         : item['HeSoDieuChinhGiaBan'];
-      item['LaThuoc'] = item['LaThuoc'] == null ? '' : item['LaThuoc'] ? 1 : 0;
-      item['Active'] = item['Active'] == null ? '' : item['Active'] ? 1 : 0;
-
       return item;
     });
     return data;
