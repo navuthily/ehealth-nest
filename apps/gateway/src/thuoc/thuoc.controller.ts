@@ -35,7 +35,7 @@ export class ThuocController {
     if (!dataAllThuoc) {
       dataAllThuoc = await this.thuocService.exec_gd2_thuoc_selectall_tam();
       await this.cacheManager.set('dataAllThuoc', dataAllThuoc, {
-        ttl: 120,
+        ttl: 60,
       });
     }
     return dataAllThuoc;
