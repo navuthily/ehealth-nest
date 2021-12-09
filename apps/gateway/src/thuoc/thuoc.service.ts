@@ -1,10 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
+import {} from 'sequelize-typescript';
 import { Connection } from 'typeorm';
-
+const sql = require('mssql');
 @Injectable()
 export class ThuocService {
-  constructor(@InjectConnection() readonly connection: Connection) {}
+  constructor(
+    @InjectConnection() readonly connection: Connection, // @InjectConnectionSequelize() readonly connectionSequelize,
+  ) {}
   async exec_gd2_dmthuoc() {
     const stored = `SET NOCOUNT ON;
      SELECT dt.MaThuoc
@@ -78,6 +81,7 @@ export class ThuocService {
     const data = await this.connection.query(`${stored}`);
     return data;
   }
+
   trans_gd2_dmthuoc(data: any) {
     let chuoitrave = {};
     let chuoi2 = '';
@@ -133,6 +137,7 @@ export class ThuocService {
     chuoitrave = { dmThuoc: JSON.stringify(TraVe), idThuoc: chuoi2 };
     return chuoitrave;
   }
+  
   async exec_gd2_thuoc_selectall_tam() {
     const stored = `SET NOCOUNT ON
     ;WITH k1 
@@ -329,5 +334,94 @@ export class ThuocService {
       return item;
     });
     return data;
+  }
+
+  async exec_gd2_get_cauhinh_new(param: any) {
+    return await this.connection.query(`GD2_get_cauhinh_new '${param}'`);
+  }
+
+  async exec_gd2_quanly_dieukienupdate(params: any) {
+    return await this.connection.query(
+      `GD2_Quanly_dieukienupdate ${params.id_luotkham}, ${params.id_donthuoc}, ${params.id_kham}, ${params.id_phy}, ${params.id_dtph}, ${params.id_user}, ${params.id_benhnhan}, ${params.sid}, ${params.loaikiemtra}, '${params.ip_client}'`,
+    );
+  }
+
+  async exec_gd2_thuoc_quanlyxuat(params: any) {
+    const { xml, IP, ID_Kho, ID_NhanVien, out, ID_XuatKho } = params;
+    const connection = await new sql.ConnectionPool({
+      dialect: 'mssql',
+      host: '192.168.1.107',
+      server: '192.168.1.107',
+      port: 1433,
+      user: 'dev',
+      password: '1234',
+      database: 'EhealthRea_dev',
+      options: {
+        encrypt: false,
+        trustServerCertificate: false,
+      },
+    }).connect();
+    const request = new sql.Request(connection);
+    const input = { xml, IP, ID_Kho, ID_NhanVien };
+    const output = { out, ID_XuatKho };
+    Object.keys(input).forEach((key) => {
+      request.input(key, input[key]);
+    });
+    Object.keys(output).forEach((key) => {
+      request.output(key);
+    });
+    const result = await request.execute('GD2_Thuoc_QuanLyXuat');
+
+    return result;
+  }
+
+  async exec_gd2_quanlydieukienupdatenew(params: any) {
+    return await this.connection.query(
+      `EXEC GD2_QuanLyDieuKienUpdateNew @0, @1`,
+      [params.function, params.xml],
+    );
+  }
+
+  async exec_gd2_check_phieulinhthuocnoitru(params: any) {
+    return await this.connection.query(
+      `EXEC GD2_Check_PhieuLinhThuocNoiTru @0`,
+      [params.ID_PhieuLinhThuoc],
+    );
+  }
+
+  async exec_gd2_checkphieunhapxuattrunggian_daduyet(params: any) {
+    return await this.connection.query(
+      `EXEC GD2_CheckPhieuNhapXuatTrungGian_DaDuyet @0`,
+      [params.ID_PhieuTrungGian],
+    );
+  }
+
+  getIP(req: any) {
+    let ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+    if (ip.substr(0, 7) == '::ffff:') {
+      ip = ip.substr(7);
+    }
+    return ip;
+  }
+
+  createTable(data: any) {
+    let table = '<table border=1 cellpadding=0 cellspacing=0>';
+    table +=
+      '<th>Tên thuốc</th><th>Tồn hiện tại</th><th>Số lượng xuất</th><th>Số lượng thiếu</th>';
+    if (data) {
+      for (let i = 0; i < data.length; i += 1) {
+        table += '<tr>';
+        table += `<td align='left'>${data[i].TenGoc}</td>`;
+        table += `<td align='right'>${data[i].SoLuongConLai}</td>`;
+        table += `<td align='right'>${data[i].SoThuocDeNghiTheoDon}</td>`;
+        table += `<td align='right'>${
+          data[i].SoThuocDeNghiTheoDon - data[i].SoLuongConLai
+        }</td>`;
+        table += '</tr>';
+      }
+      table += '</table>';
+      return table;
+    }
+    return '';
   }
 }

@@ -6,6 +6,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { decode } from 'jsonwebtoken';
@@ -109,13 +110,29 @@ class BuildServiceModule {}
       },
       inject: [ApiConfigService],
     }),
+    // SequelizeModule.forRoot({
+    //   dialect: 'mssql',
+    //   host: '192.168.1.107',
+    //   port: 1433,
+    //   username: 'dev',
+    //   password: '1234',
+    //   database: 'EhealthRea_dev',
+    //   models: [],
+    //   pool:{
+    //     max:5,
+    //     min:0,
+    //     acquire:30000,
+    //     idle:10000
+    //   }
+      
+    // }),
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
     XmlBHYTModule,
     ThuocModule,
     DanhSachLamSangModule,
     DanhSachCanLamSangModule,
-    DMLoaiKhamModule
+    DMLoaiKhamModule,
   ],
 })
 export class AppModule {}
