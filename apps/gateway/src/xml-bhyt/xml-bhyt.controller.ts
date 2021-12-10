@@ -14,9 +14,10 @@ export class XmlBHYTController {
   async xuatxml(@Body() data: any) {
     let idThuTraNo = JSON.parse(data.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
-      this.xmlBHYTQueue.add('xml-bhyt', {
-        ID_ThuTraNo: parseInt(idThuTraNo[i]),
-      });
+      this.xmlBHYTQueue.add('xml-bhyt',
+       { ID_ThuTraNo: parseInt(idThuTraNo[i])}, 
+       { delay: 100 }
+      );
     }
     return {};
   }

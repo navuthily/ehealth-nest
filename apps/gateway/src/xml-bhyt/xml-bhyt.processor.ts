@@ -43,13 +43,10 @@ export class XmlBHYTProcessor {
   }
   public get token(): any {
     if (!this._token || !this.isAccessTokenExpires()) {
-      // console.log(1);
-
       return (async () => {
         return await this.getToken();
       })();
     }
-    // console.log(2);
     return this._token;
   }
   public set token(v: any) {
@@ -58,11 +55,6 @@ export class XmlBHYTProcessor {
 
   isAccessTokenExpires() {
     if (new Date(this._token.APIKey.expires_in).getTime()) {
-      // console.log(
-      //   new Date(this._token.APIKey.expires_in).getTime() -
-      //     new Date().getTime(),
-      // );
-
       return (
         new Date().getTime() < new Date(this._token.APIKey.expires_in).getTime()
       );
@@ -83,8 +75,6 @@ export class XmlBHYTProcessor {
   @Process('xml-bhyt-layketqua')
   async layketqua(job: Job) {
     let token = await this.token;
-    // console.log(job.data);
-    // console.log(token);
     try {
       const loi = await this.httpService
         .post(
@@ -103,7 +93,7 @@ export class XmlBHYTProcessor {
         maGiaoDich: job.data.maGiaoDich,
       });
       await this.connection.query(
-        `EXEC GD2_BHYT_xml_DaChuyen_Update '${job.data.thongtin.MA_LK}', '${job.data.maGiaoDich}', '${maLoi}', '${MoTa}'`,
+        `EXEC GD2_BHYT_xml_DaChuyen_Update @0,@1,@2,@3` ,[job.data.thongtin.MA_LK, job.data.maGiaoDich, maLoi, MoTa]
       );
     } catch (err) {
       console.log(err);
@@ -111,34 +101,15 @@ export class XmlBHYTProcessor {
   }
   @Process('xml-bhyt')
   async handle(job: Job) {
-    // console.log(job.data.ID_ThuTraNo);
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
-          // this.xmlService.get_thong_tin(job.data.ID_ThuTraNo, 'GD2_ThongTinLuotKhamBHYT'),
-          // this.xmlService.get_thong_tin(
-          //   job.data.ID_ThuTraNo,
-          //   'GD2_BHYT_ngoaithuoc_quyettoan',
-          // ),
-          // this.xmlService.get_thong_tin(
-          //   job.data.ID_ThuTraNo,
-          //   'GD2_BHYT_ngoaicls_quyettoan',
-          // ),
-          // this.xmlService.get_thong_tin(
-          //   job.data.ID_ThuTraNo,
-          //   'GD2_BHYT_ChisoCLS_quyettoan',
-          // ),
-          // this.xmlService.get_thong_tin(
-          //   job.data.ID_ThuTraNo,
-          //   'GD2_BHYT_ChisoNoiTru_quyettoan',
-          // ),
           this.xmlService.exec_xml_1_tonghop(job.data.ID_ThuTraNo),
           this.xmlService.exec_xml_2_thuoc(job.data.ID_ThuTraNo),
           this.xmlService.exec_xml_3_canlamsang(job.data.ID_ThuTraNo),
           this.xmlService.exec_xml_4_chitietcls(job.data.ID_ThuTraNo),
           this.xmlService.exec_xml_5_dienbienbenh(job.data.ID_ThuTraNo),
         ]);
-
       thongtin = thongtin[0];
       let ThanhTienBaoHiem = new Big(0);
       let T_BNTT = new Big(0);
@@ -197,41 +168,18 @@ export class XmlBHYTProcessor {
         job.data.ID_ThuTraNo
       }.xml`;
       const buffer = Buffer.from(tong);
-      const token = await this.token;
-
-      // console.log(this.password)
-      var maGiaoDich = await rp(
+      const token = await this.token;    
+      const maGiaoDich = await rp(
         {
           url: `https://egw.baohiemxahoi.gov.vn/api/egw/guiHoSoGiamDinh4210?token=${token?.APIKey?.access_token}&id_token=${token?.APIKey?.id_token}&username=${this.username}&password=${this.password}&loaiHoSo=3&maTinh=48&maCSKCB=48195`,
           method: 'POST',
           json: true,
           body: Array.prototype.slice.call(buffer, 0),
-        },
-        // async (error, response, body) => {
-        //   console.log(response.body.maGiaoDich);
-
-        //   // await this.wait(3000);
-        //   // const loi = await this.httpService
-        //   //   .post(
-        //   //     `https://egw.baohiemxahoi.gov.vn/api/egw/nhanChiTietLoiHS4210?token=${Api?.data.APIKey.access_token}&id_token=${Api?.data.APIKey.id_token}&username=${username}&password=${password}&maCSKCB=48195&maGiaoDich=${response.body.maGiaoDich}`,
-        //   //   )
-        //   //   .toPromise();
-        //   // let maLoi = null;
-        //   // let MoTa = '';
-        //   // if (loi?.data?.dsLoi?.length > 0) {
-        //   //   // eslint-disable-next-line prefer-destructuring
-        //   //   maLoi = loi?.data?.dsLoi[0]?.maLoi;
-        //   //   MoTa = JSON.stringify(
-        //   //     loi?.data?.dsLoi?.map(({ moTaLoi }) => moTaLoi),
-        //   //   );
-        //   // }
-        //   // console.dir({ MoTa, filename, maGiaoDich: response.body.maGiaoDich });
-        //   // await this.connection.query(
-        //   //   `EXEC GD2_BHYT_xml_DaChuyen_Update '${thongtin.MA_LK}', '${response.body.maGiaoDich}', '${maLoi}', '${MoTa}'`,
-        //   // );
-        // },
+        }, 
       );
-      // console.log(maGiaoDich);
+
+      console.log(maGiaoDich);
+ 
 
       this.xmlBHYTQueue.add(
         'xml-bhyt-layketqua',
@@ -242,14 +190,6 @@ export class XmlBHYTProcessor {
       console.log(err);
     }
   }
-  // Bỏ qua service
-  // async get_thong_tin(id_thutrano: string, store_name: string) {
-  //   const data = await this.connection.query(
-  //     `EXEC ${store_name} ${id_thutrano}`,
-  //   );
-  //   return data;
-  // }
-  //////////////////
   xml_1_tonghop(
     thongtin,
     tongthuoc,
@@ -313,9 +253,6 @@ export class XmlBHYTProcessor {
     tonghop += '<STT>1</STT>';
     tonghop += `<MA_BN>${thongtin.MA_BN}</MA_BN>`;
     tonghop += `<HO_TEN>${thongtin.HO_TEN}</HO_TEN>`;
-    // tonghop += `<NGAY_SINH>${custom.formatDateBHYT(
-    //   thongtin.NGAY_SINH,
-    // )}</NGAY_SINH>`;
     tonghop += `<NGAY_SINH>${format(
       new Date(this.toIsoString(thongtin.NGAY_SINH)),
       this.getFullDateBHYT,
@@ -327,16 +264,10 @@ export class XmlBHYTProcessor {
     )}]]></DIA_CHI>`;
     tonghop += `<MA_THE>${thongtin.MA_THE}</MA_THE>`;
     tonghop += `<MA_DKBD>${thongtin.MA_DKBD.replace('-', '')}</MA_DKBD>`;
-    // tonghop += `<GT_THE_TU>${custom.formatDateBHYT(
-    //   thongtin.GT_THE_TU,
-    // )}</GT_THE_TU>`;
     tonghop += `<GT_THE_TU>${format(
       new Date(this.toIsoString(thongtin.GT_THE_TU)),
       this.getFullDateBHYT,
     )}</GT_THE_TU>`;
-    // tonghop += `<GT_THE_DEN>${custom.formatDateBHYT(
-    //   thongtin.GT_THE_DEN,
-    // )}</GT_THE_DEN>`;
     tonghop += `<GT_THE_DEN>${format(
       new Date(this.toIsoString(thongtin.GT_THE_DEN)),
       this.getFullDateBHYT,
@@ -348,14 +279,10 @@ export class XmlBHYTProcessor {
     tonghop += `<MA_LYDO_VVIEN>${thongtin.MA_LYDO_VVIEN}</MA_LYDO_VVIEN>`;
     tonghop += '<MA_NOI_CHUYEN />';
     tonghop += '<MA_TAI_NAN />';
-    // tonghop += `<NGAY_VAO>${custom.formatDatehour(
-    //   thongtin.NGAY_VAO,
-    // )}</NGAY_VAO>`;
     tonghop += `<NGAY_VAO>${format(
       new Date(this.toIsoString(thongtin.NGAY_VAO)),
       this.getFullDateTimeBHYT,
     )}</NGAY_VAO>`;
-    // tonghop += `<NGAY_RA>${custom.formatDatehour(thongtin.NGAY_RA)}</NGAY_RA>`;
     tonghop += `<NGAY_RA>${format(
       new Date(this.toIsoString(thongtin.NGAY_RA)),
       this.getFullDateTimeBHYT,
@@ -366,10 +293,7 @@ export class XmlBHYTProcessor {
     )}</SO_NGAY_DTRI>`;
     tonghop += `<KET_QUA_DTRI>${thongtin.KET_QUA_DTRI}</KET_QUA_DTRI>`;
     tonghop += `<TINH_TRANG_RV>${thongtin.TINH_TRANG_RV}</TINH_TRANG_RV>`;
-    // tonghop += `<NGAY_TTOAN>${custom.formatDatehour(
-    //   thongtin.NGAY_TTOAN,
-    // )}</NGAY_TTOAN>`;
-    tonghop += `<NGAY_TTOAN>${format(
+     tonghop += `<NGAY_TTOAN>${format(
       new Date(this.toIsoString(thongtin.NGAY_TTOAN)),
       this.getFullDateTimeBHYT,
     )}</NGAY_TTOAN>`;
@@ -473,14 +397,6 @@ export class XmlBHYTProcessor {
       } else {
         MA_LOAI_KCB_New = 1;
       }
-      // for (var i = 0; i < icd_tam.length; i++) {
-      //   if (thongtin.MA_BENH == icd_tam[i]) {
-      //      MA_LOAI_KCB_New = 2;
-      //     break;
-      //   } else {
-      //     MA_LOAI_KCB_New = 1;
-      //   }
-      // }
     }
     tonghop += `<MA_LOAI_KCB>${MA_LOAI_KCB_New}</MA_LOAI_KCB>`;
     tonghop += `<NAM_QT>${NAM_QT}</NAM_QT>`;
@@ -491,14 +407,11 @@ export class XmlBHYTProcessor {
     tonghop += '<MA_PTTT_QT />';
     tonghop += `<CAN_NANG>${thongtin.CAN_NANG}</CAN_NANG>`;
     tonghop += '</TONG_HOP>';
-    // eslint-disable-next-line no-buffer-constructor
     if (base64) {
       tonghop = Buffer.from(tonghop).toString('base64');
     }
     tonghop = `<?xml version="1.0" encoding="utf-8"?><GIAMDINHHS xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><THONGTINDONVI><MACSKCB>48195</MACSKCB></THONGTINDONVI><THONGTINHOSO><NGAYLAP>${NGAYLAP}</NGAYLAP><SOLUONGHOSO>1</SOLUONGHOSO><DANHSACHHOSO><HOSO><FILEHOSO><LOAIHOSO>XML1</LOAIHOSO><NOIDUNGFILE>${tonghop}`;
     tonghop += '</NOIDUNGFILE></FILEHOSO>';
-    // console.log(tonghop);
-
     return tonghop;
   }
   xml_2_thuoc(thongtinthuoc, thongtin, base64 = true) {
@@ -541,8 +454,6 @@ export class XmlBHYTProcessor {
         if (thongtinthuoc[i].T_BNTT) {
           T_BNTT = T_BNTT.plus(thongtinthuoc[i].T_BNTT);
         }
-        // console.log(thongtinthuoc[i].T_BNCCT);
-
         if (thongtinthuoc[i].T_BNCCT) {
           T_BNCCT = T_BNCCT.plus(thongtinthuoc[i].T_BNCCT);
         }
@@ -852,7 +763,6 @@ export class XmlBHYTProcessor {
   @Process({ name: 'kq_nhan_lichsu_kcb', concurrency: 5 })
   async kq_nhan_lichsu_kcb(job: Job) {
     var token = await this.token;
-
     const data = await this.httpService
       .request({
         url: `http://egw.baohiemxahoi.gov.vn/api/egw/KQNhanLichSuKCB595?token=${token.APIKey.access_token}&id_token=${token.APIKey.id_token}&username=${this.username}&password=${this.password}`,
