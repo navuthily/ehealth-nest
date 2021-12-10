@@ -23,4 +23,19 @@ export class DMBenhNhanDTO {
 
   @Field({ nullable: true })
   tuoi?: string;
+
+  @FilterableField({ nullable: true })
+  HoLotBenhNhan?: string;
+
+  @FilterableField({ nullable: true })
+  TenBenhNhan?: string;
+
+  @FilterableField({ nullable: true })
+  GioiTinh?: number;
+
+  @FilterableField({ nullable: true })
+  DienThoai1?: string;
+
+  @FilterableField({ nullable: true })
+  DiaChi?: string;
 }

@@ -987,6 +987,11 @@ type DMBenhNhan {
   namsinh: Float
   ngaythangnamsinh: Date
   tuoi: String
+  HoLotBenhNhan: String
+  TenBenhNhan: String
+  GioiTinh: Float
+  DienThoai1: String
+  DiaChi: String
 }
 
 type DMBenhNhanEdge {
@@ -1009,34 +1014,56 @@ type DMBenhNhanAggregateGroupBy {
   benhnhanId: ID
   namsinh: Float
   ngaythangnamsinh: Date
+  HoLotBenhNhan: String
+  TenBenhNhan: String
+  GioiTinh: Float
+  DienThoai1: String
+  DiaChi: String
 }
 
 type DMBenhNhanCountAggregate {
   benhnhanId: Int
   namsinh: Int
   ngaythangnamsinh: Int
+  HoLotBenhNhan: Int
+  TenBenhNhan: Int
+  GioiTinh: Int
+  DienThoai1: Int
+  DiaChi: Int
 }
 
 type DMBenhNhanSumAggregate {
   benhnhanId: Float
   namsinh: Float
+  GioiTinh: Float
 }
 
 type DMBenhNhanAvgAggregate {
   benhnhanId: Float
   namsinh: Float
+  GioiTinh: Float
 }
 
 type DMBenhNhanMinAggregate {
   benhnhanId: ID
   namsinh: Float
   ngaythangnamsinh: Date
+  HoLotBenhNhan: String
+  TenBenhNhan: String
+  GioiTinh: Float
+  DienThoai1: String
+  DiaChi: String
 }
 
 type DMBenhNhanMaxAggregate {
   benhnhanId: ID
   namsinh: Float
   ngaythangnamsinh: Date
+  HoLotBenhNhan: String
+  TenBenhNhan: String
+  GioiTinh: Float
+  DienThoai1: String
+  DiaChi: String
 }
 
 type DMBuongGiuongBenhEdge {
@@ -1204,6 +1231,11 @@ type ThongTinLuotKhamBuonggiuongbenhsConnection {
   nodes: [BenhAnGiuongBenh!]!
 }
 
+type ThongTinBenhVien {
+  Id_BenhVien: ID!
+  TenBenhVien: String
+}
+
 type DmLabel {
   id: ID!
   keyname: String
@@ -1212,6 +1244,7 @@ type DmLabel {
   nhanvientao_id: Float
   Id_BenhVien: Float
   user: User
+  thongtinbenhvien: ThongTinBenhVien
 }
 
 type DmLabelConnection {
@@ -1330,11 +1363,6 @@ type DmLanguageMaxAggregate {
   nhanvientao_id: Float
 }
 
-type ThongTinBenhVien {
-  Id_BenhVien: ID!
-  TenBenhVien: String
-}
-
 type ThongTinBenhVienConnection {
   """Paging information"""
   pageInfo: OffsetPageInfo!
@@ -1435,6 +1463,106 @@ type DmLabelLanguageMaxAggregate {
   id_label: Float
   value: String
   nhanvientao_id: String
+}
+
+type gd2benhnhanquanhe {
+  ID_MoiQuanHe: ID!
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  HoLot_NguoiQuanHe: String
+  Ten_NguoiQuanHe: String
+  SDT_NguoiQuanHe: String
+  NamSinh_NguoiQuanHe: Date
+  NguoiTao: Float
+  NguoiSua: Float
+  DiaChi_NguoiLienHe: String
+  is_daidien: Boolean
+  dmbenhnhan: DMBenhNhan
+}
+
+type Gd2benhnhanquanheConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [gd2benhnhanquanhe!]!
+}
+
+type gd2benhnhanquanheAggregateGroupBy {
+  ID_MoiQuanHe: ID
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  HoLot_NguoiQuanHe: String
+  Ten_NguoiQuanHe: String
+  SDT_NguoiQuanHe: String
+  NamSinh_NguoiQuanHe: Date
+  NguoiTao: Float
+  NguoiSua: Float
+  DiaChi_NguoiLienHe: String
+  is_daidien: Boolean
+}
+
+type gd2benhnhanquanheCountAggregate {
+  ID_MoiQuanHe: Int
+  ID_BenhNhan: Int
+  ID_BenhNhan_QuanHe: Int
+  ID_LoaiQuanHe: Int
+  HoLot_NguoiQuanHe: Int
+  Ten_NguoiQuanHe: Int
+  SDT_NguoiQuanHe: Int
+  NamSinh_NguoiQuanHe: Int
+  NguoiTao: Int
+  NguoiSua: Int
+  DiaChi_NguoiLienHe: Int
+  is_daidien: Int
+}
+
+type gd2benhnhanquanheSumAggregate {
+  ID_MoiQuanHe: Float
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  NguoiTao: Float
+  NguoiSua: Float
+}
+
+type gd2benhnhanquanheAvgAggregate {
+  ID_MoiQuanHe: Float
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  NguoiTao: Float
+  NguoiSua: Float
+}
+
+type gd2benhnhanquanheMinAggregate {
+  ID_MoiQuanHe: ID
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  HoLot_NguoiQuanHe: String
+  Ten_NguoiQuanHe: String
+  SDT_NguoiQuanHe: String
+  NamSinh_NguoiQuanHe: Date
+  NguoiTao: Float
+  NguoiSua: Float
+  DiaChi_NguoiLienHe: String
+}
+
+type gd2benhnhanquanheMaxAggregate {
+  ID_MoiQuanHe: ID
+  ID_BenhNhan: Float
+  ID_BenhNhan_QuanHe: Float
+  ID_LoaiQuanHe: Float
+  HoLot_NguoiQuanHe: String
+  Ten_NguoiQuanHe: String
+  SDT_NguoiQuanHe: String
+  NamSinh_NguoiQuanHe: Date
+  NguoiTao: Float
+  NguoiSua: Float
+  DiaChi_NguoiLienHe: String
 }
 
 type Query {
@@ -1606,6 +1734,20 @@ type Query {
     """Specify to sort results."""
     sorting: [DmLabelLanguageSort!] = [{field: id, direction: ASC}]
   ): DmLabelLanguageConnection!
+  gd2benhnhanquanhe(
+    """The id of the record to find."""
+    id: ID!
+  ): gd2benhnhanquanhe
+  gd2benhnhanquanhes(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: gd2benhnhanquanheFilter = {}
+
+    """Specify to sort results."""
+    sorting: [gd2benhnhanquanheSort!] = [{field: ID_MoiQuanHe, direction: ASC}]
+  ): Gd2benhnhanquanheConnection!
 }
 
 input CursorPaging {
@@ -1637,6 +1779,11 @@ input ThongTinLuotKhamFilterDMBenhNhanFilter {
   benhnhanId: IDFilterComparison
   namsinh: NumberFieldComparison
   ngaythangnamsinh: DateFieldComparison
+  HoLotBenhNhan: StringFieldComparison
+  TenBenhNhan: StringFieldComparison
+  GioiTinh: NumberFieldComparison
+  DienThoai1: StringFieldComparison
+  DiaChi: StringFieldComparison
 }
 
 input ThongTinLuotKhamFilterBenhAnGiuongBenhFilter {
@@ -1666,6 +1813,11 @@ input DMBenhNhanFilter {
   benhnhanId: IDFilterComparison
   namsinh: NumberFieldComparison
   ngaythangnamsinh: DateFieldComparison
+  HoLotBenhNhan: StringFieldComparison
+  TenBenhNhan: StringFieldComparison
+  GioiTinh: NumberFieldComparison
+  DienThoai1: StringFieldComparison
+  DiaChi: StringFieldComparison
 }
 
 input DMBenhNhanSort {
@@ -1678,6 +1830,11 @@ enum DMBenhNhanSortFields {
   benhnhanId
   namsinh
   ngaythangnamsinh
+  HoLotBenhNhan
+  TenBenhNhan
+  GioiTinh
+  DienThoai1
+  DiaChi
 }
 
 input DMBuongGiuongBenhFilter {
@@ -1974,7 +2131,15 @@ input DmLabelFilter {
   active: BooleanFieldComparison
   nhanvientao_id: NumberFieldComparison
   Id_BenhVien: NumberFieldComparison
+  thongtinbenhvien: DmLabelFilterThongTinBenhVienFilter
   user: DmLabelFilterUserFilter
+}
+
+input DmLabelFilterThongTinBenhVienFilter {
+  and: [DmLabelFilterThongTinBenhVienFilter!]
+  or: [DmLabelFilterThongTinBenhVienFilter!]
+  Id_BenhVien: IDFilterComparison
+  TenBenhVien: StringFieldComparison
 }
 
 input DmLabelFilterUserFilter {
@@ -2376,70 +2541,56 @@ enum DmLabelLanguageSortFields {
   nhanvientao_id
 }
 
-input DmLoaiKhamFilter {
-  and: [DmLoaiKhamFilter!]
-  or: [DmLoaiKhamFilter!]
-  ID_LoaiKham: IDFilterComparison
-  TenLoaiKham: StringFieldComparison
-  id: NumberFieldComparison
-  Active: BooleanFieldComparison
-  SoLuongBs_ThucHien: NumberFieldComparison
-  LoiKhuyen_App: NumberFieldComparison
-  maviettat: StringFieldComparison
-  maviettatbn: StringFieldComparison
-  nhomclsId: NumberFieldComparison
-  mota: StringFieldComparison
-  giabaochobn: NumberFieldComparison
-  SoLuongNhanVien_ThucHien: NumberFieldComparison
-  IsTamUng: BooleanFieldComparison
-  IsDauHieuSinhTon: BooleanFieldComparison
-  GioiTinh_LoaiKham: NumberFieldComparison
-  IsSoLuongNhieu: BooleanFieldComparison
-  YNghia: StringFieldComparison
+input gd2benhnhanquanheFilter {
+  and: [gd2benhnhanquanheFilter!]
+  or: [gd2benhnhanquanheFilter!]
+  ID_MoiQuanHe: IDFilterComparison
+  ID_BenhNhan: NumberFieldComparison
+  ID_BenhNhan_QuanHe: NumberFieldComparison
+  ID_LoaiQuanHe: NumberFieldComparison
+  HoLot_NguoiQuanHe: StringFieldComparison
+  Ten_NguoiQuanHe: StringFieldComparison
+  SDT_NguoiQuanHe: StringFieldComparison
+  NamSinh_NguoiQuanHe: DateFieldComparison
+  NguoiTao: NumberFieldComparison
+  NguoiSua: NumberFieldComparison
+  DiaChi_NguoiLienHe: StringFieldComparison
+  is_daidien: BooleanFieldComparison
+  dmbenhnhan: gd2benhnhanquanheFilterDMBenhNhanFilter
 }
 
-input DmLoaiKhamSort {
-  field: DmLoaiKhamSortFields!
+input gd2benhnhanquanheFilterDMBenhNhanFilter {
+  and: [gd2benhnhanquanheFilterDMBenhNhanFilter!]
+  or: [gd2benhnhanquanheFilterDMBenhNhanFilter!]
+  benhnhanId: IDFilterComparison
+  namsinh: NumberFieldComparison
+  ngaythangnamsinh: DateFieldComparison
+  HoLotBenhNhan: StringFieldComparison
+  TenBenhNhan: StringFieldComparison
+  GioiTinh: NumberFieldComparison
+  DienThoai1: StringFieldComparison
+  DiaChi: StringFieldComparison
+}
+
+input gd2benhnhanquanheSort {
+  field: gd2benhnhanquanheSortFields!
   direction: SortDirection!
   nulls: SortNulls
 }
 
-enum DmLoaiKhamSortFields {
-  ID_LoaiKham
-  TenLoaiKham
-  id
-  Active
-  SoLuongBs_ThucHien
-  LoiKhuyen_App
-  maviettat
-  maviettatbn
-  nhomclsId
-  mota
-  giabaochobn
-  SoLuongNhanVien_ThucHien
-  IsTamUng
-  IsDauHieuSinhTon
-  GioiTinh_LoaiKham
-  IsSoLuongNhieu
-  YNghia
-}
-
-input DmLoiKhuyenFilter {
-  and: [DmLoiKhuyenFilter!]
-  or: [DmLoiKhuyenFilter!]
-  autoId: IDFilterComparison
-  noidungloikhuyen: StringFieldComparison
-}
-
-input DmLoiKhuyenSort {
-  field: DmLoiKhuyenSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum DmLoiKhuyenSortFields {
-  autoId
-  noidungloikhuyen
+enum gd2benhnhanquanheSortFields {
+  ID_MoiQuanHe
+  ID_BenhNhan
+  ID_BenhNhan_QuanHe
+  ID_LoaiQuanHe
+  HoLot_NguoiQuanHe
+  Ten_NguoiQuanHe
+  SDT_NguoiQuanHe
+  NamSinh_NguoiQuanHe
+  NguoiTao
+  NguoiSua
+  DiaChi_NguoiLienHe
+  is_daidien
 }
 
 type Mutation {

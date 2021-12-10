@@ -17,6 +17,8 @@ import { GoogleNotificationModule } from './google-notification/google-notificat
 import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/language-thongtinbenhvien.module';
+import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
+import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 
 require('dotenv').config();
 
@@ -134,6 +136,9 @@ class BuildServiceModule {}
     ThuocModule,
     DanhSachLamSangModule,
     DanhSachCanLamSangModule,
+    LanguageThongtinbenhvienModule,
+    LienKetMoiQuanHeBenhNhanModule,
+    GetIDLoaiQuanHeQuanHeBenhNhanModule
     DMLoaiKhamModule,
     LanguageThongtinbenhvienModule
   ],
