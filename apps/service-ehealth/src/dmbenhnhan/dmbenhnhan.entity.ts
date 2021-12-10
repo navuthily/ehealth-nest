@@ -18,6 +18,21 @@ export class DMBenhNhanEntity {
   @Column({ name: 'NgayThangNamSinh', type: 'datetime2' })
   ngaythangnamsinh?: Date;
 
+  @Column({ name: 'HoLotBenhNhan'})
+  HoLotBenhNhan?: string;
+
+  @Column({ name: 'TenBenhNhan'})
+  TenBenhNhan?: string;
+
+  @Column({ name: 'GioiTinh'})
+  GioiTinh?: number;
+
+  @Column({ name: 'DienThoai1'})
+  DienThoai1?: string;
+
+  @Column({ name: 'DiaChi'})
+  DiaChi?: string;
+
   tuoi?: string;
 
   @AfterLoad()
@@ -39,4 +54,5 @@ export class DMBenhNhanEntity {
       }
     }
   }
+
 }

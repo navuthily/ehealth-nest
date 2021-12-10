@@ -34,6 +34,10 @@ import { ThongTinBenhVienEntity } from './thongtinbenhvien/thongtinbenhvien.enti
 import { ThongTinBenhVienModule } from './thongtinbenhvien/thongtinbenhvien.module';
 import { DmLabelLanguageEntity } from './dm-label-language/dm-label-language.entity';
 import { DMLabelLanguageModule } from './dm-label-language/dm-label-language.module';
+import { MoiQuanHeBenhNhanEntity } from './benhnhan-quanhe/benhnhan-quanhe.entity';
+import { MoiQuanHeBenhnhanModule } from './benhnhan-quanhe/benhnhan-quanhe.module';
+
+
 interface IHeadersContainer {
   headers?: Record<string, string>;
 }
@@ -76,6 +80,7 @@ interface IContextArgs {
     DMLanguageModule,
     ThongTinBenhVienModule,
     DMLabelLanguageModule,
+    MoiQuanHeBenhnhanModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
@@ -97,7 +102,8 @@ interface IContextArgs {
           DmlabelEntity,
           DmLanguageEntity,
           ThongTinBenhVienEntity,
-          DmLabelLanguageEntity
+          DmLabelLanguageEntity,
+          MoiQuanHeBenhNhanEntity
         ];
         console.log(process.env.SV_EHEALTH_IP);
 

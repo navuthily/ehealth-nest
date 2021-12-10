@@ -17,7 +17,7 @@ export class DanhSachLamSangController {
 
   @UseInterceptors(CacheInterceptor)
   @CacheKey('danhsachlamsang')
-  @CacheTTL(120)
+  @CacheTTL(10)
   @Get()
   async getDanhSachLamSang() {
     const [dataDanhSachLamSangDangCho, dataDanhSachLamSangDangKham] =
@@ -43,7 +43,7 @@ export class DanhSachLamSangController {
   @Get('/xongdanhsachlamsang')
   async xongdanhsachlamsang() {
     const value = await this.getDanhSachLamSang();
-    await this.cacheManager.set('danhsachlamsang', value, { ttl: 120 });
+    await this.cacheManager.set('danhsachlamsang', value, { ttl: 10 });
     return value;
   }
 }

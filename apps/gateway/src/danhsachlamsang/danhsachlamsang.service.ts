@@ -5,6 +5,7 @@ import { Connection } from 'typeorm';
 @Injectable()
 export class DanhSachLamSangService {
   constructor(@InjectConnection() readonly connection: Connection) {}
+
   async getDanhSachLamSangDangCho() {
     const stored = `SET NOCOUNT ON
     --Select DS khám LS chính
@@ -189,6 +190,7 @@ export class DanhSachLamSangService {
     const data = await this.connection.query(`${stored}`, ['DangKham', 'Xong']);
     return data;
   }
+
   async getDanhSachLamSangDangKham() {
     const stored = `SET NOCOUNT ON
     DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME) 
@@ -287,6 +289,7 @@ export class DanhSachLamSangService {
     const data = await this.connection.query(`${stored}`);
     return data;
   }
+
   trans_getDanhSachLamSangDangCho(data: any) {
     let dangcho: any[] = [];
     let n1 = 0;
@@ -336,6 +339,7 @@ export class DanhSachLamSangService {
     }
     return dangcho;
   }
+
   trans_getDanhSachLamSangDangKham(data: any) {
     let dangkham: any[] = [];
     let daxong: any[] = [];
