@@ -13,12 +13,13 @@ export class GoogleNotificationProcessor {
     const barcode_a = data.barcode.substr(3, 1);
     const barcode_b = data.barcode.substr(10, 2);
     const plateNumber = data.plateNumber;
-    const a= await admin.messaging().sendToTopic('all', {
+    const result= await admin.messaging().sendToTopic('all', {
         notification: {
           title: 'Có xe mới',
           body: `Tầng: ${barcode_a} - Slot:${barcode_b}. \r\nBiển số: ${plateNumber}`,
         },
     });
-    console.log(a)
+    console.log(result)
+    return result
   }
 }

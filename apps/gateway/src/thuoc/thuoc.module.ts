@@ -1,5 +1,7 @@
+import { BullModule } from '@nestjs/bull';
 import { CacheModule, Module } from '@nestjs/common';
 import { ThuocController } from './thuoc.controller';
+import { ThuocProcessor } from './thuoc.processor';
 import { ThuocService } from './thuoc.service';
 
 @Module({
@@ -9,8 +11,11 @@ import { ThuocService } from './thuoc.service';
       ttl: 60,
       isGlobal: true,
     }),
+    BullModule.registerQueue({
+      name: 'thuoc',
+    }),
   ],
   controllers: [ThuocController],
-  providers: [ThuocService],
+  providers: [ThuocService, ThuocProcessor],
 })
 export class ThuocModule {}

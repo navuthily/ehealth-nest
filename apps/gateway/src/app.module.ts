@@ -6,11 +6,13 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { GATEWAY_BUILD_SERVICE, GraphQLGatewayModule } from '@nestjs/graphql';
 import { ScheduleModule } from '@nestjs/schedule';
+import { SequelizeModule } from '@nestjs/sequelize';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { decode } from 'jsonwebtoken';
 import { DanhSachCanLamSangModule } from './danhsachcanlamsang/danhsachcanlamsang.module';
 import { DanhSachLamSangModule } from './danhsachlamsang/danhsachlamsang.module';
+import { DMLoaiKhamModule } from './dmloaikham/dmloaikham.module';
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
 import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
@@ -112,6 +114,22 @@ class BuildServiceModule {}
       },
       inject: [ApiConfigService],
     }),
+    // SequelizeModule.forRoot({
+    //   dialect: 'mssql',
+    //   host: '192.168.1.107',
+    //   port: 1433,
+    //   username: 'dev',
+    //   password: '1234',
+    //   database: 'EhealthRea_dev',
+    //   models: [],
+    //   pool:{
+    //     max:5,
+    //     min:0,
+    //     acquire:30000,
+    //     idle:10000
+    //   }
+      
+    // }),
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
     XmlBHYTModule,
@@ -121,6 +139,8 @@ class BuildServiceModule {}
     LanguageThongtinbenhvienModule,
     LienKetMoiQuanHeBenhNhanModule,
     GetIDLoaiQuanHeQuanHeBenhNhanModule
+    DMLoaiKhamModule,
+    LanguageThongtinbenhvienModule
   ],
 })
 export class AppModule {}
