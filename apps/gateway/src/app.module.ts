@@ -14,6 +14,8 @@ import { DanhSachLamSangModule } from './danhsachlamsang/danhsachlamsang.module'
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
 import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
+import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/language-thongtinbenhvien.module';
+
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -113,7 +115,8 @@ class BuildServiceModule {}
     XmlBHYTModule,
     ThuocModule,
     DanhSachLamSangModule,
-    DanhSachCanLamSangModule
+    DanhSachCanLamSangModule,
+    LanguageThongtinbenhvienModule
   ],
 })
 export class AppModule {}

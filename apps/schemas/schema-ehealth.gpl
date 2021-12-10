@@ -1204,6 +1204,239 @@ type ThongTinLuotKhamBuonggiuongbenhsConnection {
   nodes: [BenhAnGiuongBenh!]!
 }
 
+type DmLabel {
+  id: ID!
+  keyname: String
+  notes: String
+  active: Boolean
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+  user: User
+}
+
+type DmLabelConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [DmLabel!]!
+}
+
+type DmLabelAggregateGroupBy {
+  id: ID
+  keyname: String
+  notes: String
+  active: Boolean
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+}
+
+type DmLabelCountAggregate {
+  id: Int
+  keyname: Int
+  notes: Int
+  active: Int
+  nhanvientao_id: Int
+  Id_BenhVien: Int
+}
+
+type DmLabelSumAggregate {
+  id: Float
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+}
+
+type DmLabelAvgAggregate {
+  id: Float
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+}
+
+type DmLabelMinAggregate {
+  id: ID
+  keyname: String
+  notes: String
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+}
+
+type DmLabelMaxAggregate {
+  id: ID
+  keyname: String
+  notes: String
+  nhanvientao_id: Float
+  Id_BenhVien: Float
+}
+
+type DmLanguage {
+  id: ID!
+  name: String
+  code: String
+  icon: String
+  active: Boolean
+  nhanvientao_id: Float
+  user: User
+}
+
+type DmLanguageConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [DmLanguage!]!
+}
+
+type DmLanguageAggregateGroupBy {
+  id: ID
+  name: String
+  code: String
+  icon: String
+  active: Boolean
+  nhanvientao_id: Float
+}
+
+type DmLanguageCountAggregate {
+  id: Int
+  name: Int
+  code: Int
+  icon: Int
+  active: Int
+  nhanvientao_id: Int
+}
+
+type DmLanguageSumAggregate {
+  id: Float
+  nhanvientao_id: Float
+}
+
+type DmLanguageAvgAggregate {
+  id: Float
+  nhanvientao_id: Float
+}
+
+type DmLanguageMinAggregate {
+  id: ID
+  name: String
+  code: String
+  icon: String
+  nhanvientao_id: Float
+}
+
+type DmLanguageMaxAggregate {
+  id: ID
+  name: String
+  code: String
+  icon: String
+  nhanvientao_id: Float
+}
+
+type ThongTinBenhVien {
+  Id_BenhVien: ID!
+  TenBenhVien: String
+}
+
+type ThongTinBenhVienConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [ThongTinBenhVien!]!
+}
+
+type ThongTinBenhVienAggregateGroupBy {
+  Id_BenhVien: ID
+  TenBenhVien: String
+}
+
+type ThongTinBenhVienCountAggregate {
+  Id_BenhVien: Int
+  TenBenhVien: Int
+}
+
+type ThongTinBenhVienSumAggregate {
+  Id_BenhVien: Float
+}
+
+type ThongTinBenhVienAvgAggregate {
+  Id_BenhVien: Float
+}
+
+type ThongTinBenhVienMinAggregate {
+  Id_BenhVien: ID
+  TenBenhVien: String
+}
+
+type ThongTinBenhVienMaxAggregate {
+  Id_BenhVien: ID
+  TenBenhVien: String
+}
+
+type DmLabelLanguage {
+  id: ID!
+  id_language: Float
+  id_label: Float
+  value: String
+  active: Boolean
+  nhanvientao_id: String
+  user: User
+  language: DmLanguage
+  label: DmLabel
+}
+
+type DmLabelLanguageConnection {
+  """Paging information"""
+  pageInfo: OffsetPageInfo!
+
+  """Array of nodes."""
+  nodes: [DmLabelLanguage!]!
+}
+
+type DmLabelLanguageAggregateGroupBy {
+  id: ID
+  id_language: Float
+  id_label: Float
+  value: String
+  active: Boolean
+  nhanvientao_id: String
+}
+
+type DmLabelLanguageCountAggregate {
+  id: Int
+  id_language: Int
+  id_label: Int
+  value: Int
+  active: Int
+  nhanvientao_id: Int
+}
+
+type DmLabelLanguageSumAggregate {
+  id: Float
+  id_language: Float
+  id_label: Float
+}
+
+type DmLabelLanguageAvgAggregate {
+  id: Float
+  id_language: Float
+  id_label: Float
+}
+
+type DmLabelLanguageMinAggregate {
+  id: ID
+  id_language: Float
+  id_label: Float
+  value: String
+  nhanvientao_id: String
+}
+
+type DmLabelLanguageMaxAggregate {
+  id: ID
+  id_language: Float
+  id_label: Float
+  value: String
+  nhanvientao_id: String
+}
+
 type Query {
   thongTinLuotKham(
     """The id of the record to find."""
@@ -1317,6 +1550,62 @@ type Query {
     """Specify to sort results."""
     sorting: [DmLoiKhuyenSort!] = [{field: autoId, direction: ASC}]
   ): DmLoiKhuyenConnection!
+  dmLabel(
+    """The id of the record to find."""
+    id: ID!
+  ): DmLabel
+  dmLabels(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: DmLabelFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DmLabelSort!] = [{field: id, direction: ASC}]
+  ): DmLabelConnection!
+  dmLanguage(
+    """The id of the record to find."""
+    id: ID!
+  ): DmLanguage
+  dmLanguages(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: DmLanguageFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DmLanguageSort!] = [{field: id, direction: ASC}]
+  ): DmLanguageConnection!
+  thongTinBenhVien(
+    """The id of the record to find."""
+    id: ID!
+  ): ThongTinBenhVien
+  thongTinBenhViens(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: ThongTinBenhVienFilter = {}
+
+    """Specify to sort results."""
+    sorting: [ThongTinBenhVienSort!] = [{field: Id_BenhVien, direction: ASC}]
+  ): ThongTinBenhVienConnection!
+  dmLabelLanguage(
+    """The id of the record to find."""
+    id: ID!
+  ): DmLabelLanguage
+  dmLabelLanguages(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: DmLabelLanguageFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DmLabelLanguageSort!] = [{field: id, direction: ASC}]
+  ): DmLabelLanguageConnection!
 }
 
 input CursorPaging {
@@ -1608,6 +1897,483 @@ enum UserSortFields {
   ghichuReview
   ghichuPhongVan
   isLuongLSP
+}
+
+input DmLoaiKhamFilter {
+  and: [DmLoaiKhamFilter!]
+  or: [DmLoaiKhamFilter!]
+  ID_LoaiKham: IDFilterComparison
+  TenLoaiKham: StringFieldComparison
+  id: NumberFieldComparison
+  Active: BooleanFieldComparison
+  SoLuongBs_ThucHien: NumberFieldComparison
+  LoiKhuyen_App: NumberFieldComparison
+  maviettat: StringFieldComparison
+  maviettatbn: StringFieldComparison
+  nhomclsId: NumberFieldComparison
+  mota: StringFieldComparison
+  giabaochobn: NumberFieldComparison
+  SoLuongNhanVien_ThucHien: NumberFieldComparison
+  IsTamUng: BooleanFieldComparison
+  IsDauHieuSinhTon: BooleanFieldComparison
+  GioiTinh_LoaiKham: NumberFieldComparison
+  IsSoLuongNhieu: BooleanFieldComparison
+  YNghia: StringFieldComparison
+}
+
+input DmLoaiKhamSort {
+  field: DmLoaiKhamSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLoaiKhamSortFields {
+  ID_LoaiKham
+  TenLoaiKham
+  id
+  Active
+  SoLuongBs_ThucHien
+  LoiKhuyen_App
+  maviettat
+  maviettatbn
+  nhomclsId
+  mota
+  giabaochobn
+  SoLuongNhanVien_ThucHien
+  IsTamUng
+  IsDauHieuSinhTon
+  GioiTinh_LoaiKham
+  IsSoLuongNhieu
+  YNghia
+}
+
+input DmLoiKhuyenFilter {
+  and: [DmLoiKhuyenFilter!]
+  or: [DmLoiKhuyenFilter!]
+  autoId: IDFilterComparison
+  noidungloikhuyen: StringFieldComparison
+}
+
+input DmLoiKhuyenSort {
+  field: DmLoiKhuyenSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLoiKhuyenSortFields {
+  autoId
+  noidungloikhuyen
+}
+
+input DmLabelFilter {
+  and: [DmLabelFilter!]
+  or: [DmLabelFilter!]
+  id: IDFilterComparison
+  keyname: StringFieldComparison
+  notes: StringFieldComparison
+  active: BooleanFieldComparison
+  nhanvientao_id: NumberFieldComparison
+  Id_BenhVien: NumberFieldComparison
+  user: DmLabelFilterUserFilter
+}
+
+input DmLabelFilterUserFilter {
+  and: [DmLabelFilterUserFilter!]
+  or: [DmLabelFilterUserFilter!]
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  donviId: NumberFieldComparison
+  bophanId: NumberFieldComparison
+  phongbanId: NumberFieldComparison
+  holotNhanVien: StringFieldComparison
+  tennhanvien: StringFieldComparison
+  hinhNhanVien: StringFieldComparison
+  gioitinh: BooleanFieldComparison
+  dantocId: NumberFieldComparison
+  quoctichId: NumberFieldComparison
+  cmnd: StringFieldComparison
+  hochieu: StringFieldComparison
+  chucvuId: NumberFieldComparison
+  chucdanhId: NumberFieldComparison
+  diachi: StringFieldComparison
+  mobile: StringFieldComparison
+  homePhone: StringFieldComparison
+  email: StringFieldComparison
+  yahooId: StringFieldComparison
+  skypeId: StringFieldComparison
+  ngaysinh: DateFieldComparison
+  ngayvaolam: DateFieldComparison
+  trinhdoId: NumberFieldComparison
+  loaitinhluongId: NumberFieldComparison
+  chamcongbangmay: BooleanFieldComparison
+  taikhoanNganHang: StringFieldComparison
+  nganhangId: NumberFieldComparison
+  masothuecanhan: StringFieldComparison
+  sobaohiem: StringFieldComparison
+  ghichu: StringFieldComparison
+  danghiviec: BooleanFieldComparison
+  hinhchuky: StringFieldComparison
+  isDoctor: BooleanFieldComparison
+  isCongTacVienBenNgoai: BooleanFieldComparison
+  allowLogin: BooleanFieldComparison
+  nickname: StringFieldComparison
+  extfield1: BooleanFieldComparison
+  extfield2: BooleanFieldComparison
+  username: StringFieldComparison
+  password: StringFieldComparison
+  disable: BooleanFieldComparison
+  hideLich: BooleanFieldComparison
+  ngaycapCMND: DateFieldComparison
+  nhomLSPId: NumberFieldComparison
+  manhanvien: NumberFieldComparison
+  isCoHuu: BooleanFieldComparison
+  bsdaidienId: NumberFieldComparison
+  ngonngu: NumberFieldComparison
+  passwordProtect: StringFieldComparison
+  kinhnghiem: DateFieldComparison
+  createOn: DateFieldComparison
+  coTinhLuongKeToan: BooleanFieldComparison
+  hopdongId: NumberFieldComparison
+  thoihanHopDongId: NumberFieldComparison
+  ngaybatdauHopDong: DateFieldComparison
+  ngayketthucHopDong: DateFieldComparison
+  goibenhId: NumberFieldComparison
+  chuyenkhoaId: NumberFieldComparison
+  tinhtranghonnhanId: NumberFieldComparison
+  noicapCMND: NumberFieldComparison
+  ghichu1: StringFieldComparison
+  chungchihanhnghe: BooleanFieldComparison
+  ngaynghiviec: DateFieldComparison
+  isLichBacSy: BooleanFieldComparison
+  soChungChiHanhNghe: StringFieldComparison
+  noicapChungChiHanhNghe: NumberFieldComparison
+  ngaycapChungChiHanhNghe: DateFieldComparison
+  phamvihoatdongChungChiHanhNghe: NumberFieldComparison
+  noidaotao: NumberFieldComparison
+  nguoiduyetdonId: NumberFieldComparison
+  nhomAnhVanId: NumberFieldComparison
+  phamviHanhNgheBoSung: NumberFieldComparison
+  ngayganbo: DateFieldComparison
+  passwordOLD: StringFieldComparison
+  chucvukhacId: NumberFieldComparison
+  muchamdiemId: NumberFieldComparison
+  rememberToken: StringFieldComparison
+  accessToken: StringFieldComparison
+  expireToken: StringFieldComparison
+  apiToken: StringFieldComparison
+  appPassWord: StringFieldComparison
+  nhomLSPDeNghiId: NumberFieldComparison
+  loaikhoiId: NumberFieldComparison
+  hesodiemNN: NumberFieldComparison
+  ghichuReview: StringFieldComparison
+  ghichuPhongVan: StringFieldComparison
+  isLuongLSP: BooleanFieldComparison
+}
+
+input DmLabelSort {
+  field: DmLabelSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLabelSortFields {
+  id
+  keyname
+  notes
+  active
+  nhanvientao_id
+  Id_BenhVien
+}
+
+input DmLanguageFilter {
+  and: [DmLanguageFilter!]
+  or: [DmLanguageFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  code: StringFieldComparison
+  icon: StringFieldComparison
+  active: BooleanFieldComparison
+  nhanvientao_id: NumberFieldComparison
+  user: DmLanguageFilterUserFilter
+}
+
+input DmLanguageFilterUserFilter {
+  and: [DmLanguageFilterUserFilter!]
+  or: [DmLanguageFilterUserFilter!]
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  donviId: NumberFieldComparison
+  bophanId: NumberFieldComparison
+  phongbanId: NumberFieldComparison
+  holotNhanVien: StringFieldComparison
+  tennhanvien: StringFieldComparison
+  hinhNhanVien: StringFieldComparison
+  gioitinh: BooleanFieldComparison
+  dantocId: NumberFieldComparison
+  quoctichId: NumberFieldComparison
+  cmnd: StringFieldComparison
+  hochieu: StringFieldComparison
+  chucvuId: NumberFieldComparison
+  chucdanhId: NumberFieldComparison
+  diachi: StringFieldComparison
+  mobile: StringFieldComparison
+  homePhone: StringFieldComparison
+  email: StringFieldComparison
+  yahooId: StringFieldComparison
+  skypeId: StringFieldComparison
+  ngaysinh: DateFieldComparison
+  ngayvaolam: DateFieldComparison
+  trinhdoId: NumberFieldComparison
+  loaitinhluongId: NumberFieldComparison
+  chamcongbangmay: BooleanFieldComparison
+  taikhoanNganHang: StringFieldComparison
+  nganhangId: NumberFieldComparison
+  masothuecanhan: StringFieldComparison
+  sobaohiem: StringFieldComparison
+  ghichu: StringFieldComparison
+  danghiviec: BooleanFieldComparison
+  hinhchuky: StringFieldComparison
+  isDoctor: BooleanFieldComparison
+  isCongTacVienBenNgoai: BooleanFieldComparison
+  allowLogin: BooleanFieldComparison
+  nickname: StringFieldComparison
+  extfield1: BooleanFieldComparison
+  extfield2: BooleanFieldComparison
+  username: StringFieldComparison
+  password: StringFieldComparison
+  disable: BooleanFieldComparison
+  hideLich: BooleanFieldComparison
+  ngaycapCMND: DateFieldComparison
+  nhomLSPId: NumberFieldComparison
+  manhanvien: NumberFieldComparison
+  isCoHuu: BooleanFieldComparison
+  bsdaidienId: NumberFieldComparison
+  ngonngu: NumberFieldComparison
+  passwordProtect: StringFieldComparison
+  kinhnghiem: DateFieldComparison
+  createOn: DateFieldComparison
+  coTinhLuongKeToan: BooleanFieldComparison
+  hopdongId: NumberFieldComparison
+  thoihanHopDongId: NumberFieldComparison
+  ngaybatdauHopDong: DateFieldComparison
+  ngayketthucHopDong: DateFieldComparison
+  goibenhId: NumberFieldComparison
+  chuyenkhoaId: NumberFieldComparison
+  tinhtranghonnhanId: NumberFieldComparison
+  noicapCMND: NumberFieldComparison
+  ghichu1: StringFieldComparison
+  chungchihanhnghe: BooleanFieldComparison
+  ngaynghiviec: DateFieldComparison
+  isLichBacSy: BooleanFieldComparison
+  soChungChiHanhNghe: StringFieldComparison
+  noicapChungChiHanhNghe: NumberFieldComparison
+  ngaycapChungChiHanhNghe: DateFieldComparison
+  phamvihoatdongChungChiHanhNghe: NumberFieldComparison
+  noidaotao: NumberFieldComparison
+  nguoiduyetdonId: NumberFieldComparison
+  nhomAnhVanId: NumberFieldComparison
+  phamviHanhNgheBoSung: NumberFieldComparison
+  ngayganbo: DateFieldComparison
+  passwordOLD: StringFieldComparison
+  chucvukhacId: NumberFieldComparison
+  muchamdiemId: NumberFieldComparison
+  rememberToken: StringFieldComparison
+  accessToken: StringFieldComparison
+  expireToken: StringFieldComparison
+  apiToken: StringFieldComparison
+  appPassWord: StringFieldComparison
+  nhomLSPDeNghiId: NumberFieldComparison
+  loaikhoiId: NumberFieldComparison
+  hesodiemNN: NumberFieldComparison
+  ghichuReview: StringFieldComparison
+  ghichuPhongVan: StringFieldComparison
+  isLuongLSP: BooleanFieldComparison
+}
+
+input DmLanguageSort {
+  field: DmLanguageSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLanguageSortFields {
+  id
+  name
+  code
+  icon
+  active
+  nhanvientao_id
+}
+
+input ThongTinBenhVienFilter {
+  and: [ThongTinBenhVienFilter!]
+  or: [ThongTinBenhVienFilter!]
+  Id_BenhVien: IDFilterComparison
+  TenBenhVien: StringFieldComparison
+}
+
+input ThongTinBenhVienSort {
+  field: ThongTinBenhVienSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum ThongTinBenhVienSortFields {
+  Id_BenhVien
+  TenBenhVien
+}
+
+input DmLabelLanguageFilter {
+  and: [DmLabelLanguageFilter!]
+  or: [DmLabelLanguageFilter!]
+  id: IDFilterComparison
+  id_language: NumberFieldComparison
+  id_label: NumberFieldComparison
+  value: StringFieldComparison
+  active: BooleanFieldComparison
+  nhanvientao_id: StringFieldComparison
+  label: DmLabelLanguageFilterDmLabelFilter
+  language: DmLabelLanguageFilterDmLanguageFilter
+  user: DmLabelLanguageFilterUserFilter
+}
+
+input DmLabelLanguageFilterDmLabelFilter {
+  and: [DmLabelLanguageFilterDmLabelFilter!]
+  or: [DmLabelLanguageFilterDmLabelFilter!]
+  id: IDFilterComparison
+  keyname: StringFieldComparison
+  notes: StringFieldComparison
+  active: BooleanFieldComparison
+  nhanvientao_id: NumberFieldComparison
+  Id_BenhVien: NumberFieldComparison
+}
+
+input DmLabelLanguageFilterDmLanguageFilter {
+  and: [DmLabelLanguageFilterDmLanguageFilter!]
+  or: [DmLabelLanguageFilterDmLanguageFilter!]
+  id: IDFilterComparison
+  name: StringFieldComparison
+  code: StringFieldComparison
+  icon: StringFieldComparison
+  active: BooleanFieldComparison
+  nhanvientao_id: NumberFieldComparison
+}
+
+input DmLabelLanguageFilterUserFilter {
+  and: [DmLabelLanguageFilterUserFilter!]
+  or: [DmLabelLanguageFilterUserFilter!]
+  id: StringFieldComparison
+  createdAt: DateFieldComparison
+  updatedAt: DateFieldComparison
+  createdBy: StringFieldComparison
+  updatedBy: StringFieldComparison
+  donviId: NumberFieldComparison
+  bophanId: NumberFieldComparison
+  phongbanId: NumberFieldComparison
+  holotNhanVien: StringFieldComparison
+  tennhanvien: StringFieldComparison
+  hinhNhanVien: StringFieldComparison
+  gioitinh: BooleanFieldComparison
+  dantocId: NumberFieldComparison
+  quoctichId: NumberFieldComparison
+  cmnd: StringFieldComparison
+  hochieu: StringFieldComparison
+  chucvuId: NumberFieldComparison
+  chucdanhId: NumberFieldComparison
+  diachi: StringFieldComparison
+  mobile: StringFieldComparison
+  homePhone: StringFieldComparison
+  email: StringFieldComparison
+  yahooId: StringFieldComparison
+  skypeId: StringFieldComparison
+  ngaysinh: DateFieldComparison
+  ngayvaolam: DateFieldComparison
+  trinhdoId: NumberFieldComparison
+  loaitinhluongId: NumberFieldComparison
+  chamcongbangmay: BooleanFieldComparison
+  taikhoanNganHang: StringFieldComparison
+  nganhangId: NumberFieldComparison
+  masothuecanhan: StringFieldComparison
+  sobaohiem: StringFieldComparison
+  ghichu: StringFieldComparison
+  danghiviec: BooleanFieldComparison
+  hinhchuky: StringFieldComparison
+  isDoctor: BooleanFieldComparison
+  isCongTacVienBenNgoai: BooleanFieldComparison
+  allowLogin: BooleanFieldComparison
+  nickname: StringFieldComparison
+  extfield1: BooleanFieldComparison
+  extfield2: BooleanFieldComparison
+  username: StringFieldComparison
+  password: StringFieldComparison
+  disable: BooleanFieldComparison
+  hideLich: BooleanFieldComparison
+  ngaycapCMND: DateFieldComparison
+  nhomLSPId: NumberFieldComparison
+  manhanvien: NumberFieldComparison
+  isCoHuu: BooleanFieldComparison
+  bsdaidienId: NumberFieldComparison
+  ngonngu: NumberFieldComparison
+  passwordProtect: StringFieldComparison
+  kinhnghiem: DateFieldComparison
+  createOn: DateFieldComparison
+  coTinhLuongKeToan: BooleanFieldComparison
+  hopdongId: NumberFieldComparison
+  thoihanHopDongId: NumberFieldComparison
+  ngaybatdauHopDong: DateFieldComparison
+  ngayketthucHopDong: DateFieldComparison
+  goibenhId: NumberFieldComparison
+  chuyenkhoaId: NumberFieldComparison
+  tinhtranghonnhanId: NumberFieldComparison
+  noicapCMND: NumberFieldComparison
+  ghichu1: StringFieldComparison
+  chungchihanhnghe: BooleanFieldComparison
+  ngaynghiviec: DateFieldComparison
+  isLichBacSy: BooleanFieldComparison
+  soChungChiHanhNghe: StringFieldComparison
+  noicapChungChiHanhNghe: NumberFieldComparison
+  ngaycapChungChiHanhNghe: DateFieldComparison
+  phamvihoatdongChungChiHanhNghe: NumberFieldComparison
+  noidaotao: NumberFieldComparison
+  nguoiduyetdonId: NumberFieldComparison
+  nhomAnhVanId: NumberFieldComparison
+  phamviHanhNgheBoSung: NumberFieldComparison
+  ngayganbo: DateFieldComparison
+  passwordOLD: StringFieldComparison
+  chucvukhacId: NumberFieldComparison
+  muchamdiemId: NumberFieldComparison
+  rememberToken: StringFieldComparison
+  accessToken: StringFieldComparison
+  expireToken: StringFieldComparison
+  apiToken: StringFieldComparison
+  appPassWord: StringFieldComparison
+  nhomLSPDeNghiId: NumberFieldComparison
+  loaikhoiId: NumberFieldComparison
+  hesodiemNN: NumberFieldComparison
+  ghichuReview: StringFieldComparison
+  ghichuPhongVan: StringFieldComparison
+  isLuongLSP: BooleanFieldComparison
+}
+
+input DmLabelLanguageSort {
+  field: DmLabelLanguageSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLabelLanguageSortFields {
+  id
+  id_language
+  id_label
+  value
+  active
+  nhanvientao_id
 }
 
 input DmLoaiKhamFilter {
