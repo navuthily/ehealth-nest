@@ -1,5 +1,6 @@
 import { InjectQueue, Processor } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Queue } from 'bull';
 import { Connection } from 'typeorm';
@@ -11,7 +12,7 @@ export class XmlBHYTService {
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
   ) {}
-  // @Cron('*/10 * * * * *')
+  @Cron('*/10 * * * *')
   async handleCron() {
     const data = await this.connection.query('EXEC GD2_BHYT_xml_chuachuyen');
     for (let i = 0; i < data.length; i++) {
@@ -19,7 +20,9 @@ export class XmlBHYTService {
         ID_ThuTraNo: data[i]?.ID_ThuTraNo,
       });
     }
+    console.log(new Date() +'chay bhyt')
   }
+
   async get_thong_tin(id_thutrano: string, store_name: string) {
     const data = await this.connection.query(
       `EXEC ${store_name} ${id_thutrano}`,
@@ -233,6 +236,7 @@ export class XmlBHYTService {
     });
     return data;
   }
+
   async exec_xml_2_thuoc(idThuTraNo: any) {
     let data = await this.connection.query(
       `DECLARE @id_luotkham INT
@@ -892,6 +896,7 @@ export class XmlBHYTService {
     });
     return data;
   }
+
   async exec_xml_3_canlamsang(idThuTraNo: any) {
     let stored = `DECLARE @id_luotkham INT
     DECLARE @isNoiTru INT
@@ -1386,6 +1391,7 @@ export class XmlBHYTService {
     });
     return data;
   }
+
   async exec_xml_4_chitietcls(idThuTraNo: any) {
     let stored = `SET NOCOUNT ON;
     DECLARE @id_luotkham INT
@@ -1448,6 +1454,7 @@ export class XmlBHYTService {
     });
     return data;
   }
+
   async exec_xml_5_dienbienbenh(idThuTraNo: any) {
     let stored = `SET NOCOUNT ON;
     DECLARE @id_luotkham INT
@@ -1508,6 +1515,7 @@ export class XmlBHYTService {
     });
     return data;
   }
+
   async exec_stored_filter_date(dataDate: any) {
     let data = await this.connection.query(
       `EXEC ${dataDate.stored} '${dataDate.tungay}', '${dataDate.denngay}'`,

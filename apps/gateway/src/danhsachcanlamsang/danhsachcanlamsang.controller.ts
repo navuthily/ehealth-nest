@@ -24,7 +24,7 @@ export class DanhSachCanLamSangController {
     if (!dataCache) {
       dataCache = await this.danhSachCanLamSangService.getDanhSachCanLamSang();
       await this.cacheManager.set('dataDanhSachCanLamSang', dataCache, {
-        ttl: 120,
+        ttl: 10,
       });
     }
     return dataCache;

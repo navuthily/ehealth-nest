@@ -2376,6 +2376,72 @@ enum DmLabelLanguageSortFields {
   nhanvientao_id
 }
 
+input DmLoaiKhamFilter {
+  and: [DmLoaiKhamFilter!]
+  or: [DmLoaiKhamFilter!]
+  ID_LoaiKham: IDFilterComparison
+  TenLoaiKham: StringFieldComparison
+  id: NumberFieldComparison
+  Active: BooleanFieldComparison
+  SoLuongBs_ThucHien: NumberFieldComparison
+  LoiKhuyen_App: NumberFieldComparison
+  maviettat: StringFieldComparison
+  maviettatbn: StringFieldComparison
+  nhomclsId: NumberFieldComparison
+  mota: StringFieldComparison
+  giabaochobn: NumberFieldComparison
+  SoLuongNhanVien_ThucHien: NumberFieldComparison
+  IsTamUng: BooleanFieldComparison
+  IsDauHieuSinhTon: BooleanFieldComparison
+  GioiTinh_LoaiKham: NumberFieldComparison
+  IsSoLuongNhieu: BooleanFieldComparison
+  YNghia: StringFieldComparison
+}
+
+input DmLoaiKhamSort {
+  field: DmLoaiKhamSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLoaiKhamSortFields {
+  ID_LoaiKham
+  TenLoaiKham
+  id
+  Active
+  SoLuongBs_ThucHien
+  LoiKhuyen_App
+  maviettat
+  maviettatbn
+  nhomclsId
+  mota
+  giabaochobn
+  SoLuongNhanVien_ThucHien
+  IsTamUng
+  IsDauHieuSinhTon
+  GioiTinh_LoaiKham
+  IsSoLuongNhieu
+  YNghia
+}
+
+input DmLoiKhuyenFilter {
+  and: [DmLoiKhuyenFilter!]
+  or: [DmLoiKhuyenFilter!]
+  autoId: IDFilterComparison
+  noidungloikhuyen: StringFieldComparison
+}
+
+input DmLoiKhuyenSort {
+  field: DmLoiKhuyenSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLoiKhuyenSortFields {
+  autoId
+  noidungloikhuyen
+}
+
 type Mutation {
   login(password: String!, username: String!): LoginPayloadDto!
   setDmLoaiKhamOnDmModuleLoaiKham(input: SetDmLoaiKhamOnDmModuleLoaiKhamInput!): DmModuleLoaiKham!
