@@ -28,6 +28,7 @@ import { TranslationService } from '@libs/shared/services/translation.service';
           delete: { disabled: true },
           //   pagingStrategy: PagingStrategies.OFFSET,
           // guards: [JwtAuthGuard],
+          // referenceBy: { key: 'nhanvienId' },
         },
       ],
     }),

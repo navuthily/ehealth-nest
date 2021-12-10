@@ -8,15 +8,19 @@ export class XmlBHYTController {
   constructor(
     private xmlService: XmlBHYTService,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
-  ) {}
+  ) {
+
+    
+  }
 
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
     let idThuTraNo = JSON.parse(data.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
-      this.xmlBHYTQueue.add('xml-bhyt', {
-        ID_ThuTraNo: parseInt(idThuTraNo[i]),
-      });
+      this.xmlBHYTQueue.add('xml-bhyt',
+       { ID_ThuTraNo: parseInt(idThuTraNo[i])}, 
+       { delay: 100 }
+      );
     }
     return {};
   }
@@ -27,8 +31,6 @@ export class XmlBHYTController {
       dataKCB,
     });
     const result = await job.finished();
-    // console.log(result);
-    
     return result;
   }
 

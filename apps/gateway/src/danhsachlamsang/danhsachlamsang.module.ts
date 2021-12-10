@@ -3,12 +3,7 @@ import { DanhSachLamSangController } from './danhsachlamsang.controller';
 import { DanhSachLamSangService } from './danhsachlamsang.service';
 
 @Module({
-  imports: [
-    // CacheModule.register({
-    //   max: 0,
-    //   ttl: 120,
-    // }),
-  ],
+  imports: [],
   controllers: [DanhSachLamSangController],
   providers: [DanhSachLamSangService],
 })

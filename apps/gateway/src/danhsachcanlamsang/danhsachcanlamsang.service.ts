@@ -12,6 +12,7 @@ export class DanhSachCanLamSangService {
     --DECLARE @Tungay DATETIME='2021-01-01' 
     DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME) 
     --DECLARE @Denngay DATETIME='2021-01-02'
+    DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME)    
     DECLARE @Denngay DATETIME=CAST(CAST(dateadd(DAY,1,GETDATE()) AS  date) AS DATETIME)
     ;with K1 as(
       SELECT 

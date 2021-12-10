@@ -60,6 +60,8 @@
     "@nestjs/terminus": "^8.0.0",
     "@nestjs/typeorm": "^8.0.2",
     "@types/sequelize": "^4.28.10",
+    "@types/cache-manager": "^3.4.2",
+    "@types/request-promise-native": "^1.0.18",
     "apollo-server-core": "^3.4.0",
     "apollo-server-fastify": "^3.5.0",
     "aws-sdk": "^2.989.0",
