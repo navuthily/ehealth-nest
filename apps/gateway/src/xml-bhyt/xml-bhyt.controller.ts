@@ -8,7 +8,10 @@ export class XmlBHYTController {
   constructor(
     private xmlService: XmlBHYTService,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
-  ) {}
+  ) {
+
+    
+  }
 
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
@@ -28,8 +31,6 @@ export class XmlBHYTController {
       dataKCB,
     });
     const result = await job.finished();
-    // console.log(result);
-    
     return result;
   }
 

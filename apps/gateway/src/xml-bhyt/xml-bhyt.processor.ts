@@ -56,7 +56,8 @@ export class XmlBHYTProcessor {
   isAccessTokenExpires() {
     if (new Date(this._token.APIKey.expires_in).getTime()) {
       return (
-        new Date().getTime() < new Date(this._token.APIKey.expires_in).getTime()
+
+        new Date().getTime() < new Date(this._token.APIKey.expires_in).getTime()-30000 //30s chong lech gio server voi bhyt
       );
     }
     return false;
@@ -87,11 +88,11 @@ export class XmlBHYTProcessor {
         maLoi = loi?.data?.dsLoi[0]?.maLoi;
         MoTa = JSON.stringify(loi?.data?.dsLoi?.map(({ moTaLoi }) => moTaLoi));
       }
-      console.dir({
-        MoTa,
-        filename: job.data.filename,
-        maGiaoDich: job.data.maGiaoDich,
-      });
+      // console.dir({
+      //   MoTa,
+      //   filename: job.data.filename,
+      //   maGiaoDich: job.data.maGiaoDich,
+      // });
       await this.connection.query(
         `EXEC GD2_BHYT_xml_DaChuyen_Update @0,@1,@2,@3` ,[job.data.thongtin.MA_LK, job.data.maGiaoDich, maLoi, MoTa]
       );
@@ -176,16 +177,15 @@ export class XmlBHYTProcessor {
           json: true,
           body: Array.prototype.slice.call(buffer, 0),
         }, 
-      );
-
-      console.log(maGiaoDich);
- 
-
-      this.xmlBHYTQueue.add(
-        'xml-bhyt-layketqua',
-        { ...maGiaoDich, filename, thongtin },
-        { delay: 3000 },
-      );
+      );     
+      if(maGiaoDich.maKetQua=='200'){
+        this.xmlBHYTQueue.add(
+          'xml-bhyt-layketqua',
+          { ...maGiaoDich, filename, thongtin },
+          { delay: 3000 },
+        );
+        return;
+      }
     } catch (err) {
       console.log(err);
     }
