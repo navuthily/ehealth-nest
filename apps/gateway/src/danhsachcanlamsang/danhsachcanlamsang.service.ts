@@ -10,7 +10,7 @@ export class DanhSachCanLamSangService {
   async getDanhSachCanLamSang() {
     const stored = `SET NOCOUNT ON;
     --DECLARE @Tungay DATETIME='2021-01-01' 
-    DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME) 
+    --DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME) 
     --DECLARE @Denngay DATETIME='2021-01-02'
     DECLARE @Tungay DATETIME=CAST(CAST(GETDATE() AS  date) AS DATETIME)    
     DECLARE @Denngay DATETIME=CAST(CAST(dateadd(DAY,1,GETDATE()) AS  date) AS DATETIME)
@@ -382,15 +382,26 @@ export class DanhSachCanLamSangService {
     const recordsets = dataDanhSachCanLamSang;
     const mangVanTay: any[] = [];
     // eslint-disable-next-line no-plusplus
+
+    // [3] [Object: null prototype] {
+    //   [3]   ID_BenhNhan: '595293',
+    //   [3]   MaBenhNhan: '641869',
+    //   [3]   HoLotBenhNhan: 'Nguyễn Hữu',
+    //   [3]   TenBenhNhan: 'Phúc',
+    //   [3]   ID_NhomXepHang: '15'
+    //   [3] }
     for (let index = 0; index < recordsets.length; ++index) {
       try {
-        if (recordsets[index].ID_BenhNhan === dataVanTay.ID_BenhNhan) {
+       
+        if (recordsets[index].ID_BenhNhan == dataVanTay.ID_BenhNhan) {
+       
           if (
             dataVanTay.ID_NhomXepHang &&
             recordsets[index].nhomxephang.indexOf(dataVanTay.ID_NhomXepHang) >
               -1
           ) {
-            if (recordsets[index].ID_TrangThai === 'DangCho') {
+         
+            if (recordsets[index].ID_TrangThai == 'DangCho') {
               if (mangVanTay.length === 0) {
                 mangVanTay.push({
                   TenCanLamSang: recordsets[index].TenForm,
@@ -415,7 +426,7 @@ export class DanhSachCanLamSangService {
                 // eslint-disable-next-line no-plusplus
                 for (let y = 0; y < mangVanTay.length; ++y) {
                   if (
-                    mangVanTay[y].TenCanLamSang === recordsets[index].TenForm
+                    mangVanTay[y].TenCanLamSang == recordsets[index].TenForm
                   ) {
                     flag = 1;
                     mangVanTay[y].TenLoaiKham +=
@@ -454,6 +465,7 @@ export class DanhSachCanLamSangService {
         console.log(error);
       }
     }
+    console.log(mangVanTay)
     return mangVanTay;
   }
   toIsoString(date: any) {

@@ -88,11 +88,11 @@ export class XmlBHYTProcessor {
         maLoi = loi?.data?.dsLoi[0]?.maLoi;
         MoTa = JSON.stringify(loi?.data?.dsLoi?.map(({ moTaLoi }) => moTaLoi));
       }
-      // console.dir({
-      //   MoTa,
-      //   filename: job.data.filename,
-      //   maGiaoDich: job.data.maGiaoDich,
-      // });
+      console.dir({
+        MoTa,
+        filename: job.data.filename,
+        maGiaoDich: job.data.maGiaoDich,
+      });
       await this.connection.query(
         `EXEC GD2_BHYT_xml_DaChuyen_Update @0,@1,@2,@3` ,[job.data.thongtin.MA_LK, job.data.maGiaoDich, maLoi, MoTa]
       );
