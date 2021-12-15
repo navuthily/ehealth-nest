@@ -20,7 +20,7 @@ export class XmlBHYTService {
         ID_ThuTraNo: data[i]?.ID_ThuTraNo,
       });
     }
-    console.log(new Date() +'chay bhyt')
+    console.log(new Date() + 'chay bhyt');
   }
 
   async get_thong_tin(id_thutrano: string, store_name: string) {
@@ -1524,5 +1524,77 @@ export class XmlBHYTService {
       return (item.id = (index + 1).toString());
     });
     return data;
+  }
+
+  async dataBenhAnNoiTruByIdLuotKham(idLuotKham: any) {
+    return await this.connection.query(
+      `select * from GD2_BenhAnNoiTru where id_luotkham = @0`,
+      [idLuotKham],
+    );
+  }
+
+  async getBenhChinh(idLuotKham: any) {
+    const dataBenhAnNoiTru = await this.dataBenhAnNoiTruByIdLuotKham(
+      idLuotKham,
+    );
+    if (dataBenhAnNoiTru && dataBenhAnNoiTru.length != 0)
+      return dataBenhAnNoiTru[0].ICD_RaVienBenhChinh;
+    return (
+      await this.connection.query(
+        `select MaICD10 from kham where ID_LuotKham = @0 and Kham.IsBacSyChinh = 1 and Kham.ID_TrangThai<>'HuyBo'`,
+        [idLuotKham],
+      )
+    )[0].MaICD10;
+  }
+
+  async getBenhKem(idLuotKham: any) {
+    const dataBenhAnNoiTru = await this.dataBenhAnNoiTruByIdLuotKham(
+      idLuotKham,
+    );
+    if (dataBenhAnNoiTru && dataBenhAnNoiTru.length != 0)
+      return Object.values(
+        (
+          await this.connection.query(
+            `SELECT STUFF(
+               (
+               SELECT N';'+ISNULL(ttlkicd.maicd ,'')
+               FROM   thongtinluotkham_icd ttlkicd
+               WHERE  ttlkicd.luotkham_id = @0
+               and ttlkicd.loai = 'benhkem'
+               FOR XML PATH(N''), TYPE
+               ).value('.' ,'nvarchar(max)')
+               ,1
+               ,1
+               ,N''
+               )`,
+            [idLuotKham],
+          )
+        )[0],
+      )[0];
+    return Object.values(
+      (
+        await this.connection.query(
+          `SELECT STUFF(
+          (
+          SELECT N';'+ISNULL(Kham.MaICD10 ,'')
+          FROM   Kham
+          JOIN DM_LoaiKham AS dlk
+          ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+          WHERE  Kham.ID_LuotKham = @0
+          AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+          AND Kham.MaICD10 IS NOT NULL
+          AND Kham.MaICD10<>''
+          AND kham.IsBacSyChinh = 0
+          AND ID_TrangThai<>'HuyBo'
+          FOR XML PATH(N''), TYPE
+          ).value('.' ,'nvarchar(max)')
+          ,1
+          ,1
+          ,N''
+          )`,
+          [idLuotKham],
+        )
+      )[0],
+    )[0];
   }
 }
