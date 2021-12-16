@@ -8,7 +8,7 @@ import {
   differenceInDays,
   differenceInMonths,
   differenceInYears,
-  format
+  format,
 } from 'date-fns';
 import rp from 'request-promise-native';
 import { Connection } from 'typeorm';
@@ -22,6 +22,9 @@ export class XmlBHYTProcessor {
   private _username = '48195_BV';
   private _password = '72483341875d30c993b0e004c4a235e8';
   private _token: any;
+  private _mabenhchinh: any;
+  private _mabenhkem: any;
+
   constructor(
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
@@ -53,11 +56,25 @@ export class XmlBHYTProcessor {
     this._token = v;
   }
 
+  public get mabenhchinh(): any {
+    return this._mabenhchinh;
+  }
+  public set mabenhchinh(v: any) {
+    this._mabenhchinh = v;
+  }
+
+  public get mabenhkem(): any {
+    return this._mabenhkem;
+  }
+  public set mabenhkem(v: any) {
+    this._mabenhkem = v;
+  }
+
   isAccessTokenExpires() {
     if (new Date(this._token.APIKey.expires_in).getTime()) {
       return (
-
-        new Date().getTime() < new Date(this._token.APIKey.expires_in).getTime()-30000 //30s chong lech gio server voi bhyt
+        new Date().getTime() <
+        new Date(this._token.APIKey.expires_in).getTime() - 30000 //30s chong lech gio server voi bhyt
       );
     }
     return false;
@@ -94,7 +111,8 @@ export class XmlBHYTProcessor {
         maGiaoDich: job.data.maGiaoDich,
       });
       await this.connection.query(
-        `EXEC GD2_BHYT_xml_DaChuyen_Update @0,@1,@2,@3` ,[job.data.thongtin.MA_LK, job.data.maGiaoDich, maLoi, MoTa]
+        `EXEC GD2_BHYT_xml_DaChuyen_Update @0,@1,@2,@3`,
+        [job.data.thongtin.MA_LK, job.data.maGiaoDich, maLoi, MoTa],
       );
     } catch (err) {
       console.log(err);
@@ -102,6 +120,8 @@ export class XmlBHYTProcessor {
   }
   @Process('xml-bhyt')
   async handle(job: Job) {
+    this.mabenhchinh(await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo));
+    this.mabenhkem(await this.xmlService.getBenhKem(job.data.ID_ThuTraNo));
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
@@ -169,16 +189,14 @@ export class XmlBHYTProcessor {
         job.data.ID_ThuTraNo
       }.xml`;
       const buffer = Buffer.from(tong);
-      const token = await this.token;    
-      const maGiaoDich = await rp(
-        {
-          url: `https://egw.baohiemxahoi.gov.vn/api/egw/guiHoSoGiamDinh4210?token=${token?.APIKey?.access_token}&id_token=${token?.APIKey?.id_token}&username=${this.username}&password=${this.password}&loaiHoSo=3&maTinh=48&maCSKCB=48195`,
-          method: 'POST',
-          json: true,
-          body: Array.prototype.slice.call(buffer, 0),
-        }, 
-      );     
-      if(maGiaoDich.maKetQua=='200'){
+      const token = await this.token;
+      const maGiaoDich = await rp({
+        url: `https://egw.baohiemxahoi.gov.vn/api/egw/guiHoSoGiamDinh4210?token=${token?.APIKey?.access_token}&id_token=${token?.APIKey?.id_token}&username=${this.username}&password=${this.password}&loaiHoSo=3&maTinh=48&maCSKCB=48195`,
+        method: 'POST',
+        json: true,
+        body: Array.prototype.slice.call(buffer, 0),
+      });
+      if (maGiaoDich.maKetQua == '200') {
         this.xmlBHYTQueue.add(
           'xml-bhyt-layketqua',
           { ...maGiaoDich, filename, thongtin },
@@ -274,8 +292,8 @@ export class XmlBHYTProcessor {
     )}</GT_THE_DEN>`;
     tonghop += '<MIEN_CUNG_CT></MIEN_CUNG_CT>';
     tonghop += `<TEN_BENH><![CDATA[${thongtin.TEN_BENH}]]></TEN_BENH>`;
-    tonghop += `<MA_BENH>${thongtin.MA_BENH}</MA_BENH>`;
-    tonghop += `<MA_BENHKHAC>${thongtin.MA_BENHKHAC}</MA_BENHKHAC>`;
+    tonghop += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
+    tonghop += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
     tonghop += `<MA_LYDO_VVIEN>${thongtin.MA_LYDO_VVIEN}</MA_LYDO_VVIEN>`;
     tonghop += '<MA_NOI_CHUYEN />';
     tonghop += '<MA_TAI_NAN />';
@@ -293,7 +311,7 @@ export class XmlBHYTProcessor {
     )}</SO_NGAY_DTRI>`;
     tonghop += `<KET_QUA_DTRI>${thongtin.KET_QUA_DTRI}</KET_QUA_DTRI>`;
     tonghop += `<TINH_TRANG_RV>${thongtin.TINH_TRANG_RV}</TINH_TRANG_RV>`;
-     tonghop += `<NGAY_TTOAN>${format(
+    tonghop += `<NGAY_TTOAN>${format(
       new Date(this.toIsoString(thongtin.NGAY_TTOAN)),
       this.getFullDateTimeBHYT,
     )}</NGAY_TTOAN>`;
@@ -502,7 +520,8 @@ export class XmlBHYTProcessor {
             mabenh_new += `;${thongtin.MA_BENHKHAC}`;
           }
         }
-        chitietthuoc += `<MA_BENH>${mabenh_new}</MA_BENH>`;
+        chitietthuoc += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
+        chitietthuoc += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
         chitietthuoc += `<NGAY_YL>${format(
           new Date(this.toIsoString(thongtinthuoc[i].NgayKeDon)),
           this.getFullDateTimeBHYT,
@@ -619,7 +638,8 @@ export class XmlBHYTProcessor {
           mabenh_new += `;${thongtin.MA_BENHKHAC}`;
         }
       }
-      chitietcls += `<MA_BENH>${mabenh_new}</MA_BENH>`;
+      chitietcls += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
+      chitietcls += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
       chitietcls += `<NGAY_YL>${format(
         new Date(this.toIsoString(thongtincls[i].NgayGio)),
         this.getFullDateTimeBHYT,

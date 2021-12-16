@@ -1,8 +1,9 @@
 import { InjectQueue, Processor } from '@nestjs/bull';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Queue } from 'bull';
+import { Cache } from 'cache-manager';
 import { Connection } from 'typeorm';
 
 @Processor('xml-bhyt')
@@ -11,6 +12,7 @@ export class XmlBHYTService {
   constructor(
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
   @Cron('*/10 * * * *')
   async handleCron() {
@@ -231,8 +233,13 @@ export class XmlBHYTService {
     )                                       TheTrang
     WHERE  ThongTinLuotKham.ID_LuotKham = @id_luotkham`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
+    const mabenhkem = await this.getBenhKem(idThuTraNo);
     data.map((item: any, index: number) => {
-      return (item.id = (index + 1).toString());
+      item.id = (index + 1).toString();
+      item.MABENHCHINH = mabenhchinh;
+      item.MABENHKEM = mabenhkem;
+      return item;
     });
     return data;
   }
@@ -891,8 +898,13 @@ export class XmlBHYTService {
       WHERE  soluong<>0`,
       [idThuTraNo],
     );
+    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
+    const mabenhkem = await this.getBenhKem(idThuTraNo);
     data.map((item: any, index: number) => {
-      return (item.id = (index + 1).toString());
+      item.id = (index + 1).toString();
+      item.MABENHCHINH = mabenhchinh;
+      item.MABENHKEM = mabenhkem;
+      return item;
     });
     return data;
   }
@@ -1386,8 +1398,13 @@ export class XmlBHYTService {
           ,MaSoTheoDVBHYT
           ,T_BHTT  DESC`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
+    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
+    const mabenhkem = await this.getBenhKem(idThuTraNo);
     data.map((item: any, index: number) => {
-      return (item.id = (index + 1).toString());
+      item.id = (index + 1).toString();
+      item.MABENHCHINH = mabenhchinh;
+      item.MABENHKEM = mabenhkem;
+      return item;
     });
     return data;
   }
@@ -1526,75 +1543,139 @@ export class XmlBHYTService {
     return data;
   }
 
-  async dataBenhAnNoiTruByIdLuotKham(idLuotKham: any) {
-    return await this.connection.query(
-      `select * from GD2_BenhAnNoiTru where id_luotkham = @0`,
-      [idLuotKham],
+  async dataBenhAnNoiTruBy(idThuTraNo: any) {
+    var dataBenhAnNoiTruBy = await this.cacheManager.get(
+      `dataBenhAnNoiTruByID_${idThuTraNo}`,
     );
+    if (!dataBenhAnNoiTruBy) {
+      dataBenhAnNoiTruBy = await this.connection.query(
+        `select * from GD2_BenhAnNoiTru a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0`,
+        [idThuTraNo],
+      );
+      await this.cacheManager.set(
+        `dataBenhAnNoiTruByID_${idThuTraNo}`,
+        dataBenhAnNoiTruBy,
+        {
+          ttl: 10,
+        },
+      );
+    }
+    return dataBenhAnNoiTruBy;
   }
 
-  async getBenhChinh(idLuotKham: any) {
-    const dataBenhAnNoiTru = await this.dataBenhAnNoiTruByIdLuotKham(
-      idLuotKham,
-    );
-    if (dataBenhAnNoiTru && dataBenhAnNoiTru.length != 0)
-      return dataBenhAnNoiTru[0].ICD_RaVienBenhChinh;
+  async isNoiTru(idThuTraNo: any): Promise<boolean> {
+    const data: any = await this.dataBenhAnNoiTruBy(idThuTraNo);
+    if (data && data.length != 0) return true;
+    return false;
+  }
+
+  async getBenhChinh(idThuTraNo: any) {
+    const dataBenhAnNoiTru: any = await this.dataBenhAnNoiTruBy(idThuTraNo);
+    if (await this.isNoiTru(idThuTraNo))
+      return dataBenhAnNoiTru[0]?.ICD_RaVienBenhChinh;
     return (
       await this.connection.query(
-        `select MaICD10 from kham where ID_LuotKham = @0 and Kham.IsBacSyChinh = 1 and Kham.ID_TrangThai<>'HuyBo'`,
-        [idLuotKham],
+        `select MaICD10 from kham a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
+        [idThuTraNo],
       )
-    )[0].MaICD10;
+    )[0]?.MaICD10;
   }
 
-  async getBenhKem(idLuotKham: any) {
-    const dataBenhAnNoiTru = await this.dataBenhAnNoiTruByIdLuotKham(
-      idLuotKham,
-    );
-    if (dataBenhAnNoiTru && dataBenhAnNoiTru.length != 0)
+  async getBenhKem(idThuTraNo: any) {
+    if (await this.isNoiTru(idThuTraNo))
       return Object.values(
         (
           await this.connection.query(
             `SELECT STUFF(
-               (
-               SELECT N';'+ISNULL(ttlkicd.maicd ,'')
-               FROM   thongtinluotkham_icd ttlkicd
-               WHERE  ttlkicd.luotkham_id = @0
-               and ttlkicd.loai = 'benhkem'
-               FOR XML PATH(N''), TYPE
-               ).value('.' ,'nvarchar(max)')
-               ,1
-               ,1
-               ,N''
-               )`,
-            [idLuotKham],
+                 (
+                 SELECT N';'+ISNULL(ttlkicd.maicd ,'')
+                 FROM   thongtinluotkham_icd ttlkicd
+                 JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
+                 WHERE  b.ID_ThuTraNo = @0
+                 and ttlkicd.loai = 'benhkem'
+                 FOR XML PATH(N''), TYPE
+                 ).value('.' ,'nvarchar(max)')
+                 ,1
+                 ,1
+                 ,N''
+                 )`,
+            [idThuTraNo],
           )
         )[0],
-      )[0];
+      )[0]
+        ? Object.values(
+            (
+              await this.connection.query(
+                `SELECT STUFF(
+                   (
+                   SELECT N';'+ISNULL(ttlkicd.maicd ,'')
+                   FROM   thongtinluotkham_icd ttlkicd
+                   JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
+                   WHERE  b.ID_ThuTraNo = @0
+                   and ttlkicd.loai = 'benhkem'
+                   FOR XML PATH(N''), TYPE
+                   ).value('.' ,'nvarchar(max)')
+                   ,1
+                   ,1
+                   ,N''
+                   )`,
+                [idThuTraNo],
+              )
+            )[0],
+          )[0]
+        : '';
     return Object.values(
       (
         await this.connection.query(
           `SELECT STUFF(
-          (
-          SELECT N';'+ISNULL(Kham.MaICD10 ,'')
-          FROM   Kham
-          JOIN DM_LoaiKham AS dlk
-          ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
-          WHERE  Kham.ID_LuotKham = @0
-          AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
-          AND Kham.MaICD10 IS NOT NULL
-          AND Kham.MaICD10<>''
-          AND kham.IsBacSyChinh = 0
-          AND ID_TrangThai<>'HuyBo'
-          FOR XML PATH(N''), TYPE
-          ).value('.' ,'nvarchar(max)')
-          ,1
-          ,1
-          ,N''
-          )`,
-          [idLuotKham],
+            (
+            SELECT N';'+ISNULL(Kham.MaICD10 ,'')
+            FROM   Kham
+            JOIN DM_LoaiKham AS dlk
+            ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+            JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
+            WHERE  b.ID_ThuTraNo = @0
+            AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+            AND Kham.MaICD10 IS NOT NULL
+            AND Kham.MaICD10<>''
+            AND kham.IsBacSyChinh = 0
+            AND ID_TrangThai<>'HuyBo'
+            FOR XML PATH(N''), TYPE
+            ).value('.' ,'nvarchar(max)')
+            ,1
+            ,1
+            ,N''
+            )`,
+          [idThuTraNo],
         )
       )[0],
-    )[0];
+    )[0]
+      ? Object.values(
+          (
+            await this.connection.query(
+              `SELECT STUFF(
+           (
+           SELECT N';'+ISNULL(Kham.MaICD10 ,'')
+           FROM   Kham
+           JOIN DM_LoaiKham AS dlk
+           ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+           JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
+           WHERE  b.ID_ThuTraNo = @0
+           AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+           AND Kham.MaICD10 IS NOT NULL
+           AND Kham.MaICD10<>''
+           AND kham.IsBacSyChinh = 0
+           AND ID_TrangThai<>'HuyBo'
+           FOR XML PATH(N''), TYPE
+           ).value('.' ,'nvarchar(max)')
+           ,1
+           ,1
+           ,N''
+           )`,
+              [idThuTraNo],
+            )
+          )[0],
+        )[0]
+      : '';
   }
 }

@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Queue } from 'bull';
+import { log } from 'util';
 import { XmlBHYTService } from './xml-bhyt.service';
 
 @Controller('xml-bhyt')
@@ -8,18 +9,16 @@ export class XmlBHYTController {
   constructor(
     private xmlService: XmlBHYTService,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
-  ) {
-
-    
-  }
+  ) {}
 
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
     let idThuTraNo = JSON.parse(data.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
-      this.xmlBHYTQueue.add('xml-bhyt',
-       { ID_ThuTraNo: parseInt(idThuTraNo[i])}, 
-       { delay: 100 }
+      this.xmlBHYTQueue.add(
+        'xml-bhyt',
+        { ID_ThuTraNo: parseInt(idThuTraNo[i]) },
+        { delay: 100 },
       );
     }
     return {};
@@ -58,5 +57,15 @@ export class XmlBHYTController {
   @Get('exec_stored_filter_date')
   exec_stored_filter_date(@Query() dataDate: any) {
     return this.xmlService.exec_stored_filter_date(dataDate);
+  }
+
+  @Get('getBenhChinh/:id')
+  async getBenhChinh(@Param('id') idThuTraNo: any) {
+    return await this.xmlService.getBenhChinh(idThuTraNo);
+  }
+
+  @Get('getBenhKem/:id')
+  async getBenhKem(@Param('id') idThuTraNo: any) {
+    return await this.xmlService.getBenhKem(idThuTraNo);
   }
 }
