@@ -83,7 +83,7 @@ export class DanhSachLamSangService {
         AND (ThongTinLuotKham.ID_TrangThai IS NOT NULL) 			
         AND (ThongTinLuotKham.ID_TrangThai <>'')	
         AND (ThongTinLuotKham.ID_TrangThai <> @0)
-        AND (ThongTinLuotKham.ID_TrangThai <> @0 OR @0 IS NULL)
+        AND (ThongTinLuotKham.ID_TrangThai <> @1 OR @1 IS NULL)
         AND (ThongTinLuotKham.ID_TrangThai <> 'KetThucKham')	
         AND (ThongTinLuotKham.ID_TrangThai <> 'HuyXepHang')
         AND (ThongTinLuotKham.ID_TrangThai <> 'HuyBo')	--khatm add 
@@ -171,7 +171,7 @@ export class DanhSachLamSangService {
         AND (ThongTinLuotKham.ID_TrangThai <>'')
         AND (Len(ThongTinLuotKham.ID_TrangThai) > 0)
         AND (Kham.ID_TrangThai <> @0)
-        AND (Kham.ID_TrangThai <> @0  OR @0 IS NULL)
+        AND (Kham.ID_TrangThai <> @1  OR @1 IS NULL)
         and Kham.ID_TrangThai<>'HuyBo'
         --AND Kham.ID_TrangThai <> 'Xong'
         AND ThongTinLuotKham.CoKhamLamSang = 1
