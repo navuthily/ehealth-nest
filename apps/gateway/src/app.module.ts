@@ -18,7 +18,8 @@ import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/language-thongtinbenhvien.module';
 import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
-import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
+import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
+import { GoiKhamModule } from './goikham/goikham.module';
 
 require('dotenv').config();
 
@@ -128,7 +129,7 @@ class BuildServiceModule {}
     //     acquire:30000,
     //     idle:10000
     //   }
-      
+
     // }),
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
@@ -138,9 +139,10 @@ class BuildServiceModule {}
     DanhSachCanLamSangModule,
     LanguageThongtinbenhvienModule,
     LienKetMoiQuanHeBenhNhanModule,
-    GetIDLoaiQuanHeQuanHeBenhNhanModule
     DMLoaiKhamModule,
-    LanguageThongtinbenhvienModule
+    LanguageThongtinbenhvienModule,
+    GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
+    GoiKhamModule,
   ],
 })
 export class AppModule {}
