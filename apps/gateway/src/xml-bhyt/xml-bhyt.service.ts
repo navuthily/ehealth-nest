@@ -1582,31 +1582,11 @@ export class XmlBHYTService {
   }
 
   async getBenhKem(idThuTraNo: any) {
-    if (await this.isNoiTru(idThuTraNo))
-      return Object.values(
+    if (await this.isNoiTru(idThuTraNo)) {
+      let dataBenhkemNoiTru = Object.values(
         (
           await this.connection.query(
             `SELECT STUFF(
-                 (
-                 SELECT N';'+ISNULL(ttlkicd.maicd ,'')
-                 FROM   thongtinluotkham_icd ttlkicd
-                 JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
-                 WHERE  b.ID_ThuTraNo = @0
-                 and ttlkicd.loai = 'benhkem'
-                 FOR XML PATH(N''), TYPE
-                 ).value('.' ,'nvarchar(max)')
-                 ,1
-                 ,1
-                 ,N''
-                 )`,
-            [idThuTraNo],
-          )
-        )[0],
-      )[0]
-        ? Object.values(
-            (
-              await this.connection.query(
-                `SELECT STUFF(
                    (
                    SELECT N';'+ISNULL(ttlkicd.maicd ,'')
                    FROM   thongtinluotkham_icd ttlkicd
@@ -1619,41 +1599,16 @@ export class XmlBHYTService {
                    ,1
                    ,N''
                    )`,
-                [idThuTraNo],
-              )
-            )[0],
-          )[0]
-        : '';
-    return Object.values(
+            [idThuTraNo],
+          )
+        )[0],
+      )[0];
+      return dataBenhkemNoiTru ? dataBenhkemNoiTru : '';
+    }
+    let dataBenhkemNgoaiTru = Object.values(
       (
         await this.connection.query(
           `SELECT STUFF(
-            (
-            SELECT N';'+ISNULL(Kham.MaICD10 ,'')
-            FROM   Kham
-            JOIN DM_LoaiKham AS dlk
-            ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
-            JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
-            WHERE  b.ID_ThuTraNo = @0
-            AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
-            AND Kham.MaICD10 IS NOT NULL
-            AND Kham.MaICD10<>''
-            AND kham.IsBacSyChinh = 0
-            AND ID_TrangThai<>'HuyBo'
-            FOR XML PATH(N''), TYPE
-            ).value('.' ,'nvarchar(max)')
-            ,1
-            ,1
-            ,N''
-            )`,
-          [idThuTraNo],
-        )
-      )[0],
-    )[0]
-      ? Object.values(
-          (
-            await this.connection.query(
-              `SELECT STUFF(
            (
            SELECT N';'+ISNULL(Kham.MaICD10 ,'')
            FROM   Kham
@@ -1672,10 +1627,10 @@ export class XmlBHYTService {
            ,1
            ,N''
            )`,
-              [idThuTraNo],
-            )
-          )[0],
-        )[0]
-      : '';
+          [idThuTraNo],
+        )
+      )[0],
+    )[0];
+    return dataBenhkemNgoaiTru ? dataBenhkemNgoaiTru : '';
   }
 }
