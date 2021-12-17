@@ -38,12 +38,14 @@ export class XmlBHYTProcessor {
   public set username(v: string) {
     this._username = v;
   }
+
   public get password(): string {
     return this._password;
   }
   public set password(v: string) {
     this._password = v;
   }
+
   public get token(): any {
     if (!this._token || !this.isAccessTokenExpires()) {
       return (async () => {
@@ -79,6 +81,7 @@ export class XmlBHYTProcessor {
     }
     return false;
   }
+
   async getToken() {
     const Api = await this.httpService
       .post('https://egw.baohiemxahoi.gov.vn/api/token/take', {
@@ -118,6 +121,7 @@ export class XmlBHYTProcessor {
       console.log(err);
     }
   }
+
   @Process('xml-bhyt')
   async handle(job: Job) {
     this.mabenhchinh(await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo));
@@ -208,6 +212,7 @@ export class XmlBHYTProcessor {
       console.log(err);
     }
   }
+
   @Process({ name: 'kq_nhan_lichsu_kcb', concurrency: 5 })
   async kq_nhan_lichsu_kcb(job: Job) {
     var token = await this.token;
@@ -226,6 +231,7 @@ export class XmlBHYTProcessor {
       .toPromise();
     return data?.data;
   }
+
   xml_1_tonghop(
     thongtin,
     tongthuoc,
@@ -450,7 +456,8 @@ export class XmlBHYTProcessor {
     tonghop += '</NOIDUNGFILE></FILEHOSO>';
     return tonghop;
   }
-  xml_2_thuoc(thongtinthuoc, thongtin, base64 = true) {
+
+  xml_2_thuoc(thongtinthuoc: any, thongtin: any, base64 = true) {
     const NAM_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'yyyy');
     const THANG_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'MM');
     let T_BNTT = new Big(0);
@@ -561,7 +568,8 @@ export class XmlBHYTProcessor {
       T_BNCCT,
     };
   }
-  xml_3_canlamsang(thongtincls, thongtin, base64 = true) {
+
+  xml_3_canlamsang(thongtincls: any, thongtin: any, base64 = true) {
     const NAM_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'yyyy');
     const THANG_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'MM');
     let chitietcls = '';
@@ -683,7 +691,8 @@ export class XmlBHYTProcessor {
       tongvtyt,
     };
   }
-  xml_4_chitietcls(ChisoCLS, thongtin, base64 = true) {
+
+  xml_4_chitietcls(ChisoCLS: any, thongtin: any, base64 = true) {
     let chitietchisocls = '';
     if (ChisoCLS.length > 0) {
       for (let i = 0; i < ChisoCLS.length; i += 1) {
@@ -736,7 +745,8 @@ export class XmlBHYTProcessor {
     }
     return chitietchisocls;
   }
-  xml_5_dienbienbenh(ChisoNoiTru, thongtin, base64 = true) {
+
+  xml_5_dienbienbenh(ChisoNoiTru: any, thongtin: any, base64 = true) {
     let DienBienBenh = '';
     for (let i = 0; i < ChisoNoiTru.length; i += 1) {
       if (i == 0) {
@@ -763,6 +773,7 @@ export class XmlBHYTProcessor {
     DienBienBenh = `<FILEHOSO><LOAIHOSO>XML5</LOAIHOSO><NOIDUNGFILE>${DienBienBenh}</NOIDUNGFILE></FILEHOSO>`;
     return DienBienBenh;
   }
+
   toIsoString(date: any) {
     if (date) {
       const tzo = -date.getTimezoneOffset(),
@@ -795,7 +806,8 @@ export class XmlBHYTProcessor {
     }
     return '';
   }
-  wait(ms) {
+
+  wait(ms: any) {
     return new Promise((r) => setTimeout(r, ms));
   }
 }
