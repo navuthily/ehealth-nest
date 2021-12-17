@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Queue } from 'bull';
+import { log } from 'util';
 import { XmlBHYTService } from './xml-bhyt.service';
 
 @Controller('xml-bhyt')
@@ -8,18 +9,16 @@ export class XmlBHYTController {
   constructor(
     private xmlService: XmlBHYTService,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
-  ) {
-
-    
-  }
+  ) {}
 
   @Post('xuatxml')
   async xuatxml(@Body() data: any) {
     let idThuTraNo = JSON.parse(data.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
-      this.xmlBHYTQueue.add('xml-bhyt',
-       { ID_ThuTraNo: parseInt(idThuTraNo[i])}, 
-       { delay: 100 }
+      this.xmlBHYTQueue.add(
+        'xml-bhyt',
+        { ID_ThuTraNo: parseInt(idThuTraNo[i]) },
+        { delay: 100 },
       );
     }
     return {};
@@ -34,22 +33,36 @@ export class XmlBHYTController {
     return result;
   }
 
+  @Get('getBenhChinh/:id')
+  async getICDBenhChinh(@Param('id') idThuTraNo: any) {
+    return await this.xmlService.getBenhChinh(idThuTraNo);
+  }
+
+  @Get('getBenhKem/:id')
+  async getICDBenhKemICD10(@Param('id') idThuTraNo: any) {
+    return await this.xmlService.getBenhKem(idThuTraNo);
+  }
+
   @Get('xml1/:id')
   getXML1(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_1_tonghop(id);
   }
+
   @Get('xml2/:id')
   getXML2(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_2_thuoc(id);
   }
+
   @Get('xml3/:id')
   getXML3(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_3_canlamsang(id);
   }
+
   @Get('xml4/:id')
   getXML4(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_4_chitietcls(id);
   }
+
   @Get('xml5/:id')
   getXML5(@Param('id') id: any): Promise<any> {
     return this.xmlService.exec_xml_5_dienbienbenh(id);

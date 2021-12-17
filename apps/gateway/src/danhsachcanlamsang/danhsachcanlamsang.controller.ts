@@ -42,6 +42,7 @@ export class DanhSachCanLamSangController {
 
   @Post('/vantay')
   async vantayCanLamSang(@Body() dataVantay: any) {
+    console.log(dataVantay)
     const dataDanhSachCanLamSang = await this.dataDanhSachCanLamSang();
     return this.danhSachCanLamSangService.vantayCanLamSang(
       dataDanhSachCanLamSang,

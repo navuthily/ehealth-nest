@@ -10,7 +10,6 @@ export class LienKetMoiQuanHeBenhNhanController {
   @Post()
   async index(@Body() data: any) {
     const { id } = data;
-
     const [ID_LoaiQuanHe,gioitinh] =  await Promise.all([
       this.lienketmoiquanhebenhnhanService.exec_getidloaiquanhe_moiquanhebenhnhan(
         id,
@@ -19,12 +18,10 @@ export class LienKetMoiQuanHeBenhNhanController {
         id,
       ),
     ]);
-
     const [ID_MoiQuanHe_ConLai] =
       await this.lienketmoiquanhebenhnhanService.exec_lienket_moiquanhebenhnhan(
         ID_LoaiQuanHe[0].ID_LoaiQuanHe,gioitinh[0].gioitinh
-      );
-    
+      );    
      return ID_MoiQuanHe_ConLai;
   }
 }

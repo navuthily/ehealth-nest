@@ -20,7 +20,7 @@ import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/lang
 import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
 import { GoiKhamModule } from './goikham/goikham.module';
-
+// import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -34,7 +34,6 @@ interface IContextArgs {
 class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   async willSendRequest({ request, context }) {
     const payload = await decode(context.jwt);
-    // console.log(payload);
     request.http.headers.set('x-user-id', payload);
   }
 }
@@ -88,7 +87,6 @@ class BuildServiceModule {}
             ApolloServerPluginLandingPageGraphQLPlayground({
               cdnUrl: `${process.env.SV_GATEWAY_IP}:${process.env.SV_GATEWAY_PORT}`,
             }),
-            // ApolloServerPluginInlineTrace(),
           ],
         },
       }),
@@ -110,11 +108,11 @@ class BuildServiceModule {}
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
-        // console.log(process.env.SV_EHEALTH_IP);
         return configDB;
       },
       inject: [ApiConfigService],
     }),
+
     // SequelizeModule.forRoot({
     //   dialect: 'mssql',
     //   host: '192.168.1.107',
@@ -131,6 +129,7 @@ class BuildServiceModule {}
     //   }
 
     // }),
+
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
     XmlBHYTModule,
