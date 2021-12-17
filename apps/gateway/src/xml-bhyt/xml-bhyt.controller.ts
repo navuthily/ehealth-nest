@@ -60,12 +60,12 @@ export class XmlBHYTController {
   }
 
   @Get('getBenhChinh/:id')
-  async getBenhChinh(@Param('id') idThuTraNo: any) {
+  async getICDBenhChinh(@Param('id') idThuTraNo: any) {
     return await this.xmlService.getBenhChinh(idThuTraNo);
   }
 
   @Get('getBenhKem/:id')
-  async getBenhKem(@Param('id') idThuTraNo: any) {
+  async getICDBenhKemICD10(@Param('id') idThuTraNo: any) {
     return await this.xmlService.getBenhKem(idThuTraNo);
   }
 }

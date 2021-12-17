@@ -1,5 +1,5 @@
 import { InjectQueue, Processor } from '@nestjs/bull';
-import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Queue } from 'bull';
