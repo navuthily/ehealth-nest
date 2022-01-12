@@ -20,6 +20,7 @@ import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/lang
 import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
 import { GoiKhamModule } from './goikham/goikham.module';
+import { DMReportModule } from './dm_report/dm_report.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -142,6 +143,7 @@ class BuildServiceModule {}
     LanguageThongtinbenhvienModule,
     GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
     GoiKhamModule,
+    DMReportModule,
   ],
 })
 export class AppModule {}
