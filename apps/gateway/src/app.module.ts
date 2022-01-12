@@ -18,8 +18,10 @@ import { ThuocModule } from './thuoc/thuoc.module';
 import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/language-thongtinbenhvien.module';
 import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
+import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
+import { GoiKhamModule } from './goikham/goikham.module';
+import { DMReportModule } from './dm_report/dm_report.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
-
 require('dotenv').config();
 
 interface IHeadersContainer {
@@ -111,6 +113,24 @@ class BuildServiceModule {}
       },
       inject: [ApiConfigService],
     }),
+
+    // SequelizeModule.forRoot({
+    //   dialect: 'mssql',
+    //   host: '192.168.1.107',
+    //   port: 1433,
+    //   username: 'dev',
+    //   password: '1234',
+    //   database: 'EhealthRea_dev',
+    //   models: [],
+    //   pool:{
+    //     max:5,
+    //     min:0,
+    //     acquire:30000,
+    //     idle:10000
+    //   }
+
+    // }),
+
     ScheduleModule.forRoot(),
     GoogleNotificationModule,
     XmlBHYTModule,
@@ -120,7 +140,10 @@ class BuildServiceModule {}
     LanguageThongtinbenhvienModule,
     LienKetMoiQuanHeBenhNhanModule,
     DMLoaiKhamModule,
-    LanguageThongtinbenhvienModule
+    LanguageThongtinbenhvienModule,
+    GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
+    GoiKhamModule,
+    DMReportModule,
   ],
 })
 export class AppModule {}
