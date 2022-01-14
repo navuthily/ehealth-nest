@@ -4,9 +4,11 @@ import {
   CacheTTL, CACHE_MANAGER, Controller,
   Get, Inject, Injectable, UseInterceptors
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Cache } from 'cache-manager';
 import { DanhSachLamSangService } from './danhsachlamsang.service';
 
+@ApiTags('danhsachlamsang')
 @Controller('danhsachlamsang')
 @Injectable()
 export class DanhSachLamSangController {

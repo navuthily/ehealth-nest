@@ -1,10 +1,11 @@
 import { InjectQueue, Processor } from '@nestjs/bull';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
 import { Connection } from 'typeorm';
+import { dataFilterDTO } from './dto/dataFilter.dto';
 
 @Processor('xml-bhyt')
 @Injectable()
@@ -13,8 +14,8 @@ export class XmlBHYTService {
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
-  @Cron('*/10 * * * *')
+  ) { }
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async handleCron() {
     const data = await this.connection.query('EXEC GD2_BHYT_xml_chuachuyen');
     for (let i = 0; i < data.length; i++) {
@@ -1541,9 +1542,9 @@ export class XmlBHYTService {
     return data;
   }
 
-  async exec_stored_filter_date(dataDate: any) {
+  async exec_stored_filter_date(dataFilter: dataFilterDTO) {
     let data = await this.connection.query(
-      `EXEC ${dataDate.stored} '${dataDate.tungay}', '${dataDate.denngay}'`,
+      `EXEC ${dataFilter.stored} '${dataFilter.tungay}', '${dataFilter.denngay}'`,
     );
     data.map((item: any, index: number) => {
       return (item.id = (index + 1).toString());
@@ -1591,54 +1592,36 @@ export class XmlBHYTService {
 
   async getBenhKem(idThuTraNo: any) {
     if (await this.isNoiTru(idThuTraNo)) {
-      let dataBenhkemNoiTru = Object.values(
-        (
-          await this.connection.query(
-            `SELECT STUFF(
-                   (
-                   SELECT N';'+ISNULL(ttlkicd.maicd ,'')
-                   FROM   thongtinluotkham_icd ttlkicd
-                   JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
-                   WHERE  b.ID_ThuTraNo = @0
-                   and ttlkicd.loai = 'benhkem'
-                   FOR XML PATH(N''), TYPE
-                   ).value('.' ,'nvarchar(max)')
-                   ,1
-                   ,1
-                   ,N''
-                   )`,
-            [idThuTraNo],
-          )
-        )[0],
-      )[0];
-      return dataBenhkemNoiTru ? dataBenhkemNoiTru : '';
-    }
-    let dataBenhkemNgoaiTru = Object.values(
-      (
+      const dataNoiTruSQL =
         await this.connection.query(
-          `SELECT STUFF(
-           (
-           SELECT N';'+ISNULL(Kham.MaICD10 ,'')
-           FROM   Kham
-           JOIN DM_LoaiKham AS dlk
-           ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
-           JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
-           WHERE  b.ID_ThuTraNo = @0
-           AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
-           AND Kham.MaICD10 IS NOT NULL
-           AND Kham.MaICD10<>''
-           AND kham.IsBacSyChinh = 0
-           AND ID_TrangThai<>'HuyBo'
-           FOR XML PATH(N''), TYPE
-           ).value('.' ,'nvarchar(max)')
-           ,1
-           ,1
-           ,N''
-           )`,
-          [idThuTraNo],
-        )
-      )[0],
-    )[0];
-    return dataBenhkemNgoaiTru ? dataBenhkemNgoaiTru : '';
+          `SELECT ttlkicd.maicd
+          FROM   thongtinluotkham_icd ttlkicd
+          JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
+          WHERE  b.ID_ThuTraNo = @0
+          and ttlkicd.loai = 'benhkem'`,
+          [idThuTraNo]);
+      const dataNoiTruArray: any[] = [];
+      dataNoiTruSQL.forEach((item: any) => dataNoiTruArray.push(item?.maicd));
+      const dataNoiTruString = dataNoiTruArray.join(',');
+      return dataNoiTruString ? dataNoiTruString : '';
+    }
+    const dataNgoaiTruSQL =
+      await this.connection.query(
+        `SELECT Kham.MaICD10
+        FROM   Kham
+        JOIN DM_LoaiKham AS dlk
+        ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+        JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
+        WHERE  b.ID_ThuTraNo = 3798067
+        AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+        AND Kham.MaICD10 IS NOT NULL
+        AND Kham.MaICD10<>''
+        AND kham.IsBacSyChinh = 0
+        AND ID_TrangThai<>'HuyBo'`,
+        [idThuTraNo]);
+    const dataNgoaiTruArray: any[] = [];
+    dataNgoaiTruSQL.forEach((item: any) => dataNgoaiTruArray.push(item?.MaICD10));
+    const dataNgoaiTruString = dataNgoaiTruArray.join(',');
+    return dataNgoaiTruString ? dataNgoaiTruString : '';
   }
 }
