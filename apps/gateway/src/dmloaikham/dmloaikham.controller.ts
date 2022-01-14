@@ -6,9 +6,11 @@ import {
   Inject,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Cache } from 'cache-manager';
 import { DMLoaiKhamService } from './dmloaikham.service';
 
+@ApiTags('dmloaikham')
 @Controller('dmloaikham')
 @UseInterceptors(CacheInterceptor)
 export class DMLoaiKhamController {

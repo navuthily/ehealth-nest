@@ -1,6 +1,8 @@
 import { Controller, Get, Injectable } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { GoiKhamService } from './goikham.service';
 
+@ApiTags('goikham')
 @Controller('goikham')
 @Injectable()
 export class GoiKhamController {

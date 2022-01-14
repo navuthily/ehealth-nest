@@ -8,9 +8,11 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Cache } from 'cache-manager';
 import { DanhSachCanLamSangService } from './danhsachcanlamsang.service';
 
+@ApiTags('danhsachcanlamsang')
 @Controller('danhsachcanlamsang')
 @Injectable()
 export class DanhSachCanLamSangController {

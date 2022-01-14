@@ -30,7 +30,7 @@ export class XmlBHYTProcessor {
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
     private httpService: HttpService,
     private xmlService: XmlBHYTService,
-  ) {}
+  ) { }
 
   public get username(): string {
     return this._username;
@@ -124,8 +124,8 @@ export class XmlBHYTProcessor {
 
   @Process('xml-bhyt')
   async handle(job: Job) {
-    this.mabenhchinh(await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo));
-    this.mabenhkem(await this.xmlService.getBenhKem(job.data.ID_ThuTraNo));
+    this.mabenhchinh = await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo);
+    this.mabenhkem = await this.xmlService.getBenhKem(job.data.ID_ThuTraNo);
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
@@ -189,9 +189,8 @@ export class XmlBHYTProcessor {
         chitietchisocls +
         DienBienBenh +
         XML6;
-      const filename = `${(await '4210_') + thongtin.MA_BN}_${
-        job.data.ID_ThuTraNo
-      }.xml`;
+      const filename = `${(await '4210_') + thongtin.MA_BN}_${job.data.ID_ThuTraNo
+        }.xml`;
       const buffer = Buffer.from(tong);
       const token = await this.token;
       const maGiaoDich = await rp({
@@ -266,16 +265,15 @@ export class XmlBHYTProcessor {
       } else if (diffDays < 0) {
         months -= 1;
         let new_months = months.toString();
-        new_months += `.${
-          format(
-            new Date(
-              +format(new Date(date2), 'yyyy'),
-              +format(new Date(date2), 'mm'),
-              0,
-            ),
-            'dd',
-          ) + diffDays
-        }`;
+        new_months += `.${format(
+          new Date(
+            +format(new Date(date2), 'yyyy'),
+            +format(new Date(date2), 'mm'),
+            0,
+          ),
+          'dd',
+        ) + diffDays
+          }`;
       }
       if (months <= 2) {
         thongtin.CAN_NANG = 3.5;
@@ -316,8 +314,8 @@ export class XmlBHYTProcessor {
     )}</GT_THE_DEN>`;
     tonghop += '<MIEN_CUNG_CT></MIEN_CUNG_CT>';
     tonghop += `<TEN_BENH><![CDATA[${thongtin.TEN_BENH}]]></TEN_BENH>`;
-    tonghop += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
-    tonghop += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
+    tonghop += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
+    tonghop += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
     tonghop += `<MA_LYDO_VVIEN>${thongtin.MA_LYDO_VVIEN}</MA_LYDO_VVIEN>`;
     tonghop += '<MA_NOI_CHUYEN />';
     tonghop += '<MA_TAI_NAN />';
@@ -545,8 +543,8 @@ export class XmlBHYTProcessor {
             mabenh_new += `;${thongtin.MA_BENHKHAC}`;
           }
         }
-        chitietthuoc += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
-        chitietthuoc += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
+        chitietthuoc += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
+        chitietthuoc += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
         chitietthuoc += `<NGAY_YL>${format(
           new Date(this.toIsoString(thongtinthuoc[i].NgayKeDon)),
           this.getFullDateTimeBHYT,
@@ -664,8 +662,8 @@ export class XmlBHYTProcessor {
           mabenh_new += `;${thongtin.MA_BENHKHAC}`;
         }
       }
-      chitietcls += `<MA_BENH>${this.mabenhchinh()}</MA_BENH>`;
-      chitietcls += `<MA_BENHKHAC>${this.mabenhkem()}</MA_BENHKHAC>`;
+      chitietcls += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
+      chitietcls += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
       chitietcls += `<NGAY_YL>${format(
         new Date(this.toIsoString(thongtincls[i].NgayGio)),
         this.getFullDateTimeBHYT,
@@ -702,33 +700,26 @@ export class XmlBHYTProcessor {
         chitietchisocls += '<CHI_TIET_CLS>';
         chitietchisocls += `<MA_LK>${thongtin.MA_LK}</MA_LK>`;
         chitietchisocls += `<STT>${i + 1}</STT>`;
-        chitietchisocls += `<MA_DICH_VU>${
-          ChisoCLS[i].MA_DICH_VU == null ? '' : ChisoCLS[i].MA_DICH_VU
-        }</MA_DICH_VU>`;
-        chitietchisocls += `<MA_CHI_SO>${
-          ChisoCLS[i].MA_CHI_SO == null ? '' : ChisoCLS[i].MA_CHI_SO
-        }</MA_CHI_SO>`;
-        chitietchisocls += `<TEN_CHI_SO>${
-          ChisoCLS[i].TEN_CHI_SO == null
-            ? ''
-            : `<![CDATA[${ChisoCLS[i].TEN_CHI_SO}]]>`
-        }</TEN_CHI_SO>`;
-        chitietchisocls += `<GIA_TRI>${
-          ChisoCLS[i].GIA_TRI == null
-            ? ''
-            : `<![CDATA[${ChisoCLS[i].GIA_TRI}]]>`
-        }</GIA_TRI>`;
-        chitietchisocls += `<MA_MAY>${
-          ChisoCLS[i].MA_MAY == null ? '' : ChisoCLS[i].MA_MAY
-        }</MA_MAY>`;
-        chitietchisocls += `<MO_TA>${
-          ChisoCLS[i].MO_TA == null ? '' : `<![CDATA[${ChisoCLS[i].MO_TA}]]>`
-        }</MO_TA>`;
-        chitietchisocls += `<KET_LUAN>${
-          ChisoCLS[i].KET_LUAN == null
-            ? ''
-            : `<![CDATA[${ChisoCLS[i].KET_LUAN}]]>`
-        }</KET_LUAN>`;
+        chitietchisocls += `<MA_DICH_VU>${ChisoCLS[i].MA_DICH_VU == null ? '' : ChisoCLS[i].MA_DICH_VU
+          }</MA_DICH_VU>`;
+        chitietchisocls += `<MA_CHI_SO>${ChisoCLS[i].MA_CHI_SO == null ? '' : ChisoCLS[i].MA_CHI_SO
+          }</MA_CHI_SO>`;
+        chitietchisocls += `<TEN_CHI_SO>${ChisoCLS[i].TEN_CHI_SO == null
+          ? ''
+          : `<![CDATA[${ChisoCLS[i].TEN_CHI_SO}]]>`
+          }</TEN_CHI_SO>`;
+        chitietchisocls += `<GIA_TRI>${ChisoCLS[i].GIA_TRI == null
+          ? ''
+          : `<![CDATA[${ChisoCLS[i].GIA_TRI}]]>`
+          }</GIA_TRI>`;
+        chitietchisocls += `<MA_MAY>${ChisoCLS[i].MA_MAY == null ? '' : ChisoCLS[i].MA_MAY
+          }</MA_MAY>`;
+        chitietchisocls += `<MO_TA>${ChisoCLS[i].MO_TA == null ? '' : `<![CDATA[${ChisoCLS[i].MO_TA}]]>`
+          }</MO_TA>`;
+        chitietchisocls += `<KET_LUAN>${ChisoCLS[i].KET_LUAN == null
+          ? ''
+          : `<![CDATA[${ChisoCLS[i].KET_LUAN}]]>`
+          }</KET_LUAN>`;
         chitietchisocls += `<NGAY_KQ>${format(
           new Date(this.toIsoString(ChisoCLS[i].NGAY_KQ)),
           this.getFullDateTimeBHYT,
