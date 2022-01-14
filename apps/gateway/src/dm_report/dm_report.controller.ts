@@ -8,9 +8,11 @@ import {
   Post,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Cache } from 'cache-manager';
 import { DMReportService } from './dm_report.service';
 
+@ApiTags('dm_report')
 @Controller('dm_report')
 @UseInterceptors(CacheInterceptor)
 export class DMReportController {

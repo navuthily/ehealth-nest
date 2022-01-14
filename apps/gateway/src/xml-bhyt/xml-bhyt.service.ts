@@ -1,10 +1,11 @@
 import { InjectQueue, Processor } from '@nestjs/bull';
 import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
 import { Connection } from 'typeorm';
+import { dataFilterDTO } from './dto/dataFilter.dto';
 
 @Processor('xml-bhyt')
 @Injectable()
@@ -13,8 +14,8 @@ export class XmlBHYTService {
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
-  @Cron('*/10 * * * *')
+  ) { }
+  @Cron(CronExpression.EVERY_10_MINUTES)
   async handleCron() {
     const data = await this.connection.query('EXEC GD2_BHYT_xml_chuachuyen');
     for (let i = 0; i < data.length; i++) {
@@ -35,14 +36,14 @@ export class XmlBHYTService {
   async exec_xml_1_tonghop(idThuTraNo: any) {
     let stored = `SET NOCOUNT ON;
     DECLARE @ID_LuotKham INT
-    
+
     SET @ID_LuotKham = (
             SELECT ID_LuotKham
             FROM   Thu_TraNo
             WHERE  ID_ThuTraNo = @0
         )
-    
-    
+
+
     SELECT ThongTinLuotKham.ID_LuotKham  AS MA_LK
           ,1                             AS STT
           ,DM_BenhNhan.MaBenhNhan        AS MA_BN
@@ -51,7 +52,7 @@ export class XmlBHYTService {
                DM_BenhNhan.NgayThangNamSinh
               ,CAST(CAST(DM_BenhNhan.NamSinh AS VARCHAR(4))+'0101' AS DATETIME)
            )                                NGAY_SINH
-          ,CASE 
+          ,CASE
                 WHEN DM_BenhNhan.GioiTinh=1 THEN 2
                 ELSE 1
            END                              GIOI_TINH
@@ -61,15 +62,15 @@ export class XmlBHYTService {
           ,GD2_DM_TheBHYT.HanSD_TuNgay   AS GT_THE_TU
           ,GD2_DM_TheBHYT.HanSD_DenNgay  AS GT_THE_DEN
           ,''                            AS MIEN_CUNG_CT
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN (
                          SELECT STUFF(
                                     (
                                         SELECT N'/'+Kham.ChanDoan
                                         FROM   Kham
                                         WHERE  Kham.ID_LuotKham = @id_luotkham
-                                               
-                                               
+
+
                                                FOR XML PATH(N''), TYPE
                                     ).value('.' ,'nvarchar(max)')
                                    ,1
@@ -79,11 +80,11 @@ export class XmlBHYTService {
                      )
                 ELSE gbant.CD_RaVienBenhChinh+'/'+ISNULL(CD_RaVienBenhKemTheo ,'')
            END                              TEN_BENH
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN MaICD10
                 ELSE gbant.ICD_RaVienBenhChinh
            END                              MA_BENH
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN ISNULL(
                          (
                              SELECT STUFF(
@@ -113,8 +114,8 @@ export class XmlBHYTService {
            --	(SELECT STUFF(( SELECT N'/' +Kham.ChanDoan
            --             From Kham where Kham.ID_LuotKham=@id_luotkham for xml path(N''), type).value('.', 'nvarchar(max)') , 1, 1, N''))
            --	END MA_BENHKHAC
-          ,CASE 
-                WHEN TrangThaiKham=1 
+          ,CASE
+                WHEN TrangThaiKham=1
                 AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-195'
                 AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-124'
 				AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-076'
@@ -132,15 +133,15 @@ export class XmlBHYTService {
 				AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-017'
 				AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-207'
 
-                
+
                 AND LEFT(GD2_DM_TheBHYT.Ma_KCB_BanDau ,2)
                     ='48' THEN 4 --thong tuyen
                 WHEN TrangThaiKham=1 AND GD2_DM_TheBHYT.Ma_KCB_BanDau='48-195' THEN 1
                 WHEN TrangThaiKham=1 AND GD2_DM_TheBHYT.Ma_KCB_BanDau<>'48-195' AND LEFT(GD2_DM_TheBHYT.Ma_KCB_BanDau ,2)
                     <>'48' THEN 3
-                    
-               WHEN  
-                TrangThaiKham=1 AND 
+
+               WHEN
+                TrangThaiKham=1 AND
                 (GD2_DM_TheBHYT.Ma_KCB_BanDau='48-124'
 				OR GD2_DM_TheBHYT.Ma_KCB_BanDau='48-076'
 				OR GD2_DM_TheBHYT.Ma_KCB_BanDau='48-120'
@@ -165,28 +166,28 @@ export class XmlBHYTService {
           ,GD2_BHYT_Xml.NgayVaoVien      AS NGAY_VAO
           ,GD2_BHYT_Xml.NgayRaVien       AS NGAY_RA
           ,GD2_BHYT_Xml.NgayUpXml        AS NGAYLAP
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN ThongTinLuotKham.TongNgayDieuTri
                 ELSE DATEDIFF(DAY ,GD2_BHYT_Xml.NgayVaoVien ,GD2_BHYT_Xml.NgayRaVien)+1
            END                              SO_NGAY_DTRI
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 2
                 ELSE KetQuaDieuTri
            END                              KET_QUA_DTRI
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 1
                 ELSE HinhThucRaVien
            END                              TINH_TRANG_RV
           ,GD2_BHYT_Xml.NgayRaVien       AS NGAY_TTOAN
           ,CAST(
-               100-dbo.GD2_BHYTPhanTramCungChiTraByID_LuotKhamAndID_LoaiKham_FixBHYT2015(ThongTinLuotKham.ID_LuotKham ,0) 
+               100-dbo.GD2_BHYTPhanTramCungChiTraByID_LuotKhamAndID_LoaiKham_FixBHYT2015(ThongTinLuotKham.ID_LuotKham ,0)
                AS FLOAT
            )                             AS MUC_HUONG
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 2
                 ELSE 3
            END                              MA_LOAI_KCB
-          ,CASE 
+          ,CASE
                 WHEN gbant.ID_BenhAnNoiTru IS NULL AND ID_PhanLoaiKham=24 THEN 'K02'
                 WHEN gbant.ID_BenhAnNoiTru IS NULL AND ID_PhanLoaiKham<>24 THEN 'K01'
                 WHEN gbant.ID_BenhAnNoiTru IS NOT NULL AND dpb2.TenPhongBan IS NULL THEN dpb.Makhoa_BHYT
@@ -220,7 +221,7 @@ export class XmlBHYTService {
                gbantk.ID_BenhAnNoiTru_Khoa DESC
     )
     GD2_BenhAnNoiTru_Khoa
-    
+
     LEFT JOIN DM_PhongBan dpb
                 ON  dpb.ID_PhongBan = GD2_BenhAnNoiTru_Khoa.ID_PhongBan
            LEFT JOIN DM_PhongBan dpb2
@@ -249,14 +250,14 @@ export class XmlBHYTService {
       `DECLARE @id_luotkham INT
       DECLARE @id_benhannoitru INT
       DECLARE @id_thutrano INT = @0
-      
+
       DECLARE @isNoiTru INT
-      DECLARE @MA_LYDO_VVIEN     INT 
+      DECLARE @MA_LYDO_VVIEN     INT
       DECLARE @hangbenhvien      INT=(
                   SELECT HangBenhVienBHYT
                   FROM   GD2_ThongTinBenhVien
               )
-      
+
       DECLARE @phantramtraituyenloaikham_noitru DECIMAL(18 ,4)=ISNULL(
                   (
                       SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNoiTru
@@ -265,7 +266,7 @@ export class XmlBHYTService {
                   )
                  ,0
               )
-      
+
       DECLARE @phantramtraituyenloaikham_ngoaitru DECIMAL(18 ,4)=ISNULL(
                   (
                       SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNgoaiTru
@@ -274,9 +275,9 @@ export class XmlBHYTService {
                   )
                  ,0
               )
-      
+
       SELECT @id_luotkham = ttt.ID_LuotKham
-            ,@isNoiTru            = CASE 
+            ,@isNoiTru            = CASE
                               WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 0
                               ELSE 1
                          END
@@ -288,8 +289,8 @@ export class XmlBHYTService {
              LEFT JOIN GD2_BenhAnNoiTru gbant
                   ON  gbant.ID_LuotKham = ttt.ID_LuotKham
       WHERE  ttt.ID_ThuTraNo = @id_thutrano
-      
-      
+
+
       ;WITH k1 AS(
           SELECT Thu_TraNo_ChiTiet.*
           FROM   Thu_TraNo_ChiTiet
@@ -302,14 +303,14 @@ export class XmlBHYTService {
                 ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia) AS dongia
                  --,DonThuocChiTiet.GiaCungChiTra
                 ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia)-gdtctmr.Gia_BHYTchitra AS GiaCungChiTra
-                ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS 
+                ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS
                  soluong
                 ,MaSoTheoDMBHYT
                 ,DM_Thuoc.HamLuong_BHYT    AS HamLuong
                 ,DM_Thuoc.SignNumber
                 ,MaDuongDung_BHYT          AS MaDD_BHYT
                 ,ISNULL(
-                     CASE 
+                     CASE
                           WHEN DonThuocChiTiet.CachDung='' THEN NULL
                           ELSE DonThuocChiTiet.CachDung
                      END
@@ -320,18 +321,18 @@ export class XmlBHYTService {
                         ,DonThuocChiTiet.ID_DuongDungThuoc
                      )
                  )                         AS CachDung
-                -- Hưng sửa và bổ sung 
+                -- Hưng sửa và bổ sung
                 ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayKeDon
                 ----------------------
                 ,HoatChat_BHYT
                 ,GD2_DM_NhomThuocBHYT.Phantram
                 ,4                         AS id_nhombhyt
                 ,dpb.Makhoa_BHYT
-                ,CASE 
+                ,CASE
 			  -- Hưng sửa
 					WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE DM_NhanVien.SoChungChiHanhNghe
                       --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')<>'' THEN DM_NhanVien.SoChungChiHanhNghe
-                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')='' THEN 
+                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')='' THEN
                       --     GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
 			  ----
                  END                          SoChungChiHanhNghe
@@ -349,7 +350,7 @@ export class XmlBHYTService {
                 ,gdtctmr.T_BNTT
                 ,gdtctmr.T_BNCCT T_BNCCT_2
                 ,gdtctmr.T_BHTT
-                
+
           FROM   DonThuoc
                  LEFT JOIN GD2_BenhAnNoiTru gbant
                       ON  gbant.ID_LuotKham = DonThuoc.ID_LuotKham
@@ -384,7 +385,7 @@ export class XmlBHYTService {
               --,DonThuoc.NgayKeDon
               ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END
               ----------------------
-              ,CASE 
+              ,CASE
                    WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_LoaiKham
                    ELSE 10346
               END
@@ -397,7 +398,7 @@ export class XmlBHYTService {
                  AND DonThuocChiTiet.SoThuocThucXuat<>0
                  AND DonThuoc.ToaChinh = 1
                  AND DM_Thuoc.LaThuoc = 1
-      ) 
+      )
       ,k13 AS (
           SELECT k5.id_loai
                 ,k5.ten
@@ -413,7 +414,7 @@ export class XmlBHYTService {
                 ,CachDung
                  --,case when Phantram IS null then GiaCungChiTra else   dongia*(isnull(Phantram,100)/100)-GiaCungChiTra end GiaCungChiTra
                 ,GiaCungChiTra
-                ,dongia*soluong            --*(isnull(Phantram,100)/100.0) 
+                ,dongia*soluong            --*(isnull(Phantram,100)/100.0)
                  AS thanhtien
                 ,(dongia-GiaCungChiTra)*soluong AS ThanhTienBaoHiem
                 ,HoatChat_BHYT
@@ -438,7 +439,7 @@ export class XmlBHYTService {
                 ,k5.T_BHTT
           FROM   k5
       )
-      ,mau AS 
+      ,mau AS
       (
           SELECT DM_LoaiKham.ID_LoaiKham
                 ,TenBHYT
@@ -458,9 +459,9 @@ export class XmlBHYTService {
                 ,100                 AS phantramchitra
                 ,gdb.ID_BHYT         AS id_nhombhyt
                 ,''                  AS Makhoa_BHYT
-                ,CASE 
+                ,CASE
                       WHEN DM_NhanVien.SoChungChiHanhNghe IS NULL
-          OR DM_NhanVien.SoChungChiHanhNghe='' THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien 
+          OR DM_NhanVien.SoChungChiHanhNghe='' THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
              ELSE DM_NhanVien.SoChungChiHanhNghe END SoChungChiHanhNghe
          ,'' AS ThongTinThauBHYT
          ,NickName
@@ -476,7 +477,7 @@ export class XmlBHYTService {
          ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
          ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
          ,NULL T_BHTT
-          
+
           FROM Kham
           LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
           JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
@@ -489,15 +490,17 @@ export class XmlBHYTService {
           OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
               GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
              ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
-             ,10346
+             ,CASE
+					WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+				END
           )GD2_BacSiDaiDien_GET
           WHERE ID_LuotKham=@id_luotkham
           AND gdb.ID_BHYT=7
           AND HuyChiDinhChiTiet.ID_Kham IS NULL
           AND Kham.Isbhyt=1
           AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
-      ) 
-      ,oxi AS 
+      )
+      ,oxi AS
       (
           SELECT DM_LoaiKham.ID_LoaiKham
                 ,TenBHYT
@@ -524,7 +527,7 @@ export class XmlBHYTService {
                 ,nv1.SoChungChiHanhNghe
                 ,LoiKhuyen           AS ThongTinThauBHYT
                 ,nv1.NickName
-                ,CASE 
+                ,CASE
                       WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
                       ELSE 10346
                  END                    ID_Kham
@@ -559,17 +562,20 @@ export class XmlBHYTService {
                  LEFT JOIN DM_NhanVien nv1
                       ON  nv1.ID_NhanVien = dtph.ID_BacSiChanDoan
                  OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-              CASE 
+              CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
                    ELSE dtph.ID_BacSiChanDoan
               END
-             ,CASE 
+             ,CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
                    ELSE dtph.NgayGioTao
               END
-             ,CASE 
-                   WHEN @id_benhannoitru IS NOT NULL THEN 10346
-                   ELSE DM_LoaiKham.ID_LoaiKham
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN
+					CASE
+						WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+					END
+				 ELSE DM_LoaiKham.ID_LoaiKham
               END
           )                             GD2_BacSiDaiDien_GET
           WHERE  ID_LuotKham = @id_luotkham
@@ -578,9 +584,9 @@ export class XmlBHYTService {
                  AND dtph.Isbhyt = 1
                  AND (kham.ExtField1='DieuTriPhoiHop')
                  AND (dtph.ID_TrangThai<>'HuyBo' OR dtph.ID_TrangThai IS NULL)
-      ) 
-      
-      ,THuoc_kham AS 
+      )
+
+      ,THuoc_kham AS
       (
           SELECT DM_LoaiKham.ID_LoaiKham
                 ,TenBHYT
@@ -595,30 +601,30 @@ export class XmlBHYTService {
                 ,DM_LoaiKham.ReportName  AS cachdung
                 ,Kham.GiaBaoHiem-Kham.ThanhTienBaoHiem AS GiaCungChiTra
                 ,Kham.GiaBaoHiem         AS thanhtien
-                ,CASE 
+                ,CASE
                       WHEN DM_LoaiKham.ID_LoaiKham=10718
           AND @id_thutrano=2680411 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2647166 THEN 230422.5 
+          AND @id_thutrano=2647166 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2724337 THEN 230422.5 
+          AND @id_thutrano=2724337 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2733264 THEN 230422.5 
+          AND @id_thutrano=2733264 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2735929 THEN 230422.5 
+          AND @id_thutrano=2735929 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2733284 THEN 230422.5 
+          AND @id_thutrano=2733284 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2706601 THEN 230422.5 
+          AND @id_thutrano=2706601 THEN 230422.5
               WHEN DM_LoaiKham.ID_LoaiKham=10718
-          AND @id_thutrano=2702683 THEN 230422.5 
-              
-              
-              
-              
-              
-              
-              ELSE Kham.ThanhTienBaoHiem 
+          AND @id_thutrano=2702683 THEN 230422.5
+
+
+
+
+
+
+              ELSE Kham.ThanhTienBaoHiem
               END ThanhTienBaoHiem
          ,'' AS HoatChat_BHYT
          ,100 AS phantramchitra
@@ -630,7 +636,7 @@ export class XmlBHYTService {
           --     when isnull(DM_NhanVien.SoChungChiHanhNghe,'')='' then GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien end SoChungChiHanhNghe
          ,LoiKhuyen AS ThongTinThauBHYT
          ,nv1.NickName
-         ,CASE 
+         ,CASE
                WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
                ELSE 10346
           END ID_Kham
@@ -645,102 +651,105 @@ export class XmlBHYTService {
          ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
          ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
          ,NULL T_BHTT
-          
+
           FROM Kham
           LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
           JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
           JOIN GD2_DMNHOM_BHYT gdb ON gdb.ID_Nhom_BHYT=DM_LoaiKham.ID_Nhom_BHYT
-          LEFT JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.ID_DieuTriPhoiHop=Kham.ID_Kham
+          LEFT JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.ID_Kham=Kham.ID_Kham
           LEFT JOIN GD2_ToDieuTriChiTiet ON GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet=
           GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
-          LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.ID_DieuTriPhoiHop=Kham.ID_Kham
+          LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.ID_Kham=Kham.ID_Kham
           LEFT JOIN DM_NhanVien ON DM_NhanVien.ID_NhanVien=GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
           LEFT JOIN DM_NhanVien nv1 ON nv1.ID_NhanVien=Kham.BSChiDinh
           OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-              CASE 
+              CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
                    ELSE Kham.BSChiDinh
               END
-             ,CASE 
+             ,CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
                    ELSE Kham.NgayGioTao
               END
-             ,CASE 
-                   WHEN @id_benhannoitru IS NOT NULL THEN 10346
-                   ELSE DM_LoaiKham.ID_LoaiKham
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN
+					CASE
+						WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+					END
+				 ELSE DM_LoaiKham.ID_LoaiKham
               END
           )GD2_BacSiDaiDien_GET
-          
-          
+
+
           WHERE ID_LuotKham=@id_luotkham
           AND gdb.ID_BHYT=4
           AND HuyChiDinhChiTiet.ID_Kham IS NULL
           AND Kham.Isbhyt=1
               --AND (kham.ExtField1<>'DieuTriPhoiHop')
           AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
-      ) 
+      )
       ,k14 AS(
           SELECT k13.*
-          FROM   k13 
-          UNION ALL 
+          FROM   k13
+          UNION ALL
           SELECT *
-          FROM   mau 
-          UNION ALL 
+          FROM   mau
+          UNION ALL
           SELECT *
-          FROM   oxi 
-          UNION ALL 
+          FROM   oxi
+          UNION ALL
           SELECT *
           FROM   THuoc_kham
       )
-      
+
       --INSERT INTO @Thuoc
-      SELECT id_loai id_loai 
-  ,ten ten 
-  ,TenDonViTinh TenDonViTinh 
-  ,dongia dongia 
-  ,soluong soluong 
-  ,NgayKeDon NgayKeDon 
-  ,MaSoTheoDMBHYT MaSoTheoDMBHYT 
-  ,HamLuong HamLuong 
-  ,SignNumber SignNumber 
-  ,MaDD_BHYT MaDD_BHYT 
-  ,CachDung CachDung 
-  ,GiaCungChiTra GiaCungChiTra 
-  ,CASE 
+      SELECT id_loai id_loai
+  ,ten ten
+  ,TenDonViTinh TenDonViTinh
+  ,dongia dongia
+  ,soluong soluong
+  ,NgayKeDon NgayKeDon
+  ,MaSoTheoDMBHYT MaSoTheoDMBHYT
+  ,HamLuong HamLuong
+  ,SignNumber SignNumber
+  ,MaDD_BHYT MaDD_BHYT
+  ,CachDung CachDung
+  ,GiaCungChiTra GiaCungChiTra
+  ,CASE
         WHEN THANH_TIEN IS NOT NULL THEN THANH_TIEN
         ELSE thanhtien
-  END                     thanhtien 
-  ,thanhtien               thanhtien_2 
-  ,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)ThanhTienBaoHiem 
-  ,HoatChat_BHYT HoatChat_BHYT 
-  ,phantramchitra phantramchitra 
-  ,id_nhombhyt id_nhombhyt 
-  ,Makhoa_BHYT Makhoa_BHYT 
-  ,SoChungChiHanhNghe SoChungChiHanhNghe 
-  ,ThongTinThauBHYT ThongTinThauBHYT 
-  ,NickName NickName 
+  END                     thanhtien
+  ,thanhtien               thanhtien_2
+  ,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)ThanhTienBaoHiem
+  ,HoatChat_BHYT HoatChat_BHYT
+  ,phantramchitra phantramchitra
+  ,id_nhombhyt id_nhombhyt
+  ,Makhoa_BHYT Makhoa_BHYT
+  ,SoChungChiHanhNghe SoChungChiHanhNghe
+  ,ThongTinThauBHYT ThongTinThauBHYT
+  ,NickName NickName
   ,ID_Kham
-  --,((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100 AS MUC_HUONG ID_Kham 
-  ,CASE 
+  --,((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100 AS MUC_HUONG ID_Kham
+  ,CASE
         WHEN MUC_HUONG IS NOT NULL THEN MUC_HUONG
         ELSE ((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100
-  END                     MUC_HUONG 
-  ,CASE 
+  END                     MUC_HUONG
+  ,CASE
         WHEN TYLE_TT IS NOT NULL THEN TYLE_TT
         ELSE phantramchitra
-  END                     TYLE_TT 
-  ,CASE 
+  END                     TYLE_TT
+  ,CASE
         WHEN T_TRANTT IS NOT NULL THEN T_TRANTT
         ELSE thanhtien
   END                    T_TRANTT
-  --,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem) AS T_BHTT T_TRANTT 
-  ,CASE 
+  --,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem) AS T_BHTT T_TRANTT
+  ,CASE
   WHEN T_BHTT IS NOT NULL THEN T_BHTT ELSE CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
-  END  T_BHTT 
-  ,Makhoa_BHYT         AS  MA_KHOA 
-  ,SoChungChiHanhNghe  AS  MA_BAC_SI 
-  ,ThongTinThauBHYT    AS  TT_THAU 
-  ,CASE 
+  END  T_BHTT
+  ,Makhoa_BHYT         AS  MA_KHOA
+  ,SoChungChiHanhNghe  AS  MA_BAC_SI
+  ,ThongTinThauBHYT    AS  TT_THAU
+  ,CASE
         WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 455000.000
         WHEN id_loai=4881 AND @id_thutrano=2133167 THEN 455000.000
         WHEN id_loai=4881 AND @id_thutrano=2165147 THEN 455000.0000
@@ -750,11 +759,11 @@ export class XmlBHYTService {
         WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=0 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0) --không có trường hợp này
         WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN<>3 THEN thanhtien*((100.0-phantramchitra)/100.0)
         WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN=3 THEN thanhtien-ThanhTienBaoHiem
-            
+
             --WHEN ThanhTienBaoHiem/(dongia*soluong)*100<>100 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0
         ELSE 0
-  END                     T_BNTT 
-  ,CASE 
+  END                     T_BNTT
+  ,CASE
   WHEN T_BNCCT_2 IS NOT NULL THEN T_BNCCT_2 ELSE
   CASE
     WHEN (id_loai=10718) AND @id_thutrano=2680411 THEN 12127.5
@@ -767,7 +776,7 @@ export class XmlBHYTService {
     WHEN (id_loai=10718) AND @id_thutrano=2702683 THEN 12127.5
     WHEN (id_loai=10718) THEN thanhtien-CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
     WHEN T_BNCCT IS NOT NULL AND (id_loai<>10505) THEN T_BNCCT
-    ELSE CASE 
+    ELSE CASE
           WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 9750.0000
           WHEN id_loai=4881 AND @id_thutrano=2029771 THEN 65000.0000
           WHEN id_loai=4881 AND @id_thutrano=2012070 THEN 65000.0000
@@ -882,17 +891,17 @@ export class XmlBHYTService {
           ELSE thanhtien*1.000-ThanhTienBaoHiem*1.000
         END
       END
-  END                     T_BNCCT 
-  ,IsThuoc IsThuoc 
-  ,Nickname_BacSiLamDaiDien Nickname_BacSiLamDaiDien 
-  ,T_BNCCT T_BNCCTam 
-  ,Gia_BHYTchitra Gia_BHYTchitra 
-  ,MUC_HUONG               MUC_HUONG_2 
-  ,TYLE_TT                 TYLE_TT_2 
-  ,THANH_TIEN              THANH_TIEN_2 
-  ,T_TRANTT               T_TRANTT_2 
-  ,T_BNTT   T_BNTT_2 
-  ,T_BNCCT_2 T_BNCCT_2 
+  END                     T_BNCCT
+  ,IsThuoc IsThuoc
+  ,Nickname_BacSiLamDaiDien Nickname_BacSiLamDaiDien
+  ,T_BNCCT T_BNCCTam
+  ,Gia_BHYTchitra Gia_BHYTchitra
+  ,MUC_HUONG               MUC_HUONG_2
+  ,TYLE_TT                 TYLE_TT_2
+  ,THANH_TIEN              THANH_TIEN_2
+  ,T_TRANTT               T_TRANTT_2
+  ,T_BNTT   T_BNTT_2
+  ,T_BNCCT_2 T_BNCCT_2
   ,T_BHTT T_BHTT_2
       FROM   k14
       WHERE  soluong<>0`,
@@ -912,12 +921,12 @@ export class XmlBHYTService {
   async exec_xml_3_canlamsang(idThuTraNo: any) {
     let stored = `DECLARE @id_luotkham INT
     DECLARE @isNoiTru INT
-    DECLARE @MA_LYDO_VVIEN     INT 
+    DECLARE @MA_LYDO_VVIEN     INT
     DECLARE @hangbenhvien      INT=(
                 SELECT HangBenhVienBHYT
                 FROM   GD2_ThongTinBenhVien
     )
-    
+
     DECLARE @phantramtraituyenloaikham_noitru DECIMAL(18 ,4)=ISNULL(
                 (
                     SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNoiTru
@@ -926,7 +935,7 @@ export class XmlBHYTService {
                 )
                ,0
             )
-    
+
     DECLARE @phantramtraituyenloaikham_ngoaitru DECIMAL(18 ,4)=ISNULL(
                 (
                     SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNgoaiTru
@@ -935,10 +944,10 @@ export class XmlBHYTService {
                 )
                ,0
             )
-    
-    
+
+
     SELECT @id_luotkham = ttt.ID_LuotKham
-          ,@isNoiTru          = CASE 
+          ,@isNoiTru          = CASE
                             WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 0
                             ELSE 1
                        END
@@ -949,9 +958,9 @@ export class XmlBHYTService {
            LEFT JOIN GD2_BenhAnNoiTru gbant
                 ON  gbant.ID_LuotKham = ttt.ID_LuotKham
     WHERE  ttt.ID_ThuTraNo = @0
-    
-    
-    
+
+
+
     ;WITH k1 AS(
         SELECT Thu_TraNo_ChiTiet.*
         FROM   Thu_TraNo_ChiTiet
@@ -964,8 +973,8 @@ export class XmlBHYTService {
               ,1                AS soluong
               ,kham.NgayGioTao  AS NgayGio
               ,ThanhTienBaoHiem/GiaBaoHiem AS MUC_HUONG
-              ,CASE 
-                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN 
+              ,CASE
+                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN
                          GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
                     ELSE dnv.SoChungChiHanhNghe
                END                 SoChungChiHanhNghe
@@ -1004,7 +1013,7 @@ export class XmlBHYTService {
                AND HuyChiDinhChiTiet.ID_Kham IS NULL
                AND Kham.Isbhyt = 1
     ),
-    
+
     k3 AS (
         SELECT DieuTriPhoiHop.ID_LoaiKham
               ,GiaBaoHiem
@@ -1025,8 +1034,8 @@ export class XmlBHYTService {
               ,DieuTriPhoiHop.ThanhTienBaoHiem/(
                    DieuTriPhoiHop.GiaBaoHiem*(SoLanThucHienTrongNgay*SoNgayThucHien)
                )     AS MUC_HUONG
-              ,CASE 
-                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN 
+              ,CASE
+                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN
                          GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
                     ELSE dnv.SoChungChiHanhNghe
                END      SoChungChiHanhNghe
@@ -1079,8 +1088,8 @@ export class XmlBHYTService {
               ,PHYSIOTHERAPY.ThanhTienBaoHiem/(
                    PHYSIOTHERAPY.GiaBaoHiem*(SoLanThucHienTrongNgay*SoNgayThucHien)
                )     AS MUC_HUONG
-              ,CASE 
-                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN 
+              ,CASE
+                    WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN
                          GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
                     ELSE dnv.SoChungChiHanhNghe
                END      SoChungChiHanhNghe
@@ -1125,11 +1134,11 @@ export class XmlBHYTService {
                )*(
                    SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc)
                )                         AS ThanhTienBaoHiem
-              ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS 
+              ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS
                soluong
               ,10                        AS ID_Nhom_BHYT
               --,DonThuoc.NgayKeDon        AS NgayGio
-			  -- Hưng sửa và bổ sung 
+			  -- Hưng sửa và bổ sung
 			  ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayGio
 			  ----------------------
               ,(GD2_DonThuocChiTietMoRong.Gia_BHYTchitra)/ISNULL(GD2_DonThuocChiTietMoRong.GiaBHYT ,DonThuocChiTiet.Gia) AS MUC_HUONG
@@ -1175,14 +1184,14 @@ export class XmlBHYTService {
                AND DonThuoc.ToaChinh = 1
                AND DM_Thuoc.LaThuoc = 0
                AND DonThuocChiTiet.IsBhyt = 1
-    ) 
+    )
     ,k6 AS(
         SELECT GD2_BHYT_DM_Giuong_HangBV.ID_Auto
               ,GD2_BHYT_DM_Giuong_HangBV.Ten_BHYT
               ,N'Ngày' AS DVT
               ,gbagb.DonGiaBH
               ,MaSoTheoDMBYT
-              ,CASE 
+              ,CASE
                     WHEN @0=1640610 THEN 50872.5
                     WHEN @0=1647383
         AND NgayBHYT=0.5 THEN 80547.65
@@ -1206,13 +1215,13 @@ export class XmlBHYTService {
         AND NgayBHYT=0.5 THEN 50872.5
             WHEN @0=1674434
         AND NgayBHYT=0.5 THEN 50872.5
-            
-            
+
+
             ELSE gbagb.ThanhTienBaoHiemThuc END ThanhTienBH
        ,gbagb.NgayBHYT
        ,6 AS ID_Nhom_BHYT
        ,gbagb.NgayGioBatDauSuDung
-       ,CASE 
+       ,CASE
              WHEN @0=1640610 THEN 0.57
              WHEN @0=1647383
         AND NgayBHYT=0.5 THEN 0.95
@@ -1236,10 +1245,10 @@ export class XmlBHYTService {
         AND NgayBHYT=0.5 THEN 0.57
             WHEN @0=1674434
         AND NgayBHYT=0.5 THEN 0.57
-            
-            
-            
-            ELSE gbagb.ThanhTienBaoHiemThuc/(gbagb.DonGiaBH*gbagb.NgayBHYT) 
+
+
+
+            ELSE gbagb.ThanhTienBaoHiemThuc/(gbagb.DonGiaBH*gbagb.NgayBHYT)
             END MUC_HUONG
        ,'' AS SoChungChiHanhNghe
        ,'' AS ThongTinThauBHYT
@@ -1255,21 +1264,21 @@ export class XmlBHYTService {
        ,NULL T_BNCCT
        ,NULL Gia_BHYTchitra
        ,NULL T_BHTT
-        
-        FROM k1 
+
+        FROM k1
         JOIN GD2_BenhAn_GiuongBenh gbagb ON gbagb.Id_BenhAn_GiuongBenh=k1.Id_BenhAn_GiuongBenh
         JOIN GD2_DMBuong_GiuongBenh gdgb ON gbagb.Id_BuongGiuong=gdgb.ID_Buong_Giuong
         JOIN GD2_BHYT_DM_Giuong_HangBV ON gbagb.Id_nhombenh=GD2_BHYT_DM_Giuong_HangBV.ID_Auto
-        
+
         WHERE NgayBHYT>0
     )
     ,k11 AS (
         SELECT *
         FROM   k2
-        UNION ALL 
+        UNION ALL
         SELECT *
         FROM   k3
-        UNION ALL 
+        UNION ALL
         SELECT *
         FROM   k4
     )
@@ -1328,26 +1337,26 @@ export class XmlBHYTService {
           ,soluong
           ,ID_Nhom_BHYT
           ,thanhtien           AS thanhtien_2
-          ,CASE 
+          ,CASE
                 WHEN THANH_TIEN IS NOT NULL THEN THANH_TIEN
                 ELSE thanhtien
            END	thanhtien
           ,ID_BHYT
           ,NgayGio
            --,CAST(MUC_HUONG*100 AS FLOAT)     MUC_HUONG
-          ,CASE 
+          ,CASE
                 WHEN MUC_HUONG_2 IS NOT NULL THEN MUC_HUONG_2
                 ELSE CAST(MUC_HUONG*100 AS FLOAT)
            END                    MUC_HUONG
-          ,CASE 
+          ,CASE
                 WHEN TYLE_TT IS NOT NULL THEN TYLE_TT
                 ELSE 100
            END                    TYLE_TT
-          ,CASE 
+          ,CASE
                 WHEN T_TRANTT IS NOT NULL THEN T_TRANTT
                 ELSE thanhtien
            END                    T_TRANTT
-           
+
            --, thanhtien-ThanhTienBaoHiem AS T_BNCCT
           --,ThanhTienBaoHiem
           ,CASE
@@ -1358,7 +1367,7 @@ export class XmlBHYTService {
           ,SoChungChiHanhNghe  AS MA_BAC_SI
           ,ThongTinThauBHYT    AS TT_THAU
           ,GiaCungChiTra
-          ,CASE 
+          ,CASE
 				WHEN T_BNTT IS NOT NULL THEN T_BNTT ELSE
 					CASE
 						WHEN @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*((100.0-@phantramtraituyenloaikham_noitru)/100.0)
@@ -1366,7 +1375,7 @@ export class XmlBHYTService {
 						ELSE 0
 					END
            END                    T_BNTT
-          ,CASE 
+          ,CASE
 				WHEN T_BNCCT IS NOT NULL THEN T_BNCCT ELSE
 					CASE
 						WHEN @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*(@phantramtraituyenloaikham_noitru/100.0)-
@@ -1388,7 +1397,7 @@ export class XmlBHYTService {
           ,T_BNCCT T_BNCCT_2
           ,Gia_BHYTchitra Gia_BHYTchitra_2
           ,T_BHTT T_BHTT_2
-    FROM   k15 
+    FROM   k15
     WHERE  ID_BHYT<>7
            AND ID_BHYT<>6
            AND ID_BHYT<>4
@@ -1417,8 +1426,8 @@ export class XmlBHYTService {
             FROM   ThanhToanTong ttt
             WHERE  ttt.ID_ThuTraNo = @0
         )
-    
-    
+
+
     ;WITH k1 AS(
         SELECT Thu_TraNo_ChiTiet.*
         FROM   Thu_TraNo_ChiTiet
@@ -1446,7 +1455,7 @@ export class XmlBHYTService {
                AND HuyChiDinhChiTiet.ID_Kham IS NULL
                AND Kham.Isbhyt = 1
     )
-    
+
     SELECT kqxn.KetQua              AS GIA_TRI
           ,DM_XetNghiem.MaXN_BHYT   AS MA_CHI_SO
           ,dlk.STT_BHYT				AS TEN_CHI_SO
@@ -1476,54 +1485,54 @@ export class XmlBHYTService {
     let stored = `SET NOCOUNT ON;
     DECLARE @id_luotkham INT
     DECLARE @isnoitru INT
-    SELECT 
-    @id_luotkham=ttt.ID_LuotKham 
+    SELECT
+    @id_luotkham=ttt.ID_LuotKham
     ,@isnoitru=gbant.ID_BenhAnNoiTru
     FROM ThanhToanTong ttt
     LEFT JOIN GD2_BenhAnNoiTru gbant ON gbant.ID_LuotKham = ttt.ID_LuotKham
      WHERE ttt.ID_ThuTraNo=@0
-    
+
     IF(@isnoitru IS NULL )
-      BEGIN	
+      BEGIN
         SELECT Kham.MoTa as DIEN_BIEN
         ,Kham.NgayGioTao AS  NGAY_YL
         ,'' AS  HOI_CHAN
         ,'' AS  PHAU_THUAT
           FROM Kham
           LEFT JOIN DM_LoaiKham AS dlk ON dlk.ID_LoaiKham = Kham.ID_LoaiKham
-          
-           WHERE ID_LuotKham=@id_luotkham 
+
+           WHERE ID_LuotKham=@id_luotkham
            AND dlk.ID_NhomCLS=20
            AND Kham.MoTa<>''
-           --AND IsBacSyChinh=1		
+           --AND IsBacSyChinh=1
           --AND 	   MoTa<>''
       END
-    ELSE 
+    ELSE
       BEGIN
         ;with k1  as(select gbant.* from GD2_BenhAnNoiTru gbant WHERE gbant.ID_LuotKham=@id_luotkham )
         ,k2 as(
-          select 
+          select
           gtdtct.DienBien,
           gtdtct.NgayGioHieuLuc
-          from k1 
+          from k1
           JOIN GD2_TODIEUTRI gt ON gt.ID_BenhAnNoiTru = k1.ID_BenhAnNoiTru
           JOIN GD2_ToDieuTriChiTiet gtdtct ON gtdtct.ID_ToDieuTri = gt.ID_ToDieuTri
         )
-        
+
         SELECT k2.DienBien as DIEN_BIEN
         ,NgayGioHieuLuc AS  NGAY_YL
         ,'' AS  HOI_CHAN
         ,'' AS  PHAU_THUAT
-          FROM k2 	
-          
+          FROM k2
+
         WHERE LTRIM(RTRIM(isnull(
           REPLACE(REPLACE(DienBien, CHAR(13), ''), CHAR(10), '')
-          
-        
+
+
         ,'')))<>''
-        
-        
-         and NgayGioHieuLuc IS NOT NULL 
+
+
+         and NgayGioHieuLuc IS NOT NULL
         ORDER BY NGAY_YL
       END`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
@@ -1533,9 +1542,9 @@ export class XmlBHYTService {
     return data;
   }
 
-  async exec_stored_filter_date(dataDate: any) {
+  async exec_stored_filter_date(dataFilter: dataFilterDTO) {
     let data = await this.connection.query(
-      `EXEC ${dataDate.stored} '${dataDate.tungay}', '${dataDate.denngay}'`,
+      `EXEC ${dataFilter.stored} '${dataFilter.tungay}', '${dataFilter.denngay}'`,
     );
     data.map((item: any, index: number) => {
       return (item.id = (index + 1).toString());
@@ -1583,54 +1592,36 @@ export class XmlBHYTService {
 
   async getBenhKem(idThuTraNo: any) {
     if (await this.isNoiTru(idThuTraNo)) {
-      let dataBenhkemNoiTru = Object.values(
-        (
-          await this.connection.query(
-            `SELECT STUFF(
-                   (
-                   SELECT N';'+ISNULL(ttlkicd.maicd ,'')
-                   FROM   thongtinluotkham_icd ttlkicd
-                   JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
-                   WHERE  b.ID_ThuTraNo = @0
-                   and ttlkicd.loai = 'benhkem'
-                   FOR XML PATH(N''), TYPE
-                   ).value('.' ,'nvarchar(max)')
-                   ,1
-                   ,1
-                   ,N''
-                   )`,
-            [idThuTraNo],
-          )
-        )[0],
-      )[0];
-      return dataBenhkemNoiTru ? dataBenhkemNoiTru : '';
-    }
-    let dataBenhkemNgoaiTru = Object.values(
-      (
+      const dataNoiTruSQL =
         await this.connection.query(
-          `SELECT STUFF(
-           (
-           SELECT N';'+ISNULL(Kham.MaICD10 ,'')
-           FROM   Kham
-           JOIN DM_LoaiKham AS dlk
-           ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
-           JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
-           WHERE  b.ID_ThuTraNo = @0
-           AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
-           AND Kham.MaICD10 IS NOT NULL
-           AND Kham.MaICD10<>''
-           AND kham.IsBacSyChinh = 0
-           AND ID_TrangThai<>'HuyBo'
-           FOR XML PATH(N''), TYPE
-           ).value('.' ,'nvarchar(max)')
-           ,1
-           ,1
-           ,N''
-           )`,
-          [idThuTraNo],
-        )
-      )[0],
-    )[0];
-    return dataBenhkemNgoaiTru ? dataBenhkemNgoaiTru : '';
+          `SELECT ttlkicd.maicd
+          FROM   thongtinluotkham_icd ttlkicd
+          JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
+          WHERE  b.ID_ThuTraNo = @0
+          and ttlkicd.loai = 'benhkem'`,
+          [idThuTraNo]);
+      const dataNoiTruArray: any[] = [];
+      dataNoiTruSQL.forEach((item: any) => dataNoiTruArray.push(item?.maicd));
+      const dataNoiTruString = dataNoiTruArray.join(',');
+      return dataNoiTruString ? dataNoiTruString : '';
+    }
+    const dataNgoaiTruSQL =
+      await this.connection.query(
+        `SELECT Kham.MaICD10
+        FROM   Kham
+        JOIN DM_LoaiKham AS dlk
+        ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+        JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
+        WHERE  b.ID_ThuTraNo = 3798067
+        AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+        AND Kham.MaICD10 IS NOT NULL
+        AND Kham.MaICD10<>''
+        AND kham.IsBacSyChinh = 0
+        AND ID_TrangThai<>'HuyBo'`,
+        [idThuTraNo]);
+    const dataNgoaiTruArray: any[] = [];
+    dataNgoaiTruSQL.forEach((item: any) => dataNgoaiTruArray.push(item?.MaICD10));
+    const dataNgoaiTruString = dataNgoaiTruArray.join(',');
+    return dataNgoaiTruString ? dataNgoaiTruString : '';
   }
 }

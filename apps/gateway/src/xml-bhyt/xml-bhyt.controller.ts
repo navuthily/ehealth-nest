@@ -3,17 +3,21 @@ import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { Queue } from 'bull';
 import { log } from 'util';
 import { XmlBHYTService } from './xml-bhyt.service';
-
+import { ListIdThuTraNoJsonDTO } from "./dto/listIdThuTraNo.dto";
+import { dataKCBDTO } from './dto/dataKCB.dto';
+import { dataFilterDTO } from './dto/dataFilter.dto';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('xml-bhyt')
 @Controller('xml-bhyt')
 export class XmlBHYTController {
   constructor(
     private xmlService: XmlBHYTService,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
-  ) {}
+  ) { }
 
   @Post('xuatxml')
-  async xuatxml(@Body() data: any) {
-    let idThuTraNo = JSON.parse(data.idThuTraNo);
+  async xuatxml(@Body() dataIds: ListIdThuTraNoJsonDTO) {
+    let idThuTraNo = JSON.parse(dataIds.idThuTraNo);
     for (let i = 0; i < idThuTraNo.length; i++) {
       this.xmlBHYTQueue.add(
         'xml-bhyt',
@@ -25,7 +29,7 @@ export class XmlBHYTController {
   }
 
   @Post('kq_nhan_lichsu_kcb')
-  async kq_nhan_lichsu_kcb(@Body() dataKCB: any) {
+  async kq_nhan_lichsu_kcb(@Body() dataKCB: dataKCBDTO) {
     const job = await this.xmlBHYTQueue.add('kq_nhan_lichsu_kcb', {
       dataKCB,
     });
@@ -69,7 +73,7 @@ export class XmlBHYTController {
   }
 
   @Get('exec_stored_filter_date')
-  exec_stored_filter_date(@Query() dataDate: any) {
-    return this.xmlService.exec_stored_filter_date(dataDate);
+  exec_stored_filter_date(@Query() dataFilter: dataFilterDTO) {
+    return this.xmlService.exec_stored_filter_date(dataFilter);
   }
 }

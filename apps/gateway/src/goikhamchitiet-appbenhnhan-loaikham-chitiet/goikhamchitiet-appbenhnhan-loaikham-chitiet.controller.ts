@@ -1,11 +1,13 @@
 import { Body, Controller, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService } from './goikhamchitiet-appbenhnhan-loaikham-chitiet.service';
 
+@ApiTags('quanly_appbenhnhan')
 @Controller('quanly_appbenhnhan')
 export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietController {
   constructor(
     private quanlyAppbenhnhanService: GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService,
-  ) {}
+  ) { }
 
   @Post('goichidinhkham')
   async index(@Body() data: any) {

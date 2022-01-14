@@ -10,10 +10,12 @@ import {
   Request,
   UseInterceptors,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
 import { ThuocService } from './thuoc.service';
 
+@ApiTags('thuoc')
 @Controller('thuoc')
 @UseInterceptors(CacheInterceptor)
 export class ThuocController {
