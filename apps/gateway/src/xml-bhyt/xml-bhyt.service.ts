@@ -1602,7 +1602,7 @@ export class XmlBHYTService {
           [idThuTraNo]);
       const dataNoiTruArray: any[] = [];
       dataNoiTruSQL.forEach((item: any) => dataNoiTruArray.push(item?.maicd));
-      const dataNoiTruString = dataNoiTruArray.join(',');
+      const dataNoiTruString = dataNoiTruArray.join(';');
       return dataNoiTruString ? dataNoiTruString : '';
     }
     const dataNgoaiTruSQL =
@@ -1621,7 +1621,7 @@ export class XmlBHYTService {
         [idThuTraNo]);
     const dataNgoaiTruArray: any[] = [];
     dataNgoaiTruSQL.forEach((item: any) => dataNgoaiTruArray.push(item?.MaICD10));
-    const dataNgoaiTruString = dataNgoaiTruArray.join(',');
+    const dataNgoaiTruString = dataNgoaiTruArray.join(';');
     return dataNgoaiTruString ? dataNgoaiTruString : '';
   }
 }

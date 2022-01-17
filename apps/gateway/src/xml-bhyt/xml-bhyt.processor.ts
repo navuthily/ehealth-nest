@@ -525,14 +525,14 @@ export class XmlBHYTProcessor {
         chitietthuoc += `<T_NGOAIDS>${T_NGOAIDS_New}</T_NGOAIDS>`;
         chitietthuoc += `<MA_KHOA>${thongtinthuoc[i].MA_KHOA}</MA_KHOA>`;
         chitietthuoc += `<MA_BAC_SI>${MA_BAC_SI}</MA_BAC_SI>`;
-        var mabenh_new = thongtin.MA_BENH;
+        var mabenh_new = mabenhchinh;
         if (+NAM_QT >= 2021 && +THANG_QT >= 7 && thongtin.Is_NoiTru == '0') {
-          if (thongtin.MA_BENHKHAC != '' && thongtin.MA_BENHKHAC != null) {
-            mabenh_new += `;${thongtin.MA_BENHKHAC}`;
+          if (mabenhkem != '' && mabenhkem != null) {
+            mabenh_new += `;${mabenhkem}`;
           }
         }
         chitietthuoc += `<MA_BENH>${mabenhchinh}</MA_BENH>`;
-        chitietthuoc += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
+        // chitietthuoc += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
         chitietthuoc += `<NGAY_YL>${format(
           new Date(this.toIsoString(thongtinthuoc[i].NgayKeDon)),
           this.getFullDateTimeBHYT,
@@ -644,14 +644,14 @@ export class XmlBHYTProcessor {
       chitietcls += `<T_TRANTT>${thongtincls[i].T_TRANTT}</T_TRANTT>`;
       chitietcls += `<MA_KHOA>${MA_KHOA}</MA_KHOA>`;
       chitietcls += `<MA_BAC_SI>${thongtincls[i].MA_BAC_SI}</MA_BAC_SI>`;
-      var mabenh_new = thongtin.MA_BENH;
+      var mabenh_new = mabenhchinh;
       if (+NAM_QT >= 2021 && +THANG_QT >= 7 && thongtin.Is_NoiTru == '0') {
-        if (thongtin.MA_BENHKHAC != '' && thongtin.MA_BENHKHAC != null) {
-          mabenh_new += `;${thongtin.MA_BENHKHAC}`;
+        if (mabenhkem != '' && mabenhkem != null) {
+          mabenh_new += `;${mabenhkem}`;
         }
       }
-      chitietcls += `<MA_BENH>${mabenhchinh}</MA_BENH>`;
-      chitietcls += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
+      chitietcls += `<MA_BENH>${mabenh_new}</MA_BENH>`;
+      // chitietcls += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
       chitietcls += `<NGAY_YL>${format(
         new Date(this.toIsoString(thongtincls[i].NgayGio)),
         this.getFullDateTimeBHYT,
