@@ -8,7 +8,7 @@ import {
   differenceInDays,
   differenceInMonths,
   differenceInYears,
-  format,
+  format
 } from 'date-fns';
 import rp from 'request-promise-native';
 import { Connection } from 'typeorm';
@@ -22,9 +22,6 @@ export class XmlBHYTProcessor {
   private _username = '48195_BV';
   private _password = '72483341875d30c993b0e004c4a235e8';
   private _token: any;
-  private _mabenhchinh: any;
-  private _mabenhkem: any;
-
   constructor(
     @InjectConnection() readonly connection: Connection,
     @InjectQueue('xml-bhyt') private readonly xmlBHYTQueue: Queue,
@@ -58,20 +55,6 @@ export class XmlBHYTProcessor {
     this._token = v;
   }
 
-  public get mabenhchinh(): any {
-    return this._mabenhchinh;
-  }
-  public set mabenhchinh(v: any) {
-    this._mabenhchinh = v;
-  }
-
-  public get mabenhkem(): any {
-    return this._mabenhkem;
-  }
-  public set mabenhkem(v: any) {
-    this._mabenhkem = v;
-  }
-
   isAccessTokenExpires() {
     if (new Date(this._token.APIKey.expires_in).getTime()) {
       return (
@@ -95,7 +78,7 @@ export class XmlBHYTProcessor {
 
   @Process('xml-bhyt-layketqua')
   async layketqua(job: Job) {
-    let token = await this.token;
+    const token = await this.token;
     try {
       const loi = await this.httpService
         .post(
@@ -124,8 +107,9 @@ export class XmlBHYTProcessor {
 
   @Process('xml-bhyt')
   async handle(job: Job) {
-    this.mabenhchinh = await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo);
-    this.mabenhkem = await this.xmlService.getBenhKem(job.data.ID_ThuTraNo);
+    const mabenhchinh = await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo);
+    const mabenhkem = await this.xmlService.getBenhKem(job.data.ID_ThuTraNo);
+
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
         await Promise.all([
@@ -140,8 +124,8 @@ export class XmlBHYTProcessor {
       let T_BNTT = new Big(0);
       let T_BNCCT = new Big(0);
       let T_TONGCHI = new Big(0);
-      const chitietthuoc = await this.xml_2_thuoc(thongtinthuoc, thongtin);
-      const chitietcls = await this.xml_3_canlamsang(thongtincls, thongtin);
+      const chitietthuoc = await this.xml_2_thuoc(thongtinthuoc, thongtin, mabenhchinh, mabenhkem);
+      const chitietcls = await this.xml_3_canlamsang(thongtincls, thongtin, mabenhchinh, mabenhkem);
       const ThanhTienBaoHiem_CLS = new Big(chitietcls.ThanhTienBaoHiem);
       const ThanhTienBaoHiem_Thuoc = new Big(chitietthuoc.ThanhTienBaoHiem);
       const T_BNTT_CLS = new Big(chitietcls.T_BNTT);
@@ -177,6 +161,8 @@ export class XmlBHYTProcessor {
         T_BNTT,
         ThanhTienBaoHiem,
         T_BNCCT,
+        mabenhchinh,
+        mabenhkem
       );
       const XML6 =
         '</HOSO></DANHSACHHOSO></THONGTINHOSO><CHUKYDONVI /></GIAMDINHHS>';
@@ -214,7 +200,7 @@ export class XmlBHYTProcessor {
 
   @Process({ name: 'kq_nhan_lichsu_kcb', concurrency: 5 })
   async kq_nhan_lichsu_kcb(job: Job) {
-    var token = await this.token;
+    const token = await this.token;
     const data = await this.httpService
       .request({
         url: `http://egw.baohiemxahoi.gov.vn/api/egw/KQNhanLichSuKCB595?token=${token.APIKey.access_token}&id_token=${token.APIKey.id_token}&username=${this.username}&password=${this.password}`,
@@ -232,13 +218,15 @@ export class XmlBHYTProcessor {
   }
 
   xml_1_tonghop(
-    thongtin,
-    tongthuoc,
-    tongvtyt,
-    T_TONGCHI,
-    T_BNTT,
-    ThanhTienBaoHiem,
-    T_BNCCT,
+    thongtin: any,
+    tongthuoc: any,
+    tongvtyt: any,
+    T_TONGCHI: any,
+    T_BNTT: any,
+    ThanhTienBaoHiem: any,
+    T_BNCCT: any,
+    mabenhchinh: any,
+    mabenhkem: any,
     base64 = true,
   ) {
     const NGAYLAP = format(
@@ -314,8 +302,8 @@ export class XmlBHYTProcessor {
     )}</GT_THE_DEN>`;
     tonghop += '<MIEN_CUNG_CT></MIEN_CUNG_CT>';
     tonghop += `<TEN_BENH><![CDATA[${thongtin.TEN_BENH}]]></TEN_BENH>`;
-    tonghop += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
-    tonghop += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
+    tonghop += `<MA_BENH>${mabenhchinh}</MA_BENH>`;
+    tonghop += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
     tonghop += `<MA_LYDO_VVIEN>${thongtin.MA_LYDO_VVIEN}</MA_LYDO_VVIEN>`;
     tonghop += '<MA_NOI_CHUYEN />';
     tonghop += '<MA_TAI_NAN />';
@@ -455,7 +443,7 @@ export class XmlBHYTProcessor {
     return tonghop;
   }
 
-  xml_2_thuoc(thongtinthuoc: any, thongtin: any, base64 = true) {
+  xml_2_thuoc(thongtinthuoc: any, thongtin: any, mabenhchinh: any, mabenhkem: any, base64 = true) {
     const NAM_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'yyyy');
     const THANG_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'MM');
     let T_BNTT = new Big(0);
@@ -543,8 +531,8 @@ export class XmlBHYTProcessor {
             mabenh_new += `;${thongtin.MA_BENHKHAC}`;
           }
         }
-        chitietthuoc += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
-        chitietthuoc += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
+        chitietthuoc += `<MA_BENH>${mabenhchinh}</MA_BENH>`;
+        chitietthuoc += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
         chitietthuoc += `<NGAY_YL>${format(
           new Date(this.toIsoString(thongtinthuoc[i].NgayKeDon)),
           this.getFullDateTimeBHYT,
@@ -567,7 +555,7 @@ export class XmlBHYTProcessor {
     };
   }
 
-  xml_3_canlamsang(thongtincls: any, thongtin: any, base64 = true) {
+  xml_3_canlamsang(thongtincls: any, thongtin: any, mabenhchinh: any, mabenhkem: any, base64 = true) {
     const NAM_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'yyyy');
     const THANG_QT = format(new Date(this.toIsoString(thongtin.NGAYLAP)), 'MM');
     let chitietcls = '';
@@ -662,8 +650,8 @@ export class XmlBHYTProcessor {
           mabenh_new += `;${thongtin.MA_BENHKHAC}`;
         }
       }
-      chitietcls += `<MA_BENH>${this.mabenhchinh}</MA_BENH>`;
-      chitietcls += `<MA_BENHKHAC>${this.mabenhkem}</MA_BENHKHAC>`;
+      chitietcls += `<MA_BENH>${mabenhchinh}</MA_BENH>`;
+      chitietcls += `<MA_BENHKHAC>${mabenhkem}</MA_BENHKHAC>`;
       chitietcls += `<NGAY_YL>${format(
         new Date(this.toIsoString(thongtincls[i].NgayGio)),
         this.getFullDateTimeBHYT,
