@@ -248,658 +248,658 @@ export class XmlBHYTService {
   async exec_xml_2_thuoc(idThuTraNo: any) {
     let data = await this.connection.query(
       `DECLARE @id_luotkham INT
-            DECLARE @id_benhannoitru INT
-            DECLARE @id_thutrano INT = @0
+      DECLARE @id_benhannoitru INT
+      DECLARE @id_thutrano INT = @0
 
-            DECLARE @isNoiTru INT
-            DECLARE @MA_LYDO_VVIEN     INT
-            DECLARE @hangbenhvien      INT=(
-                        SELECT HangBenhVienBHYT
-                        FROM   GD2_ThongTinBenhVien
-                    )
+      DECLARE @isNoiTru INT
+      DECLARE @MA_LYDO_VVIEN     INT
+      DECLARE @hangbenhvien      INT=(
+                  SELECT HangBenhVienBHYT
+                  FROM   GD2_ThongTinBenhVien
+              )
 
-            DECLARE @phantramtraituyenloaikham_noitru DECIMAL(18 ,4)=ISNULL(
-                        (
-                            SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNoiTru
-                            FROM   GD2_BHYT_HangBV_PhanTram
-                            WHERE  HangBenhVien = @hangbenhvien
-                        )
-                       ,0
-                    )
+      DECLARE @phantramtraituyenloaikham_noitru DECIMAL(18 ,4)=ISNULL(
+                  (
+                      SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNoiTru
+                      FROM   GD2_BHYT_HangBV_PhanTram
+                      WHERE  HangBenhVien = @hangbenhvien
+                  )
+                 ,0
+              )
 
-            DECLARE @phantramtraituyenloaikham_ngoaitru DECIMAL(18 ,4)=ISNULL(
-                        (
-                            SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNgoaiTru
-                            FROM   GD2_BHYT_HangBV_PhanTram
-                            WHERE  HangBenhVien = @hangbenhvien
-                        )
-                       ,0
-                    )
+      DECLARE @phantramtraituyenloaikham_ngoaitru DECIMAL(18 ,4)=ISNULL(
+                  (
+                      SELECT GD2_BHYT_HangBV_PhanTram.PhanTramBaoHiemTraNgoaiTru
+                      FROM   GD2_BHYT_HangBV_PhanTram
+                      WHERE  HangBenhVien = @hangbenhvien
+                  )
+                 ,0
+              )
 
-            SELECT @id_luotkham = ttt.ID_LuotKham
-                  ,@isNoiTru            = CASE
-                                    WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 0
-                                    ELSE 1
-                               END
-                  ,@MA_LYDO_VVIEN       = ttlk.TrangThaiKham
-                  ,@id_benhannoitru     = ID_BenhAnNoiTru
-            FROM   ThanhToanTong ttt
-                   JOIN ThongTinLuotKham ttlk
-                        ON  ttlk.ID_LuotKham = ttt.ID_LuotKham
-                   LEFT JOIN GD2_BenhAnNoiTru gbant
-                        ON  gbant.ID_LuotKham = ttt.ID_LuotKham
-            WHERE  ttt.ID_ThuTraNo = @id_thutrano
+      SELECT @id_luotkham = ttt.ID_LuotKham
+            ,@isNoiTru            = CASE
+                              WHEN gbant.ID_BenhAnNoiTru IS NULL THEN 0
+                              ELSE 1
+                         END
+            ,@MA_LYDO_VVIEN       = ttlk.TrangThaiKham
+            ,@id_benhannoitru     = ID_BenhAnNoiTru
+      FROM   ThanhToanTong ttt
+             JOIN ThongTinLuotKham ttlk
+                  ON  ttlk.ID_LuotKham = ttt.ID_LuotKham
+             LEFT JOIN GD2_BenhAnNoiTru gbant
+                  ON  gbant.ID_LuotKham = ttt.ID_LuotKham
+      WHERE  ttt.ID_ThuTraNo = @id_thutrano
 
 
-            ;WITH k1 AS(
-                SELECT Thu_TraNo_ChiTiet.*
-                FROM   Thu_TraNo_ChiTiet
-                WHERE  ID_ThuTraNo = @id_thutrano
-            )
-            ,k5 AS (
-                SELECT DonThuocChiTiet.ID_Thuoc  AS id_loai
-                      ,DM_Thuoc.TenBietDuoc      AS ten
-                      ,DM_DonViTinh.TenDonViTinh
-                      ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia) AS dongia
-                       --,DonThuocChiTiet.GiaCungChiTra
-                      ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia)-gdtctmr.Gia_BHYTchitra AS GiaCungChiTra
-                      ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS
-                       soluong
-                      ,MaSoTheoDMBHYT
-                      ,DM_Thuoc.HamLuong_BHYT    AS HamLuong
-                      ,DM_Thuoc.SignNumber
-                      ,MaDuongDung_BHYT          AS MaDD_BHYT
-                      ,ISNULL(
-                           CASE
-                                WHEN DonThuocChiTiet.CachDung='' THEN NULL
-                                ELSE DonThuocChiTiet.CachDung
-                           END
-                          ,dbo.GD2_PhienCachDungThuoc_New(
-                               DonThuocChiTiet.LuongThuocDungTrong1Ngay
-                              ,DonThuocChiTiet.CachDungLieuDung
-                              ,DonThuocChiTiet.ID_Thuoc
-                              ,DonThuocChiTiet.ID_DuongDungThuoc
-                           )
-                       )                         AS CachDung
-                      -- Hưng sửa và bổ sung
-                      ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayKeDon
-                      ----------------------
-                      ,HoatChat_BHYT
-                      ,GD2_DM_NhomThuocBHYT.Phantram
-                      ,4                         AS id_nhombhyt
-                      ,dpb.Makhoa_BHYT
-                      ,CASE
-                WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
-                ELSE DM_NhanVien.SoChungChiHanhNghe
-                       END  SoChungChiHanhNghe
-                      ,DM_Thuoc.ThongTinThauBHYT
-                      ,gdtctmr.Gia_BHYTchitra
-                      ,DM_NhanVien.NickName
-                      ,DonThuocChiTiet.ID_DonThuocCT AS id_kham
-                      ,1 AS IsThuoc
-                      ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
-                      ,gdtctmr.T_BNCCT
-                      ,gdtctmr.MUC_HUONG
-                      ,gdtctmr.TYLE_TT
-                      ,gdtctmr.THANH_TIEN
-                      ,gdtctmr.T_TRANTT
-                      ,gdtctmr.T_BNTT
-                      ,gdtctmr.T_BNCCT T_BNCCT_2
-                      ,gdtctmr.T_BHTT
+      ;WITH k1 AS(
+          SELECT Thu_TraNo_ChiTiet.*
+          FROM   Thu_TraNo_ChiTiet
+          WHERE  ID_ThuTraNo = @id_thutrano
+      )
+      ,k5 AS (
+          SELECT DonThuocChiTiet.ID_Thuoc  AS id_loai
+                ,DM_Thuoc.TenBietDuoc      AS ten
+                ,DM_DonViTinh.TenDonViTinh
+                ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia) AS dongia
+                 --,DonThuocChiTiet.GiaCungChiTra
+                ,ISNULL(gdtctmr.GiaBHYT ,DonThuocChiTiet.Gia)-gdtctmr.Gia_BHYTchitra AS GiaCungChiTra
+                ,SoThuocThucXuat-dbo.[GD2_LaySoLuongThuocTraLaiNoiTru](DonThuocChiTiet.ID_Thuoc ,DonThuocChiTiet.ID_DonThuoc) AS
+                 soluong
+                ,MaSoTheoDMBHYT
+                ,DM_Thuoc.HamLuong_BHYT    AS HamLuong
+                ,DM_Thuoc.SignNumber
+                ,MaDuongDung_BHYT          AS MaDD_BHYT
+                ,ISNULL(
+                     CASE
+                          WHEN DonThuocChiTiet.CachDung='' THEN NULL
+                          ELSE DonThuocChiTiet.CachDung
+                     END
+                    ,dbo.GD2_PhienCachDungThuoc_New(
+                         DonThuocChiTiet.LuongThuocDungTrong1Ngay
+                        ,DonThuocChiTiet.CachDungLieuDung
+                        ,DonThuocChiTiet.ID_Thuoc
+                        ,DonThuocChiTiet.ID_DuongDungThuoc
+                     )
+                 )                         AS CachDung
+                -- Hưng sửa và bổ sung
+                ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END NgayKeDon
+                ----------------------
+                ,HoatChat_BHYT
+                ,GD2_DM_NhomThuocBHYT.Phantram
+                ,4                         AS id_nhombhyt
+                ,dpb.Makhoa_BHYT
+                ,CASE
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+          ELSE DM_NhanVien.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
+                ,DM_Thuoc.ThongTinThauBHYT
+                ,gdtctmr.Gia_BHYTchitra
+                ,DM_NhanVien.NickName
+                ,DonThuocChiTiet.ID_DonThuocCT AS id_kham
+                ,1 AS IsThuoc
+                ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
+                ,gdtctmr.T_BNCCT
+                ,gdtctmr.MUC_HUONG
+                ,gdtctmr.TYLE_TT
+                ,gdtctmr.THANH_TIEN
+                ,gdtctmr.T_TRANTT
+                ,gdtctmr.T_BNTT
+                ,gdtctmr.T_BNCCT T_BNCCT_2
+                ,gdtctmr.T_BHTT
 
-                FROM   DonThuoc
-                       LEFT JOIN GD2_BenhAnNoiTru gbant
-                            ON  gbant.ID_LuotKham = DonThuoc.ID_LuotKham
-                       JOIN k1
-                            ON  DonThuoc.ID_DonThuoc = k1.ID_DonThuoc
-                       JOIN DonThuocChiTiet
-                            ON  DonThuocChiTiet.ID_DonThuoc = DonThuoc.ID_DonThuoc
-                       JOIN DM_Thuoc
-                            ON  DonThuocChiTiet.ID_Thuoc = DM_Thuoc.ID_Thuoc
-                       JOIN DM_DonViTinh
-                            ON  DM_Thuoc.ID_DonViTinh = DM_DonViTinh.ID_DonViTinh
-                       JOIN DM_DuongDung ddd
-                            ON  ddd.ID_DuongDung = DonThuocChiTiet.ID_DuongDungThuoc
-                       LEFT JOIN GD2_DM_NhomThuocBHYT
-                            ON  GD2_DM_NhomThuocBHYT.ID_NhomThuocBHYT = DM_Thuoc.ID_NhomBHYT
-                       LEFT JOIN DM_PhongBan dpb
-                            ON  DonThuoc.ID_PhongBan = dpb.ID_PhongBan
-                       -- Hưng sửa và bổ sung
-                       LEFT JOIN GD2_ToDieuTriChiTiet gtdtct
-                            ON  gtdtct.ID_DonThuoc = DonThuoc.ID_DonThuoc
-                       LEFT JOIN DM_NhanVien
-                            ON  ID_NhanVien = ( CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.ID_NguoiHoanTat ELSE DonThuoc.ID_BacSiChoToa END )
-                       ----------------------
-                       LEFT JOIN Kham
-                            ON  Kham.ID_Kham = DonThuoc.ID_Kham
-                       LEFT JOIN GD2_DonThuocChiTietMoRong gdtctmr
-                            ON  gdtctmr.ID_DonThuocChiTiet = DonThuocChiTiet.ID_DonThuocCT
-                       OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-                    -- Hưng sửa và bổ sung
-                    -- DonThuoc.ID_BacSiChoToa
-                    CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.ID_NguoiHoanTat ELSE DonThuoc.ID_BacSiChoToa END
-                    --,DonThuoc.NgayKeDon
-                    ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END
-                    ----------------------
-                    ,CASE
-                         WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_LoaiKham
-                         ELSE 10346
-                    END
-                )                                   GD2_BacSiDaiDien_GET
-                WHERE  (
-                           DonThuoc.TrangThaiDonThuoc<>'Cancel'
-                           OR TrangThaiDonThuoc IS NULL
-                       )
-                       AND DonThuocChiTiet.IsBhyt = 1
-                       AND DonThuocChiTiet.SoThuocThucXuat<>0
-                       AND DonThuoc.ToaChinh = 1
-                       AND DM_Thuoc.LaThuoc = 1
-            )
-            ,k13 AS (
-                SELECT k5.id_loai
-                      ,k5.ten
-                      ,k5.TenDonViTinh        AS TenDonViTinh
-                       --,case when Phantram IS null then dongia else   dongia*(isnull(Phantram,100)/100) end dongia
-                      ,dongia
-                      ,soluong
-                      ,NgayKeDon
-                      ,MaSoTheoDMBHYT
-                      ,HamLuong
-                      ,SignNumber
-                      ,MaDD_BHYT
-                      ,CachDung
-                       --,case when Phantram IS null then GiaCungChiTra else   dongia*(isnull(Phantram,100)/100)-GiaCungChiTra end GiaCungChiTra
-                      ,GiaCungChiTra
-                      ,dongia*soluong            --*(isnull(Phantram,100)/100.0)
-                       AS thanhtien
-                      ,(dongia-GiaCungChiTra)*soluong AS ThanhTienBaoHiem
-                      ,HoatChat_BHYT
-                      ,ISNULL(Phantram ,100)     phantramchitra
-                       --,100 as phantramchitra
-                      ,id_nhombhyt
-                      ,Makhoa_BHYT
-                      ,SoChungChiHanhNghe
-                      ,ThongTinThauBHYT
-                      ,NickName
-                      ,ID_Kham
-                      ,1                      AS IsThuoc
-                      ,Nickname_BacSiLamDaiDien
-                      ,T_BNCCT
-                      ,Gia_BHYTchitra
-                      ,k5.MUC_HUONG
-                      ,k5.TYLE_TT
-                      ,k5.THANH_TIEN
-                      ,k5.T_TRANTT
-                      ,k5.T_BNTT
-                      ,k5.T_BNCCT_2
-                      ,k5.T_BHTT
-                FROM   k5
-            )
-            ,mau AS
-            (
-                SELECT DM_LoaiKham.ID_LoaiKham
-                      ,TenBHYT
-                      ,N'Bịch'             AS TenDonViTinh
-                      ,Kham.GiaBaoHiem
-                      ,1                   AS soluong
-                      ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
-                      ,MaSoTheoDVBHYT
-                      ,DM_LoaiKham.GhiChu  AS hamluong
-                      ,STT_BHYT            AS singnumber
-                      ,'2.10'              AS madd_bhyt
-                      ,''                  AS cachdung
-                      ,Kham.GiaBaoHiem-Kham.ThanhTienBaoHiem AS GiaCungChiTra
-                      ,Kham.GiaBaoHiem     AS thanhtien
-                      ,Kham.ThanhTienBaoHiem
-                      ,''                  AS HoatChat_BHYT
-                      ,100                 AS phantramchitra
-                      ,gdb.ID_BHYT         AS id_nhombhyt
-                      ,''                  AS Makhoa_BHYT
+          FROM   DonThuoc
+                 LEFT JOIN GD2_BenhAnNoiTru gbant
+                      ON  gbant.ID_LuotKham = DonThuoc.ID_LuotKham
+                 JOIN k1
+                      ON  DonThuoc.ID_DonThuoc = k1.ID_DonThuoc
+                 JOIN DonThuocChiTiet
+                      ON  DonThuocChiTiet.ID_DonThuoc = DonThuoc.ID_DonThuoc
+                 JOIN DM_Thuoc
+                      ON  DonThuocChiTiet.ID_Thuoc = DM_Thuoc.ID_Thuoc
+                 JOIN DM_DonViTinh
+                      ON  DM_Thuoc.ID_DonViTinh = DM_DonViTinh.ID_DonViTinh
+                 JOIN DM_DuongDung ddd
+                      ON  ddd.ID_DuongDung = DonThuocChiTiet.ID_DuongDungThuoc
+                 LEFT JOIN GD2_DM_NhomThuocBHYT
+                      ON  GD2_DM_NhomThuocBHYT.ID_NhomThuocBHYT = DM_Thuoc.ID_NhomBHYT
+                 LEFT JOIN DM_PhongBan dpb
+                      ON  DonThuoc.ID_PhongBan = dpb.ID_PhongBan
+                 -- Hưng sửa và bổ sung
+                 LEFT JOIN GD2_ToDieuTriChiTiet gtdtct
+                      ON  gtdtct.ID_DonThuoc = DonThuoc.ID_DonThuoc
+                 LEFT JOIN DM_NhanVien
+                      ON  ID_NhanVien = ( CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.ID_NguoiHoanTat ELSE DonThuoc.ID_BacSiChoToa END )
+                 ----------------------
+                 LEFT JOIN Kham
+                      ON  Kham.ID_Kham = DonThuoc.ID_Kham
+                 LEFT JOIN GD2_DonThuocChiTietMoRong gdtctmr
+                      ON  gdtctmr.ID_DonThuocChiTiet = DonThuocChiTiet.ID_DonThuocCT
+                 OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
+              -- Hưng sửa và bổ sung
+              -- DonThuoc.ID_BacSiChoToa
+              CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.ID_NguoiHoanTat ELSE DonThuoc.ID_BacSiChoToa END
+              --,DonThuoc.NgayKeDon
+              ,CASE WHEN gbant.ID_BenhAnNoiTru IS NOT NULL THEN gtdtct.NgayGioHieuLuc ELSE DonThuoc.NgayKeDon END
+              ----------------------
+              ,CASE
+                   WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_LoaiKham
+                   ELSE 10346
+              END
+          )                                   GD2_BacSiDaiDien_GET
+          WHERE  (
+                     DonThuoc.TrangThaiDonThuoc<>'Cancel'
+                     OR TrangThaiDonThuoc IS NULL
+                 )
+                 AND DonThuocChiTiet.IsBhyt = 1
+                 AND DonThuocChiTiet.SoThuocThucXuat<>0
+                 AND DonThuoc.ToaChinh = 1
+                 AND DM_Thuoc.LaThuoc = 1
+      )
+      ,k13 AS (
+          SELECT k5.id_loai
+                ,k5.ten
+                ,k5.TenDonViTinh        AS TenDonViTinh
+                 --,case when Phantram IS null then dongia else   dongia*(isnull(Phantram,100)/100) end dongia
+                ,dongia
+                ,soluong
+                ,NgayKeDon
+                ,MaSoTheoDMBHYT
+                ,HamLuong
+                ,SignNumber
+                ,MaDD_BHYT
+                ,CachDung
+                 --,case when Phantram IS null then GiaCungChiTra else   dongia*(isnull(Phantram,100)/100)-GiaCungChiTra end GiaCungChiTra
+                ,GiaCungChiTra
+                ,dongia*soluong            --*(isnull(Phantram,100)/100.0)
+                 AS thanhtien
+                ,(dongia-GiaCungChiTra)*soluong AS ThanhTienBaoHiem
+                ,HoatChat_BHYT
+                ,ISNULL(Phantram ,100)     phantramchitra
+                 --,100 as phantramchitra
+                ,id_nhombhyt
+                ,Makhoa_BHYT
+                ,SoChungChiHanhNghe
+                ,ThongTinThauBHYT
+                ,NickName
+                ,ID_Kham
+                ,1                      AS IsThuoc
+                ,Nickname_BacSiLamDaiDien
+                ,T_BNCCT
+                ,Gia_BHYTchitra
+                ,k5.MUC_HUONG
+                ,k5.TYLE_TT
+                ,k5.THANH_TIEN
+                ,k5.T_TRANTT
+                ,k5.T_BNTT
+                ,k5.T_BNCCT_2
+                ,k5.T_BHTT
+          FROM   k5
+      )
+      ,mau AS
+      (
+          SELECT DM_LoaiKham.ID_LoaiKham
+                ,TenBHYT
+                ,N'Bịch'             AS TenDonViTinh
+                ,Kham.GiaBaoHiem
+                ,1                   AS soluong
+                ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
+                ,MaSoTheoDVBHYT
+                ,DM_LoaiKham.GhiChu  AS hamluong
+                ,STT_BHYT            AS singnumber
+                ,'2.10'              AS madd_bhyt
+                ,''                  AS cachdung
+                ,Kham.GiaBaoHiem-Kham.ThanhTienBaoHiem AS GiaCungChiTra
+                ,Kham.GiaBaoHiem     AS thanhtien
+                ,Kham.ThanhTienBaoHiem
+                ,''                  AS HoatChat_BHYT
+                ,100                 AS phantramchitra
+                ,gdb.ID_BHYT         AS id_nhombhyt
+                ,''                  AS Makhoa_BHYT
+       ,CASE
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+          ELSE DM_NhanVien.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
+         ,'' AS ThongTinThauBHYT
+         ,NickName
+         ,GD2_ToDieuTriChiTiet.ID_NguoiHoanTat AS ID_Kham
+         ,0 AS IsThuoc
+         ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
+         ,GD2_CanLamSang_BHYT.T_BNCCT AS T_BNCCT
+         ,0 AS Gia_BHYTchitra
+         ,GD2_CanLamSang_BHYT.MUC_HUONG
+         ,GD2_CanLamSang_BHYT.TYLE_TT
+         ,GD2_CanLamSang_BHYT.THANH_TIEN
+         ,NULL T_TRANTT
+         ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
+         ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
+         ,NULL T_BHTT
+
+          FROM Kham
+          LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
+          JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
+          JOIN GD2_DMNHOM_BHYT gdb ON gdb.ID_Nhom_BHYT=DM_LoaiKham.ID_Nhom_BHYT
+          JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.Id_Kham=Kham.Id_Kham
+          JOIN GD2_ToDieuTriChiTiet ON GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet=
+          GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
+          LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.Id_Kham=Kham.Id_Kham
+          LEFT JOIN DM_NhanVien ON DM_NhanVien.ID_NhanVien=GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+          OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
+              GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+             ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
              ,CASE
-                WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
-                ELSE DM_NhanVien.SoChungChiHanhNghe
-                       END  SoChungChiHanhNghe
-               ,'' AS ThongTinThauBHYT
-               ,NickName
-               ,GD2_ToDieuTriChiTiet.ID_NguoiHoanTat AS ID_Kham
-               ,0 AS IsThuoc
-               ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
-               ,GD2_CanLamSang_BHYT.T_BNCCT AS T_BNCCT
-               ,0 AS Gia_BHYTchitra
-               ,GD2_CanLamSang_BHYT.MUC_HUONG
-               ,GD2_CanLamSang_BHYT.TYLE_TT
-               ,GD2_CanLamSang_BHYT.THANH_TIEN
-               ,NULL T_TRANTT
-               ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
-               ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
-               ,NULL T_BHTT
-
-                FROM Kham
-                LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
-                JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
-                JOIN GD2_DMNHOM_BHYT gdb ON gdb.ID_Nhom_BHYT=DM_LoaiKham.ID_Nhom_BHYT
-                JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.Id_Kham=Kham.Id_Kham
-                JOIN GD2_ToDieuTriChiTiet ON GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet=
-                GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
-                LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.Id_Kham=Kham.Id_Kham
-                LEFT JOIN DM_NhanVien ON DM_NhanVien.ID_NhanVien=GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-                    GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                   ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
-                   ,CASE
-                WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+          WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+        END
+          )GD2_BacSiDaiDien_GET
+          WHERE ID_LuotKham=@id_luotkham
+          AND gdb.ID_BHYT=7
+          AND HuyChiDinhChiTiet.ID_Kham IS NULL
+          AND Kham.Isbhyt=1
+          AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
+      )
+      ,oxi AS
+      (
+          SELECT DM_LoaiKham.ID_LoaiKham
+                ,TenBHYT
+                ,N'Bịch'             AS TenDonViTinh
+                ,dtph.GiaBaoHiem
+                ,(dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0) AS soluong
+                ,ISNULL(GD2_ToDieuTriChiTiet.NgayGioHieuLuc ,dtph.NgayGioTao)NgayGioHieuLuc
+                ,MaSoTheoDVBHYT
+                ,DM_LoaiKham.GhiChu  AS hamluong
+                ,STT_BHYT            AS singnumber
+                ,''                  AS madd_bhyt
+                ,''                  AS cachdung
+                ,(
+                     (dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0)
+                 )*dtph.GiaBaoHiem-dtph.ThanhTienBaoHiem AS GiaCungChiTra
+                ,(
+                     (dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0)
+                 )*dtph.GiaBaoHiem   AS thanhtien
+                ,dtph.ThanhTienBaoHiem
+                ,''                  AS HoatChat_BHYT
+                ,100                 AS phantramchitra
+                ,4                   AS id_nhombhyt
+                ,''                  AS Makhoa_BHYT
+                ,nv1.SoChungChiHanhNghe
+                ,LoiKhuyen           AS ThongTinThauBHYT
+                ,nv1.NickName
+                ,CASE
+                      WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
+                      ELSE 10346
+                 END                    ID_Kham
+                ,0                   AS IsThuoc
+                ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
+                ,GD2_CanLamSang_BHYT.T_BNCCT    AS T_BNCCT
+                ,0                   AS Gia_BHYTchitra
+                ,GD2_CanLamSang_BHYT.MUC_HUONG
+                ,GD2_CanLamSang_BHYT.TYLE_TT
+                ,GD2_CanLamSang_BHYT.THANH_TIEN
+                ,NULL                   T_TRANTT
+                ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
+                ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
+                ,NULL T_BHTT
+          FROM   Kham
+                 JOIN DieuTriPhoiHop dtph
+                      ON  dtph.ID_Kham = Kham.ID_Kham
+                 LEFT JOIN GD2_CanLamSang_BHYT
+                      ON  dtph.ID_DieuTriPhoiHop = GD2_CanLamSang_BHYT.ID_DieuTriPhoiHop
+                 JOIN DM_LoaiKham
+                      ON  dtph.ID_LoaiKham = DM_LoaiKham.ID_LoaiKham
+                 JOIN GD2_DMNHOM_BHYT gdb
+                      ON  gdb.ID_Nhom_BHYT = DM_LoaiKham.ID_Nhom_BHYT
+                 LEFT JOIN GD2_ToDieuTriChiTietKham
+                      ON  GD2_ToDieuTriChiTietKham.ID_DieuTriPhoiHop = dtph.ID_DieuTriPhoiHop
+                 LEFT JOIN GD2_ToDieuTriChiTiet
+                      ON  GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet = GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
+                 LEFT JOIN HuyChiDinhChiTiet
+                      ON  HuyChiDinhChiTiet.ID_DieuTriPhoiHop = dtph.ID_DieuTriPhoiHop
+                 LEFT JOIN DM_NhanVien
+                      ON  DM_NhanVien.ID_NhanVien = GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+                 LEFT JOIN DM_NhanVien nv1
+                      ON  nv1.ID_NhanVien = dtph.ID_BacSiChanDoan
+                 OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
+              CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+                   ELSE dtph.ID_BacSiChanDoan
               END
-                )GD2_BacSiDaiDien_GET
-                WHERE ID_LuotKham=@id_luotkham
-                AND gdb.ID_BHYT=7
-                AND HuyChiDinhChiTiet.ID_Kham IS NULL
-                AND Kham.Isbhyt=1
-                AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
-            )
-            ,oxi AS
-            (
-                SELECT DM_LoaiKham.ID_LoaiKham
-                      ,TenBHYT
-                      ,N'Bịch'             AS TenDonViTinh
-                      ,dtph.GiaBaoHiem
-                      ,(dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0) AS soluong
-                      ,ISNULL(GD2_ToDieuTriChiTiet.NgayGioHieuLuc ,dtph.NgayGioTao)NgayGioHieuLuc
-                      ,MaSoTheoDVBHYT
-                      ,DM_LoaiKham.GhiChu  AS hamluong
-                      ,STT_BHYT            AS singnumber
-                      ,''                  AS madd_bhyt
-                      ,''                  AS cachdung
-                      ,(
-                           (dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0)
-                       )*dtph.GiaBaoHiem-dtph.ThanhTienBaoHiem AS GiaCungChiTra
-                      ,(
-                           (dtph.SoLanThucHienTrongNgay*dtph.SoNgayThucHien)-ISNULL(HuyChiDinhChiTiet.SoLanTraLai ,0)
-                       )*dtph.GiaBaoHiem   AS thanhtien
-                      ,dtph.ThanhTienBaoHiem
-                      ,''                  AS HoatChat_BHYT
-                      ,100                 AS phantramchitra
-                      ,4                   AS id_nhombhyt
-                      ,''                  AS Makhoa_BHYT
-                      ,nv1.SoChungChiHanhNghe
-                      ,LoiKhuyen           AS ThongTinThauBHYT
-                      ,nv1.NickName
-                      ,CASE
-                            WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
-                            ELSE 10346
-                       END                    ID_Kham
-                      ,0                   AS IsThuoc
-                      ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
-                      ,GD2_CanLamSang_BHYT.T_BNCCT    AS T_BNCCT
-                      ,0                   AS Gia_BHYTchitra
-                      ,GD2_CanLamSang_BHYT.MUC_HUONG
-                      ,GD2_CanLamSang_BHYT.TYLE_TT
-                      ,GD2_CanLamSang_BHYT.THANH_TIEN
-                      ,NULL                   T_TRANTT
-                      ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
-                      ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
-                      ,NULL T_BHTT
-                FROM   Kham
-                       JOIN DieuTriPhoiHop dtph
-                            ON  dtph.ID_Kham = Kham.ID_Kham
-                       LEFT JOIN GD2_CanLamSang_BHYT
-                            ON  dtph.ID_DieuTriPhoiHop = GD2_CanLamSang_BHYT.ID_DieuTriPhoiHop
-                       JOIN DM_LoaiKham
-                            ON  dtph.ID_LoaiKham = DM_LoaiKham.ID_LoaiKham
-                       JOIN GD2_DMNHOM_BHYT gdb
-                            ON  gdb.ID_Nhom_BHYT = DM_LoaiKham.ID_Nhom_BHYT
-                       LEFT JOIN GD2_ToDieuTriChiTietKham
-                            ON  GD2_ToDieuTriChiTietKham.ID_DieuTriPhoiHop = dtph.ID_DieuTriPhoiHop
-                       LEFT JOIN GD2_ToDieuTriChiTiet
-                            ON  GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet = GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
-                       LEFT JOIN HuyChiDinhChiTiet
-                            ON  HuyChiDinhChiTiet.ID_DieuTriPhoiHop = dtph.ID_DieuTriPhoiHop
-                       LEFT JOIN DM_NhanVien
-                            ON  DM_NhanVien.ID_NhanVien = GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                       LEFT JOIN DM_NhanVien nv1
-                            ON  nv1.ID_NhanVien = dtph.ID_BacSiChanDoan
-                       OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-                    CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                         ELSE dtph.ID_BacSiChanDoan
-                    END
-                   ,CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
-                         ELSE dtph.NgayGioTao
-                    END
-                   ,CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN
-                CASE
-                  WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
-                END
-               ELSE DM_LoaiKham.ID_LoaiKham
-                    END
-                )                             GD2_BacSiDaiDien_GET
-                WHERE  ID_LuotKham = @id_luotkham
-                       AND gdb.ID_BHYT = 4
-                       AND HuyChiDinhChiTiet.ID_Kham IS NULL
-                       AND dtph.Isbhyt = 1
-                       AND (kham.ExtField1='DieuTriPhoiHop')
-                       AND (dtph.ID_TrangThai<>'HuyBo' OR dtph.ID_TrangThai IS NULL)
-            )
-
-            ,THuoc_kham AS
-            (
-                SELECT DM_LoaiKham.ID_LoaiKham
-                      ,TenBHYT
-                      ,N'Lọ'                   AS TenDonViTinh
-                      ,Kham.GiaBaoHiem
-                      ,1                       AS soluong
-                      ,ISNULL(GD2_ToDieuTriChiTiet.NgayGioHieuLuc ,Kham.NgayGioTao)NgayGioHieuLuc
-                      ,MaSoTheoDVBHYT
-                      ,DM_LoaiKham.GhiChu      AS hamluong
-                      ,STT_BHYT                AS singnumber
-                      ,'2.10'                  AS madd_bhyt
-                      ,DM_LoaiKham.ReportName  AS cachdung
-                      ,Kham.GiaBaoHiem-Kham.ThanhTienBaoHiem AS GiaCungChiTra
-                      ,Kham.GiaBaoHiem         AS thanhtien
-                      ,CASE
-                            WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2680411 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2647166 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2724337 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2733264 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2735929 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2733284 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2706601 THEN 230422.5
-                    WHEN DM_LoaiKham.ID_LoaiKham=10718
-                AND @id_thutrano=2702683 THEN 230422.5
-
-
-
-
-
-
-                    ELSE Kham.ThanhTienBaoHiem
-                    END ThanhTienBaoHiem
-               ,'' AS HoatChat_BHYT
-               ,100 AS phantramchitra
-               ,4 AS id_nhombhyt
-               ,'' AS Makhoa_BHYT
-           ,CASE
-                WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE DM_NhanVien.SoChungChiHanhNghe
-                       END  SoChungChiHanhNghe
-               ,LoiKhuyen AS ThongTinThauBHYT
-               ,nv1.NickName
-               ,CASE
-                     WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
-                     ELSE 10346
-                END ID_Kham
-               ,1 AS IsThuoc
-               ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
-               ,Kham.GiaBaoHiem-ThanhTienBaoHiem AS T_BNCCT
-               ,0 AS Gia_BHYTchitra
-               ,GD2_CanLamSang_BHYT.MUC_HUONG
-               ,GD2_CanLamSang_BHYT.TYLE_TT
-               ,GD2_CanLamSang_BHYT.THANH_TIEN
-               ,NULL T_TRANTT
-               ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
-               ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
-               ,NULL T_BHTT
-
-                FROM Kham
-                LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
-                JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
-                JOIN GD2_DMNHOM_BHYT gdb ON gdb.ID_Nhom_BHYT=DM_LoaiKham.ID_Nhom_BHYT
-                LEFT JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.ID_Kham=Kham.ID_Kham
-                LEFT JOIN GD2_ToDieuTriChiTiet ON GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet=
-                GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
-                LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.ID_Kham=Kham.ID_Kham
-                LEFT JOIN DM_NhanVien ON DM_NhanVien.ID_NhanVien=GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                LEFT JOIN DM_NhanVien nv1 ON nv1.ID_NhanVien=Kham.BSChiDinh
-                OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
-                    CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
-                         ELSE Kham.BSChiDinh
-                    END
-                   ,CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
-                         ELSE Kham.NgayGioTao
-                    END
-                   ,CASE
-                         WHEN @id_benhannoitru IS NOT NULL THEN
-                CASE
-                  WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
-                END
-               ELSE DM_LoaiKham.ID_LoaiKham
-                    END
-                )GD2_BacSiDaiDien_GET
-
-
-                WHERE ID_LuotKham=@id_luotkham
-                AND gdb.ID_BHYT=4
-                AND HuyChiDinhChiTiet.ID_Kham IS NULL
-                AND Kham.Isbhyt=1
-                    --AND (kham.ExtField1<>'DieuTriPhoiHop')
-                AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
-            )
-            ,k14 AS(
-                SELECT k13.*
-                FROM   k13
-                UNION ALL
-                SELECT *
-                FROM   mau
-                UNION ALL
-                SELECT *
-                FROM   oxi
-                UNION ALL
-                SELECT *
-                FROM   THuoc_kham
-            )
-
-            --INSERT INTO @Thuoc
-            SELECT id_loai id_loai
-        ,ten ten
-        ,TenDonViTinh TenDonViTinh
-        ,dongia dongia
-        ,soluong soluong
-        ,NgayKeDon NgayKeDon
-        ,MaSoTheoDMBHYT MaSoTheoDMBHYT
-        ,HamLuong HamLuong
-        ,SignNumber SignNumber
-        ,MaDD_BHYT MaDD_BHYT
-        ,CachDung CachDung
-        ,GiaCungChiTra GiaCungChiTra
-        ,CASE
-              WHEN THANH_TIEN IS NOT NULL THEN THANH_TIEN
-              ELSE thanhtien
-        END                     thanhtien
-        ,thanhtien               thanhtien_2
-        ,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)ThanhTienBaoHiem
-        ,HoatChat_BHYT HoatChat_BHYT
-        ,phantramchitra phantramchitra
-        ,id_nhombhyt id_nhombhyt
-        ,Makhoa_BHYT Makhoa_BHYT
-        ,SoChungChiHanhNghe SoChungChiHanhNghe
-        ,ThongTinThauBHYT ThongTinThauBHYT
-        ,NickName NickName
-        ,ID_Kham
-        --,((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100 AS MUC_HUONG ID_Kham
-        ,CASE
-              WHEN MUC_HUONG IS NOT NULL THEN MUC_HUONG
-              ELSE ((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100
-        END                     MUC_HUONG
-        ,CASE
-              WHEN TYLE_TT IS NOT NULL THEN TYLE_TT
-              ELSE phantramchitra
-        END                     TYLE_TT
-        ,CASE
-              WHEN T_TRANTT IS NOT NULL THEN T_TRANTT
-              ELSE thanhtien
-        END                    T_TRANTT
-        --,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem) AS T_BHTT T_TRANTT
-        ,CASE
-        WHEN T_BHTT IS NOT NULL THEN T_BHTT ELSE CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
-        END  T_BHTT
-        ,Makhoa_BHYT         AS  MA_KHOA
-        ,SoChungChiHanhNghe  AS  MA_BAC_SI
-        ,ThongTinThauBHYT    AS  TT_THAU
-        ,CASE
-              WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 455000.000
-              WHEN id_loai=4881 AND @id_thutrano=2133167 THEN 455000.000
-              WHEN id_loai=4881 AND @id_thutrano=2165147 THEN 455000.0000
-              WHEN id_loai=4881 AND @id_thutrano=2135342 THEN 455000.0000
-              WHEN id_loai=4881 AND @id_thutrano=2225883 THEN 455000.0000
-              WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*((100.0-@phantramtraituyenloaikham_noitru)/100.0)
-              WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=0 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0) --không có trường hợp này
-              WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN<>3 THEN thanhtien*((100.0-phantramchitra)/100.0)
-              WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN=3 THEN thanhtien-ThanhTienBaoHiem
-
-                  --WHEN ThanhTienBaoHiem/(dongia*soluong)*100<>100 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0
-              ELSE 0
-        END                     T_BNTT
-        ,CASE
-        WHEN T_BNCCT_2 IS NOT NULL THEN T_BNCCT_2 ELSE
-        CASE
-          WHEN (id_loai=10718) AND @id_thutrano=2680411 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2647166 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2724337 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2733264 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2735929 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2733284 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2706601 THEN 12127.5
-          WHEN (id_loai=10718) AND @id_thutrano=2702683 THEN 12127.5
-          WHEN (id_loai=10718) THEN thanhtien-CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
-          WHEN T_BNCCT IS NOT NULL AND (id_loai<>10505) THEN T_BNCCT
-          ELSE CASE
-                WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 9750.0000
-                WHEN id_loai=4881 AND @id_thutrano=2029771 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2012070 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=1997760 THEN 16250.0000
-                WHEN id_loai=4881 AND @id_thutrano=2063503 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2121181 THEN 16250.0000
-                WHEN id_loai=4881 AND @id_thutrano=2133167 THEN 39000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2165147 THEN 39000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2135342 THEN 9750.0000
-                WHEN id_loai=4881 AND @id_thutrano=2167160 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2204891 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2149264 THEN 16250.0000
-                WHEN id_loai=4881 AND @id_thutrano=2209778 THEN 65000.0000
-                WHEN id_loai=4881 AND @id_thutrano=2225883 THEN 39000.0000
-                WHEN id_loai=2922 AND @id_thutrano=2299317 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2347061 THEN 22400.0000
-                WHEN id_loai=4881 AND @id_thutrano=2292471 THEN 65000.0000
-                WHEN id_loai=5807 AND @id_thutrano=2393637 THEN 166600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2412242 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2411996 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2411996 AND soluong=3 THEN 33600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2402443 THEN 22400.0000
-                WHEN id_loai=5807 AND @id_thutrano=2409483 THEN 83300.0000
-                WHEN id_loai=2922 AND @id_thutrano=2396053 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2396053 AND soluong=3 THEN 33600.0000
-                WHEN id_loai=5807 AND @id_thutrano=2359571 AND soluong=1 THEN 83300.0000
-                WHEN id_loai=5807 AND @id_thutrano=2359571 AND soluong=2 THEN 166600.0000
-                WHEN id_loai=4881 AND @id_thutrano=2359571 THEN 65000.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 11200.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=3 THEN 33600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2460644 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2461058 THEN 5600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2459671 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=1 THEN 11200.0000
-                WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=3 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2459671 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2461058 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2460164 AND soluong=3 THEN 33600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2460644 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2426439 AND soluong=3 THEN 33600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2426439 AND soluong=1 THEN 11200.0000
-                WHEN id_loai=2922 AND @id_thutrano=2454078 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2445310 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=1 THEN 11200.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 11200.0000
-                WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2415440 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=2922 AND @id_thutrano=2413851 AND soluong=2 THEN 22400.0000
-                WHEN id_loai=5807 AND @id_thutrano=2413851 AND soluong=2 THEN 166600.0000
-                WHEN id_loai=5807 AND @id_thutrano=2413851 AND soluong=2 THEN 166600.0000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=3 THEN 27751.5000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=1 THEN 9250.5000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=2 THEN 18501.0000
-                WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=3 THEN 27751.5000
-                WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*(@phantramtraituyenloaikham_noitru/100.00)
-                  -ThanhTienBaoHiem
-                WHEN phantramchitra=80 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*(@phantramtraituyenloaikham_noitru/100.00)
-                  -ThanhTienBaoHiem
-                WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=0 THEN thanhtien*(@phantramtraituyenloaikham_ngoaitru/100.00)
-                  -ThanhTienBaoHiem --không có trường hợp này
-                WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN<>3 THEN 0.000
-                WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN=3 THEN 0
-                ELSE thanhtien*1.000-ThanhTienBaoHiem*1.000
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
+                   ELSE dtph.NgayGioTao
               END
-            END
-        END                     T_BNCCT
-        ,IsThuoc IsThuoc
-        ,Nickname_BacSiLamDaiDien Nickname_BacSiLamDaiDien
-        ,T_BNCCT T_BNCCTam
-        ,Gia_BHYTchitra Gia_BHYTchitra
-        ,MUC_HUONG               MUC_HUONG_2
-        ,TYLE_TT                 TYLE_TT_2
-        ,THANH_TIEN              THANH_TIEN_2
-        ,T_TRANTT               T_TRANTT_2
-        ,T_BNTT   T_BNTT_2
-        ,T_BNCCT_2 T_BNCCT_2
-        ,T_BHTT T_BHTT_2
-            FROM   k14
-            WHERE  soluong<>0`,
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN
+          CASE
+            WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+          END
+         ELSE DM_LoaiKham.ID_LoaiKham
+              END
+          )                             GD2_BacSiDaiDien_GET
+          WHERE  ID_LuotKham = @id_luotkham
+                 AND gdb.ID_BHYT = 4
+                 AND HuyChiDinhChiTiet.ID_Kham IS NULL
+                 AND dtph.Isbhyt = 1
+                 AND (kham.ExtField1='DieuTriPhoiHop')
+                 AND (dtph.ID_TrangThai<>'HuyBo' OR dtph.ID_TrangThai IS NULL)
+      )
+
+      ,THuoc_kham AS
+      (
+          SELECT DM_LoaiKham.ID_LoaiKham
+                ,TenBHYT
+                ,N'Lọ'                   AS TenDonViTinh
+                ,Kham.GiaBaoHiem
+                ,1                       AS soluong
+                ,ISNULL(GD2_ToDieuTriChiTiet.NgayGioHieuLuc ,Kham.NgayGioTao)NgayGioHieuLuc
+                ,MaSoTheoDVBHYT
+                ,DM_LoaiKham.GhiChu      AS hamluong
+                ,STT_BHYT                AS singnumber
+                ,'2.10'                  AS madd_bhyt
+                ,DM_LoaiKham.ReportName  AS cachdung
+                ,Kham.GiaBaoHiem-Kham.ThanhTienBaoHiem AS GiaCungChiTra
+                ,Kham.GiaBaoHiem         AS thanhtien
+                ,CASE
+                      WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2680411 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2647166 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2724337 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2733264 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2735929 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2733284 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2706601 THEN 230422.5
+              WHEN DM_LoaiKham.ID_LoaiKham=10718
+          AND @id_thutrano=2702683 THEN 230422.5
+
+
+
+
+
+
+              ELSE Kham.ThanhTienBaoHiem
+              END ThanhTienBaoHiem
+         ,'' AS HoatChat_BHYT
+         ,100 AS phantramchitra
+         ,4 AS id_nhombhyt
+         ,'' AS Makhoa_BHYT
+     ,CASE
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE nv1.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
+         ,LoiKhuyen AS ThongTinThauBHYT
+         ,nv1.NickName
+         ,CASE
+               WHEN kham.ID_LoaiKham IS NOT NULL THEN kham.ID_Kham
+               ELSE 10346
+          END ID_Kham
+         ,1 AS IsThuoc
+         ,GD2_BacSiDaiDien_GET.Nickname_BacSiLamDaiDien
+         ,Kham.GiaBaoHiem-ThanhTienBaoHiem AS T_BNCCT
+         ,0 AS Gia_BHYTchitra
+         ,GD2_CanLamSang_BHYT.MUC_HUONG
+         ,GD2_CanLamSang_BHYT.TYLE_TT
+         ,GD2_CanLamSang_BHYT.THANH_TIEN
+         ,NULL T_TRANTT
+         ,GD2_CanLamSang_BHYT.T_BNTT T_BNTT
+         ,GD2_CanLamSang_BHYT.T_BNCCT T_BNCCT_2
+         ,NULL T_BHTT
+
+          FROM Kham
+          LEFT JOIN GD2_CanLamSang_BHYT ON Kham.ID_Kham=GD2_CanLamSang_BHYT.ID_Kham
+          JOIN DM_LoaiKham ON Kham.ID_LoaiKham=DM_LoaiKham.ID_LoaiKham
+          JOIN GD2_DMNHOM_BHYT gdb ON gdb.ID_Nhom_BHYT=DM_LoaiKham.ID_Nhom_BHYT
+          LEFT JOIN GD2_ToDieuTriChiTietKham ON GD2_ToDieuTriChiTietKham.ID_Kham=Kham.ID_Kham
+          LEFT JOIN GD2_ToDieuTriChiTiet ON GD2_ToDieuTriChiTiet.ID_ToDieuTriChiTiet=
+          GD2_ToDieuTriChiTietKham.ID_ToDieuTriChiTiet
+          LEFT JOIN HuyChiDinhChiTiet ON HuyChiDinhChiTiet.ID_Kham=Kham.ID_Kham
+          LEFT JOIN DM_NhanVien ON DM_NhanVien.ID_NhanVien=GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+          LEFT JOIN DM_NhanVien nv1 ON nv1.ID_NhanVien=Kham.BSChiDinh
+          OUTER APPLY dbo.GD2_BacSiDaiDien_GET(
+              CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
+                   ELSE Kham.BSChiDinh
+              END
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN GD2_ToDieuTriChiTiet.NgayGioHieuLuc
+                   ELSE Kham.NgayGioTao
+              END
+             ,CASE
+                   WHEN @id_benhannoitru IS NOT NULL THEN
+          CASE
+            WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+          END
+         ELSE DM_LoaiKham.ID_LoaiKham
+              END
+          )GD2_BacSiDaiDien_GET
+
+
+          WHERE ID_LuotKham=@id_luotkham
+          AND gdb.ID_BHYT=4
+          AND HuyChiDinhChiTiet.ID_Kham IS NULL
+          AND Kham.Isbhyt=1
+              --AND (kham.ExtField1<>'DieuTriPhoiHop')
+          AND (Kham.ID_TrangThai<>'HuyBo' OR Kham.ID_TrangThai IS NULL)
+      )
+      ,k14 AS(
+          SELECT k13.*
+          FROM   k13
+          UNION ALL
+          SELECT *
+          FROM   mau
+          UNION ALL
+          SELECT *
+          FROM   oxi
+          UNION ALL
+          SELECT *
+          FROM   THuoc_kham
+      )
+
+      --INSERT INTO @Thuoc
+      SELECT id_loai id_loai
+  ,ten ten
+  ,TenDonViTinh TenDonViTinh
+  ,dongia dongia
+  ,soluong soluong
+  ,NgayKeDon NgayKeDon
+  ,MaSoTheoDMBHYT MaSoTheoDMBHYT
+  ,HamLuong HamLuong
+  ,SignNumber SignNumber
+  ,MaDD_BHYT MaDD_BHYT
+  ,CachDung CachDung
+  ,GiaCungChiTra GiaCungChiTra
+  ,CASE
+        WHEN THANH_TIEN IS NOT NULL THEN THANH_TIEN
+        ELSE thanhtien
+  END                     thanhtien
+  ,thanhtien               thanhtien_2
+  ,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)ThanhTienBaoHiem
+  ,HoatChat_BHYT HoatChat_BHYT
+  ,phantramchitra phantramchitra
+  ,id_nhombhyt id_nhombhyt
+  ,Makhoa_BHYT Makhoa_BHYT
+  ,SoChungChiHanhNghe SoChungChiHanhNghe
+  ,ThongTinThauBHYT ThongTinThauBHYT
+  ,NickName NickName
+  ,ID_Kham
+  --,((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100 AS MUC_HUONG ID_Kham
+  ,CASE
+        WHEN MUC_HUONG IS NOT NULL THEN MUC_HUONG
+        ELSE ((ThanhTienBaoHiem/phantramchitra)*100.00)/(dongia*soluong)*100
+  END                     MUC_HUONG
+  ,CASE
+        WHEN TYLE_TT IS NOT NULL THEN TYLE_TT
+        ELSE phantramchitra
+  END                     TYLE_TT
+  ,CASE
+        WHEN T_TRANTT IS NOT NULL THEN T_TRANTT
+        ELSE thanhtien
+  END                    T_TRANTT
+  --,CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem) AS T_BHTT T_TRANTT
+  ,CASE
+  WHEN T_BHTT IS NOT NULL THEN T_BHTT ELSE CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
+  END  T_BHTT
+  ,Makhoa_BHYT         AS  MA_KHOA
+  ,SoChungChiHanhNghe  AS  MA_BAC_SI
+  ,ThongTinThauBHYT    AS  TT_THAU
+  ,CASE
+        WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 455000.000
+        WHEN id_loai=4881 AND @id_thutrano=2133167 THEN 455000.000
+        WHEN id_loai=4881 AND @id_thutrano=2165147 THEN 455000.0000
+        WHEN id_loai=4881 AND @id_thutrano=2135342 THEN 455000.0000
+        WHEN id_loai=4881 AND @id_thutrano=2225883 THEN 455000.0000
+        WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*((100.0-@phantramtraituyenloaikham_noitru)/100.0)
+        WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=0 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0) --không có trường hợp này
+        WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN<>3 THEN thanhtien*((100.0-phantramchitra)/100.0)
+        WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN=3 THEN thanhtien-ThanhTienBaoHiem
+
+            --WHEN ThanhTienBaoHiem/(dongia*soluong)*100<>100 THEN thanhtien*((100.0-@phantramtraituyenloaikham_ngoaitru)/100.0
+        ELSE 0
+  END                     T_BNTT
+  ,CASE
+  WHEN T_BNCCT_2 IS NOT NULL THEN T_BNCCT_2 ELSE
+  CASE
+    WHEN (id_loai=10718) AND @id_thutrano=2680411 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2647166 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2724337 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2733264 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2735929 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2733284 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2706601 THEN 12127.5
+    WHEN (id_loai=10718) AND @id_thutrano=2702683 THEN 12127.5
+    WHEN (id_loai=10718) THEN thanhtien-CONVERT(DECIMAL(18 ,2) ,ThanhTienBaoHiem)
+    WHEN T_BNCCT IS NOT NULL AND (id_loai<>10505) THEN T_BNCCT
+    ELSE CASE
+          WHEN id_loai=4881 AND @id_thutrano=2047144 THEN 9750.0000
+          WHEN id_loai=4881 AND @id_thutrano=2029771 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2012070 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=1997760 THEN 16250.0000
+          WHEN id_loai=4881 AND @id_thutrano=2063503 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2121181 THEN 16250.0000
+          WHEN id_loai=4881 AND @id_thutrano=2133167 THEN 39000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2165147 THEN 39000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2135342 THEN 9750.0000
+          WHEN id_loai=4881 AND @id_thutrano=2167160 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2204891 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2149264 THEN 16250.0000
+          WHEN id_loai=4881 AND @id_thutrano=2209778 THEN 65000.0000
+          WHEN id_loai=4881 AND @id_thutrano=2225883 THEN 39000.0000
+          WHEN id_loai=2922 AND @id_thutrano=2299317 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2347061 THEN 22400.0000
+          WHEN id_loai=4881 AND @id_thutrano=2292471 THEN 65000.0000
+          WHEN id_loai=5807 AND @id_thutrano=2393637 THEN 166600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2412242 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2411996 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2411996 AND soluong=3 THEN 33600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2402443 THEN 22400.0000
+          WHEN id_loai=5807 AND @id_thutrano=2409483 THEN 83300.0000
+          WHEN id_loai=2922 AND @id_thutrano=2396053 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2396053 AND soluong=3 THEN 33600.0000
+          WHEN id_loai=5807 AND @id_thutrano=2359571 AND soluong=1 THEN 83300.0000
+          WHEN id_loai=5807 AND @id_thutrano=2359571 AND soluong=2 THEN 166600.0000
+          WHEN id_loai=4881 AND @id_thutrano=2359571 THEN 65000.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 11200.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=3 THEN 33600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2460644 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2461058 THEN 5600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2459671 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=1 THEN 11200.0000
+          WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=3 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2459671 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2461058 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2460164 AND soluong=3 THEN 33600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2460644 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2426439 AND soluong=3 THEN 33600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2426439 AND soluong=1 THEN 11200.0000
+          WHEN id_loai=2922 AND @id_thutrano=2454078 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2445310 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2463648 AND soluong=1 THEN 11200.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=1 THEN 11200.0000
+          WHEN id_loai=2922 AND @id_thutrano=2458191 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2415440 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=2922 AND @id_thutrano=2413851 AND soluong=2 THEN 22400.0000
+          WHEN id_loai=5807 AND @id_thutrano=2413851 AND soluong=2 THEN 166600.0000
+          WHEN id_loai=5807 AND @id_thutrano=2413851 AND soluong=2 THEN 166600.0000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2526240 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2535882 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2490811 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2489444 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2523620 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2523604 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2468189 AND soluong=3 THEN 27751.5000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=1 THEN 9250.5000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=2 THEN 18501.0000
+          WHEN id_loai=2922 AND @id_thutrano=2536863 AND soluong=3 THEN 27751.5000
+          WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*(@phantramtraituyenloaikham_noitru/100.00)
+            -ThanhTienBaoHiem
+          WHEN phantramchitra=80 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=1 THEN thanhtien*(@phantramtraituyenloaikham_noitru/100.00)
+            -ThanhTienBaoHiem
+          WHEN phantramchitra=100 AND @MA_LYDO_VVIEN=3 AND @isNoiTru=0 THEN thanhtien*(@phantramtraituyenloaikham_ngoaitru/100.00)
+            -ThanhTienBaoHiem --không có trường hợp này
+          WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN<>3 THEN 0.000
+          WHEN phantramchitra<>100 AND @MA_LYDO_VVIEN=3 THEN 0
+          ELSE thanhtien*1.000-ThanhTienBaoHiem*1.000
+        END
+      END
+  END                     T_BNCCT
+  ,IsThuoc IsThuoc
+  ,Nickname_BacSiLamDaiDien Nickname_BacSiLamDaiDien
+  ,T_BNCCT T_BNCCTam
+  ,Gia_BHYTchitra Gia_BHYTchitra
+  ,MUC_HUONG               MUC_HUONG_2
+  ,TYLE_TT                 TYLE_TT_2
+  ,THANH_TIEN              THANH_TIEN_2
+  ,T_TRANTT               T_TRANTT_2
+  ,T_BNTT   T_BNTT_2
+  ,T_BNCCT_2 T_BNCCT_2
+  ,T_BHTT T_BHTT_2
+      FROM   k14
+      WHERE  soluong<>0`,
       [idThuTraNo],
     );
     const mabenhchinh = await this.getBenhChinh(idThuTraNo);
