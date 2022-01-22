@@ -1607,7 +1607,7 @@ export class XmlBHYTService {
         JOIN DM_LoaiKham AS dlk
         ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
         JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
-        WHERE  b.ID_ThuTraNo = 3798067
+        WHERE  b.ID_ThuTraNo = @0
         AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
         AND Kham.MaICD10 IS NOT NULL
         AND Kham.MaICD10<>''
