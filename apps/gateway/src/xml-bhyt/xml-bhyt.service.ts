@@ -329,13 +329,9 @@ export class XmlBHYTService {
                 ,4                         AS id_nhombhyt
                 ,dpb.Makhoa_BHYT
                 ,CASE
-			  -- Hưng sửa
-					WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE DM_NhanVien.SoChungChiHanhNghe
-                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')<>'' THEN DM_NhanVien.SoChungChiHanhNghe
-                      --WHEN ISNULL(DM_NhanVien.SoChungChiHanhNghe ,'')='' THEN
-                      --     GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
-			  ----
-                 END                          SoChungChiHanhNghe
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+          ELSE DM_NhanVien.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
                 ,DM_Thuoc.ThongTinThauBHYT
                 ,gdtctmr.Gia_BHYTchitra
                 ,DM_NhanVien.NickName
@@ -459,10 +455,10 @@ export class XmlBHYTService {
                 ,100                 AS phantramchitra
                 ,gdb.ID_BHYT         AS id_nhombhyt
                 ,''                  AS Makhoa_BHYT
-                ,CASE
-                      WHEN DM_NhanVien.SoChungChiHanhNghe IS NULL
-          OR DM_NhanVien.SoChungChiHanhNghe='' THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
-             ELSE DM_NhanVien.SoChungChiHanhNghe END SoChungChiHanhNghe
+       ,CASE
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
+          ELSE DM_NhanVien.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
          ,'' AS ThongTinThauBHYT
          ,NickName
          ,GD2_ToDieuTriChiTiet.ID_NguoiHoanTat AS ID_Kham
@@ -491,8 +487,8 @@ export class XmlBHYTService {
               GD2_ToDieuTriChiTiet.ID_NguoiHoanTat
              ,GD2_ToDieuTriChiTiet.NgayGioHieuLuc
              ,CASE
-					WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
-				END
+          WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+        END
           )GD2_BacSiDaiDien_GET
           WHERE ID_LuotKham=@id_luotkham
           AND gdb.ID_BHYT=7
@@ -572,10 +568,10 @@ export class XmlBHYTService {
               END
              ,CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN
-					CASE
-						WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
-					END
-				 ELSE DM_LoaiKham.ID_LoaiKham
+          CASE
+            WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+          END
+         ELSE DM_LoaiKham.ID_LoaiKham
               END
           )                             GD2_BacSiDaiDien_GET
           WHERE  ID_LuotKham = @id_luotkham
@@ -630,10 +626,9 @@ export class XmlBHYTService {
          ,100 AS phantramchitra
          ,4 AS id_nhombhyt
          ,'' AS Makhoa_BHYT
-          --,nv1.SoChungChiHanhNghe
-         ,GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien
-          --,case when isnull(DM_NhanVien.SoChungChiHanhNghe,'')<>''  then DM_NhanVien.SoChungChiHanhNghe
-          --     when isnull(DM_NhanVien.SoChungChiHanhNghe,'')='' then GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien end SoChungChiHanhNghe
+     ,CASE
+          WHEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien IS NOT NULL THEN GD2_BacSiDaiDien_GET.SoChungChiHanhNghe_BacSiLamDaiDien ELSE nv1.SoChungChiHanhNghe
+                 END  SoChungChiHanhNghe
          ,LoiKhuyen AS ThongTinThauBHYT
          ,nv1.NickName
          ,CASE
@@ -673,10 +668,10 @@ export class XmlBHYTService {
               END
              ,CASE
                    WHEN @id_benhannoitru IS NOT NULL THEN
-					CASE
-						WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
-					END
-				 ELSE DM_LoaiKham.ID_LoaiKham
+          CASE
+            WHEN gdb.ID_BHYT in (4, 5, 6, 7) then DM_LoaiKham.ID_LoaiKham else 10346
+          END
+         ELSE DM_LoaiKham.ID_LoaiKham
               END
           )GD2_BacSiDaiDien_GET
 
