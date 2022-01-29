@@ -1,5 +1,7 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bull';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { Queue } from 'bull';
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService } from './goikhamchitiet-appbenhnhan-loaikham-chitiet.service';
 
 @ApiTags('quanly_appbenhnhan')
@@ -7,6 +9,7 @@ import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService } from './goikhamchitie
 export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietController {
   constructor(
     private quanlyAppbenhnhanService: GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService,
+    @InjectQueue('quanly_appbenhnhan') private readonly quanly_appbenhnhanQueue: Queue,
   ) { }
 
   @Post('goichidinhkham')
@@ -18,4 +21,17 @@ export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietController {
       );
     return result;
   }
+  @Get('updateGoiKhamStuff/:id')
+  async updateGoiKhamStuff(@Param('id') id_loaikham: number) {
+    const dataSQL = await this.quanlyAppbenhnhanService.getGoiKhamStuff(id_loaikham);
+    const dataGroup = this.quanlyAppbenhnhanService.groupGoiKham(dataSQL);
+    dataGroup.forEach(item => {
+      this.quanly_appbenhnhanQueue.add(
+        'updateGoiKhamStuff',
+        item
+      );
+    })
+    return {};
+  }
 }
+
