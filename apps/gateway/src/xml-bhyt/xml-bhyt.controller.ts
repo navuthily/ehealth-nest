@@ -76,4 +76,9 @@ export class XmlBHYTController {
   exec_stored_filter_date(@Query() dataFilter: dataFilterDTO) {
     return this.xmlService.exec_stored_filter_date(dataFilter);
   }
+
+  @Get('test')
+  async test() {
+    return await this.xmlService.getBenhKem(3798067);
+  }
 }
