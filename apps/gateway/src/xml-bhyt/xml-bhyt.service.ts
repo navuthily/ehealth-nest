@@ -234,8 +234,8 @@ export class XmlBHYTService {
     )                                       TheTrang
     WHERE  ThongTinLuotKham.ID_LuotKham = @id_luotkham`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -902,8 +902,8 @@ export class XmlBHYTService {
       WHERE  soluong<>0`,
       [idThuTraNo],
     );
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -1402,8 +1402,8 @@ export class XmlBHYTService {
           ,MaSoTheoDVBHYT
           ,T_BHTT  DESC`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -1589,22 +1589,15 @@ export class XmlBHYTService {
     return dataBenhAnNoiTruByIDLuotKham;
   }
 
-  async isNoiTru(idThuTraNo: any): Promise<boolean> {
-    const data: any = await this.dataBenhAnNoiTruByIDThuTraNo(idThuTraNo);
+  isNoiTru(data: any) {
     if (data && data.length != 0) return true;
     return false;
   }
 
-  async isNoiTruByIDLuotKham(id_luotkham: any): Promise<boolean> {
-    const data: any = await this.dataBenhAnNoiTruByIDLuotKham(id_luotkham);
-    if (data && data.length != 0) return true;
-    return false;
-  }
-
-  async getBenhChinh(idThuTraNo: any) {
-    const dataBenhAnNoiTru: any = await this.dataBenhAnNoiTruByIDThuTraNo(idThuTraNo);
-    if (await this.isNoiTru(idThuTraNo))
-      return dataBenhAnNoiTru[0]?.ICD_RaVienBenhChinh;
+  async getBenhChinhByIDThuTraNo(idThuTraNo: any) {
+    const dataNoiTru: any = await this.dataBenhAnNoiTruByIDThuTraNo(idThuTraNo);
+    if (this.isNoiTru(dataNoiTru))
+      return dataNoiTru[0]?.ICD_RaVienBenhChinh;
     return (
       await this.connection.query(
         `select MaICD10 from kham a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
@@ -1615,7 +1608,7 @@ export class XmlBHYTService {
 
   async getBenhChinhByIDLuotKham(id_luotkham: any) {
     const dataBenhAnNoiTru: any = await this.dataBenhAnNoiTruByIDLuotKham(id_luotkham);
-    if (await this.isNoiTruByIDLuotKham(id_luotkham))
+    if (this.isNoiTru(dataBenhAnNoiTru))
       return dataBenhAnNoiTru[0]?.ICD_RaVienBenhChinh;
     return (
       await this.connection.query(
@@ -1627,25 +1620,25 @@ export class XmlBHYTService {
     )[0]?.MaICD10;
   }
 
-  async getBenhKem(id_luotkham: any) {
-    if (await this.isNoiTru(id_luotkham)) {
-      const data = await this.dataBenhKemNoiTru(id_luotkham);
-      return data;
+  async getBenhKemByIDThuTraNo(id_thutrano: any) {
+    const dataNoiTru = await this.dataBenhKemNoiTruByIDThuTraNo(id_thutrano);
+    if (this.isNoiTru(dataNoiTru)) {
+      return this.convertToStringBenhKem(dataNoiTru);
     }
-    const data = await this.dataBenhKemNgoaiTru(id_luotkham);
-    return data;
+    const dataNgoaiTru = await this.dataBenhKemNgoaiTruByIDThuTraNo(id_thutrano);
+    return this.convertToStringBenhKem(dataNgoaiTru);
   }
 
   async getBenhKemByIDLuotKham(id_luotkham: any) {
-    if (await this.isNoiTru(id_luotkham)) {
-      const data = await this.dataBenhKemNoiTruByIDLuotKham(id_luotkham);
-      return this.convertBenhKem(data);
+    const dataNoiTru = await this.dataBenhKemNoiTruByIDLuotKham(id_luotkham);
+    if (this.isNoiTru(dataNoiTru)) {
+      return dataNoiTru;
     }
-    const data = await this.dataBenhKemNgoaiTruByIDLuotKham(id_luotkham);
-    return this.convertBenhKem(data);
+    const dataNgoaiTru = await this.dataBenhKemNgoaiTruByIDLuotKham(id_luotkham);
+    return dataNgoaiTru;
   }
 
-  async dataBenhKemNoiTru(idThuTraNo: any) {
+  async dataBenhKemNoiTruByIDThuTraNo(idThuTraNo: any) {
     const data = await this.connection.query(
       `SELECT ttlkicd.maicd MaICD10
       FROM   thongtinluotkham_icd ttlkicd
@@ -1667,7 +1660,7 @@ export class XmlBHYTService {
     return data;
   }
 
-  async dataBenhKemNgoaiTru(idThuTraNo: any) {
+  async dataBenhKemNgoaiTruByIDThuTraNo(idThuTraNo: any) {
     const data = await this.connection.query(
       `SELECT Kham.MaICD10
       FROM   Kham
@@ -1701,9 +1694,11 @@ export class XmlBHYTService {
     return data;
   }
 
-  convertBenhKem(data: any) {
-    const dataConvert = data.map((item: { MaICD10: any; }) => item.MaICD10).join(";");
-    return dataConvert || '';
+  convertToStringBenhKem(data: any) {
+    if (data) {
+      const dataConvert = data.map((item: { MaICD10: any; }) => item.MaICD10).join(";");
+      return dataConvert || '';
+    }
+    return '';
   }
-
 }

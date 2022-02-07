@@ -39,12 +39,12 @@ export class XmlBHYTController {
 
   @Get('getBenhChinh/:id')
   async getICDBenhChinh(@Param('id') idThuTraNo: any) {
-    return await this.xmlService.getBenhChinh(idThuTraNo);
+    return await this.xmlService.getBenhChinhByIDThuTraNo(idThuTraNo);
   }
 
   @Get('getBenhKem/:id')
   async getICDBenhKemICD10(@Param('id') idThuTraNo: any) {
-    return await this.xmlService.getBenhKem(idThuTraNo);
+    return await this.xmlService.getBenhKemByIDThuTraNo(idThuTraNo);
   }
 
   @Get('xml1/:id')
@@ -77,8 +77,8 @@ export class XmlBHYTController {
     return this.xmlService.exec_stored_filter_date(dataFilter);
   }
 
-  @Get('test')
-  async test() {
-    return await this.xmlService.getBenhKem(3798067);
-  }
+  // @Get('test')
+  // async test() {
+  //   return await this.xmlService.getBenhKemByIDThuTraNo(3798067);
+  // }
 }
