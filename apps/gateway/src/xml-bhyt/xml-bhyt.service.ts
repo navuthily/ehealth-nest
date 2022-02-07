@@ -1589,11 +1589,6 @@ export class XmlBHYTService {
     return dataBenhAnNoiTruByIDLuotKham;
   }
 
-  isNoiTru(data: any) {
-    if (data && data.length != 0) return true;
-    return false;
-  }
-
   async getBenhChinhByIDThuTraNo(idThuTraNo: any) {
     const dataNoiTru: any = await this.dataBenhAnNoiTruByIDThuTraNo(idThuTraNo);
     if (this.isNoiTru(dataNoiTru))
@@ -1692,6 +1687,11 @@ export class XmlBHYTService {
       AND ID_TrangThai<>'HuyBo'`,
       [id_luotkham]);
     return data;
+  }
+
+  isNoiTru(data: any) {
+    if (data && data.length != 0) return true;
+    return false;
   }
 
   convertToStringBenhKem(data: any) {
