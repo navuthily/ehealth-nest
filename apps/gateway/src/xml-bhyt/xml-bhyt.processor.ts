@@ -107,8 +107,8 @@ export class XmlBHYTProcessor {
 
   @Process('xml-bhyt')
   async handle(job: Job) {
-    const mabenhchinh = await this.xmlService.getBenhChinh(job.data.ID_ThuTraNo);
-    const mabenhkem = await this.xmlService.getBenhKem(job.data.ID_ThuTraNo);
+    const mabenhchinh = await this.xmlService.getBenhChinhByIDThuTraNo(job.data.ID_ThuTraNo);
+    const mabenhkem = await this.xmlService.getBenhKemByIDThuTraNo(job.data.ID_ThuTraNo);
 
     try {
       let [thongtin, thongtinthuoc, thongtincls, ChisoCLS, ChisoNoiTru] =
