@@ -1621,7 +1621,7 @@ export class XmlBHYTService {
       await this.connection.query(
         ` select top 1 a.MaICD10, b.TenDanhMuc, b.TenDanhMuc_TiengAnh from kham a
           left join GD2_DanhMucICD_New b on a.MaICD10 = b.MaCode
-          where a.ID_LuotKham = 2910291 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
+          where a.ID_LuotKham = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
         [id_luotkham],
       )
     )[0]?.MaICD10;
