@@ -79,6 +79,6 @@ export class XmlBHYTController {
 
   // @Get('test')
   // async test() {
-  //   return await this.xmlService.getBenhKemByIDThuTraNo(3798067);
+  //   return await this.xmlService.getBenhKemByIDLuotKham(2089382); //3798067, 2089382
   // }
 }
