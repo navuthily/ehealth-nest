@@ -1604,7 +1604,7 @@ export class XmlBHYTService {
   async getBenhChinhByIDLuotKham(id_luotkham: any) {
     const data: any = await this.dataBenhAnNoiTruByIDLuotKham(id_luotkham);
     if (this.isNoiTruByData(data))
-      return data[0]?.ICD_RaVienBenhChinh;
+      return data[0];
     return (
       await this.connection.query(
         ` select top 1 a.MaICD10, b.TenDanhMuc, b.TenDanhMuc_TiengAnh from kham a
@@ -1612,7 +1612,7 @@ export class XmlBHYTService {
           where a.ID_LuotKham = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
         [id_luotkham],
       )
-    )[0]?.MaICD10;
+    )[0];
   }
 
   async getBenhKemByIDThuTraNo(id_thutrano: any) {
