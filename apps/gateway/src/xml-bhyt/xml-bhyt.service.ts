@@ -234,8 +234,8 @@ export class XmlBHYTService {
     )                                       TheTrang
     WHERE  ThongTinLuotKham.ID_LuotKham = @id_luotkham`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -902,8 +902,8 @@ export class XmlBHYTService {
       WHERE  soluong<>0`,
       [idThuTraNo],
     );
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -1402,8 +1402,8 @@ export class XmlBHYTService {
           ,MaSoTheoDVBHYT
           ,T_BHTT  DESC`;
     let data = await this.connection.query(`${stored}`, [idThuTraNo]);
-    const mabenhchinh = await this.getBenhChinh(idThuTraNo);
-    const mabenhkem = await this.getBenhKem(idThuTraNo);
+    const mabenhchinh = await this.getBenhChinhByIDThuTraNo(idThuTraNo);
+    const mabenhkem = await this.getBenhKemByIDThuTraNo(idThuTraNo);
     data.map((item: any, index: number) => {
       item.id = (index + 1).toString();
       item.MABENHCHINH = mabenhchinh;
@@ -1547,76 +1547,176 @@ export class XmlBHYTService {
     return data;
   }
 
-  async dataBenhAnNoiTruBy(idThuTraNo: any) {
-    var dataBenhAnNoiTruBy = await this.cacheManager.get(
-      `dataBenhAnNoiTruByID_${idThuTraNo}`,
+  async dataBenhAnNoiTruByIDThuTraNo(idThuTraNo: any) {
+    let data = await this.cacheManager.get(
+      `dataBenhAnNoiTruByIDThuTraNo_${idThuTraNo}`,
     );
-    if (!dataBenhAnNoiTruBy) {
-      dataBenhAnNoiTruBy = await this.connection.query(
+    if (!data) {
+      data = await this.connection.query(
         `select * from GD2_BenhAnNoiTru a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0`,
         [idThuTraNo],
       );
       await this.cacheManager.set(
-        `dataBenhAnNoiTruByID_${idThuTraNo}`,
-        dataBenhAnNoiTruBy,
+        `dataBenhAnNoiTruByIDThuTraNo_${idThuTraNo}`,
+        data,
         {
           ttl: 10,
         },
       );
     }
-    return dataBenhAnNoiTruBy;
+    return data;
   }
 
-  async isNoiTru(idThuTraNo: any): Promise<boolean> {
-    const data: any = await this.dataBenhAnNoiTruBy(idThuTraNo);
-    if (data && data.length != 0) return true;
-    return false;
+  async dataBenhAnNoiTruByIDLuotKham(id_luotkham: any) {
+    let data = await this.cacheManager.get(
+      `dataBenhAnNoiTruByIDLuotKham_${id_luotkham}`,
+    );
+    if (!data) {
+      data = await this.connection.query(
+        ` select top 1 a.ICD_RaVienBenhChinh, b.TenDanhMuc, b.TenDanhMuc_TiengAnh from GD2_BenhAnNoiTru a
+          left join GD2_DanhMucICD_New b on a.ICD_RaVienBenhChinh = b.MaCode
+          where a.ID_LuotKham = @0`,
+        [id_luotkham],
+      );
+      await this.cacheManager.set(
+        `dataBenhAnNoiTruByIDLuotKham_${id_luotkham}`,
+        data,
+        {
+          ttl: 10,
+        },
+      );
+    }
+    return data;
   }
 
-  async getBenhChinh(idThuTraNo: any) {
-    const dataBenhAnNoiTru: any = await this.dataBenhAnNoiTruBy(idThuTraNo);
-    if (await this.isNoiTru(idThuTraNo))
-      return dataBenhAnNoiTru[0]?.ICD_RaVienBenhChinh;
+  async getBenhChinhByIDThuTraNo(idThuTraNo: any) {
+    const data: any = await this.dataBenhAnNoiTruByIDThuTraNo(idThuTraNo);
+    if (this.isNoiTruByData(data))
+      return data[0]?.ICD_RaVienBenhChinh;
     return (
       await this.connection.query(
-        `select MaICD10 from kham a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
+        `select a.MaICD10 from kham a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
         [idThuTraNo],
       )
     )[0]?.MaICD10;
   }
 
-  async getBenhKem(idThuTraNo: any) {
-    if (await this.isNoiTru(idThuTraNo)) {
-      const dataNoiTruSQL =
-        await this.connection.query(
-          `SELECT ttlkicd.maicd
-          FROM   thongtinluotkham_icd ttlkicd
-          JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
-          WHERE  b.ID_ThuTraNo = @0
-          and ttlkicd.loai = 'benhkem'`,
-          [idThuTraNo]);
-      const dataNoiTruArray: any[] = [];
-      dataNoiTruSQL.forEach((item: any) => dataNoiTruArray.push(item?.maicd));
-      const dataNoiTruString = dataNoiTruArray.join(';');
-      return dataNoiTruString ? dataNoiTruString : '';
-    }
-    const dataNgoaiTruSQL =
+  async getBenhChinhByIDLuotKham(id_luotkham: any) {
+    const data: any = await this.dataBenhAnNoiTruByIDLuotKham(id_luotkham);
+    if (this.isNoiTruByData(data))
+      return data[0];
+    return (
       await this.connection.query(
-        `SELECT Kham.MaICD10
-        FROM   Kham
-        JOIN DM_LoaiKham AS dlk
-        ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
-        JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
-        WHERE  b.ID_ThuTraNo = @0
-        AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
-        AND Kham.MaICD10 IS NOT NULL
-        AND Kham.MaICD10<>''
-        AND kham.IsBacSyChinh = 0
-        AND ID_TrangThai<>'HuyBo'`,
-        [idThuTraNo]);
-    const dataNgoaiTruArray: any[] = [];
-    dataNgoaiTruSQL.forEach((item: any) => dataNgoaiTruArray.push(item?.MaICD10));
-    const dataNgoaiTruString = dataNgoaiTruArray.join(';');
-    return dataNgoaiTruString ? dataNgoaiTruString : '';
+        ` select top 1 a.MaICD10, b.TenDanhMuc, b.TenDanhMuc_TiengAnh from kham a
+          left join GD2_DanhMucICD_New b on a.MaICD10 = b.MaCode
+          where a.ID_LuotKham = @0 and a.IsBacSyChinh = 1 and a.ID_TrangThai<>'HuyBo'`,
+        [id_luotkham],
+      )
+    )[0];
+  }
+
+  async getBenhKemByIDThuTraNo(id_thutrano: any) {
+    if (await this.isNoiTruByIDThuTraNo(id_thutrano)) {
+      const data = await this.dataBenhKemNoiTruByIDThuTraNo(id_thutrano);
+      return this.convertToStringBenhKem(data);
+    }
+    const data = await this.dataBenhKemNgoaiTruByIDThuTraNo(id_thutrano);
+    return this.convertToStringBenhKem(data);
+  }
+
+  async getBenhKemByIDLuotKham(id_luotkham: any) {
+    if (await this.isNoiTruByIDLuotKham(id_luotkham)) {
+      const data = await this.dataBenhKemNoiTruByIDLuotKham(id_luotkham);
+      return data;
+    }
+    const data = await this.dataBenhKemNgoaiTruByIDLuotKham(id_luotkham);
+    return data;
+  }
+
+  async dataBenhKemNoiTruByIDThuTraNo(idThuTraNo: any) {
+    const data = await this.connection.query(
+      `SELECT ttlkicd.maicd MaICD10
+      FROM   thongtinluotkham_icd ttlkicd
+      JOIN Thu_TraNo b on ttlkicd.luotkham_id = b.ID_LuotKham
+      WHERE  b.ID_ThuTraNo = @0
+      and ttlkicd.loai = 'benhkem'`,
+      [idThuTraNo]);
+    return data;
+  }
+
+  async dataBenhKemNoiTruByIDLuotKham(id_luotkham: any) {
+    const data = await this.connection.query(
+      ` SELECT ttlkicd.maicd MaICD10, b.TenDanhMuc, b.TenDanhMuc_TiengAnh
+        FROM  thongtinluotkham_icd ttlkicd
+        left join GD2_DanhMucICD_New b on ttlkicd.maicd = b.MaCode
+        WHERE ttlkicd.luotkham_id = @0
+        and ttlkicd.loai = 'benhkem'`,
+      [id_luotkham]);
+    return data;
+  }
+
+  async dataBenhKemNgoaiTruByIDThuTraNo(idThuTraNo: any) {
+    const data = await this.connection.query(
+      `SELECT Kham.MaICD10
+      FROM   Kham
+      JOIN DM_LoaiKham AS dlk
+      ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+      JOIN Thu_TraNo b on Kham.ID_LuotKham = b.ID_LuotKham
+      WHERE  b.ID_ThuTraNo = @0
+      AND (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+      AND Kham.MaICD10 IS NOT NULL
+      AND Kham.MaICD10<>''
+      AND kham.IsBacSyChinh = 0
+      AND ID_TrangThai<>'HuyBo'`,
+      [idThuTraNo]);
+    return data;
+  }
+
+  async dataBenhKemNgoaiTruByIDLuotKham(id_luotkham: any) {
+    const data = await this.connection.query(
+      `SELECT Kham.MaICD10, b.TenDanhMuc, b.TenDanhMuc_TiengAnh
+      FROM   Kham
+      JOIN DM_LoaiKham AS dlk
+      ON  dlk.ID_LoaiKham = Kham.ID_LoaiKham
+      left join GD2_DanhMucICD_New b on Kham.MaICD10 = b.MaCode
+      WHERE  Kham.ID_LuotKham = @0
+      and (Kham.ID_LoaiKham=10516 OR dlk.ID_NhomCLS=20)
+      AND Kham.MaICD10 IS NOT NULL
+      AND Kham.MaICD10<>''
+      AND kham.IsBacSyChinh = 0
+      AND ID_TrangThai<>'HuyBo'`,
+      [id_luotkham]);
+    return data;
+  }
+
+  async isNoiTruByIDThuTraNo(idThuTraNo: any): Promise<boolean> {
+    const data = await this.connection.query(
+      `select 1 from GD2_BenhAnNoiTru a join Thu_TraNo b on a.ID_LuotKham = b.ID_LuotKham where b.ID_ThuTraNo = @0`,
+      [idThuTraNo],
+    );
+    if (data && data.length != 0) return true;
+    return false;
+  }
+
+  async isNoiTruByIDLuotKham(id_luotkham: any): Promise<boolean> {
+    const data = await this.connection.query(
+      `select 1 from GD2_BenhAnNoiTru where ID_LuotKham = @0`,
+      [id_luotkham],
+    );
+    if (data && data.length != 0) return true;
+    return false;
+  }
+
+  isNoiTruByData(data: any) {
+    if (data && data.length != 0) return true;
+    return false;
+  }
+
+  convertToStringBenhKem(data: any) {
+    if (data) {
+      const dataConvert = data.map((item: { MaICD10: any; }) => item.MaICD10).join(";");
+      return dataConvert || '';
+    }
+    return '';
   }
 }
