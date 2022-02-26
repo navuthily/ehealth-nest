@@ -22,6 +22,8 @@ import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet
 import { GoiKhamModule } from './goikham/goikham.module';
 import { DMReportModule } from './dm_report/dm_report.module';
 import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
+import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
+import { ThucDonModule } from './thucdon/thucdon.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -145,7 +147,9 @@ class BuildServiceModule {}
     GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
     GoiKhamModule,
     DMReportModule,
-    BenhAnNoiTruModule
+    BenhAnNoiTruModule,    
+    DMPhongBanModule,
+    ThucDonModule
   ],
 })
 export class AppModule {}
