@@ -15,11 +15,21 @@ export class BenhAnNoiTruController {
      return this.benhanNoiTruService.getDanhSachNoiTru(id_khoa);
   }
 
-  @Get('danhMucThucDon/')
+  @Get('danhmucthucdon')
   async danhMucThucDon() {    
      return this.benhanNoiTruService.getDanhMucThucDon();
   }
+
+  @Get('suatan/:ngay')
+  async suatan(@Param('ngay')  ngay) {    
+     return this.benhanNoiTruService.getDanhMucThucDon();
+  }
   
+
+  @Get('suatan/:id/suatanchitiet')
+  async suatanchitiet(@Param('id', ParseIntPipe)  id: number) {    
+     return this.benhanNoiTruService.getDanhMucThucDon();
+  }
   
  
 

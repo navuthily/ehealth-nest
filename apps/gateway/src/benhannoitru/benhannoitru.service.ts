@@ -121,6 +121,15 @@ export class BenhAnNoiTruService {
      return data;             
   }
 
+
+  async getPhieuAnChiTietTheoNgay() {
+     const stored = 
+          `select * from  FAMILY_WRK.dbo.dmvt2
+               where Su_dung=1
+          `;
+     const data = await this.connection.query(`${stored}`, []);
+     return data;             
+  }
  
 
 }
