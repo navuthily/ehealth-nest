@@ -18,6 +18,7 @@ export class DMPhongBanService {
     const dataResponse = await this.connection.query(`${stored}`);
     dataResponse.map((item: any) => {
       item['id'] = item['ID_PhongBan'];
+      item['name'] = item['MaVietTat'];
       return item;
     });
     return dataResponse;

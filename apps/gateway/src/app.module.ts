@@ -24,6 +24,7 @@ import { DMReportModule } from './dm_report/dm_report.module';
 import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
 import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
 import { ThucDonModule } from './thucdon/thucdon.module';
+import { SuatAnModule } from './suatan/suatan.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -149,7 +150,8 @@ class BuildServiceModule {}
     DMReportModule,
     BenhAnNoiTruModule,    
     DMPhongBanModule,
-    ThucDonModule
+    ThucDonModule,
+    SuatAnModule
   ],
 })
 export class AppModule {}

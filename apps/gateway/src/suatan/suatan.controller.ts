@@ -1,19 +1,33 @@
 import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
-import { BenhAnNoiTruService } from './benhannoitru.service';
+import { SuatAnService } from './suatan.service';
 import { dataFilterDTO } from './dto/dataFilter.dto';
 import { ApiTags } from '@nestjs/swagger';
-@ApiTags('benhannoitru')
-@Controller('benhannoitru')
-export class BenhAnNoiTruController {
+@ApiTags('suatan')
+@Controller('suatan')
+export class SuatAnController {
   constructor(
-    private benhanNoiTruService: BenhAnNoiTruService,
+    private suatanService: SuatAnService,
   
   ) { }
 
-  @Get('danhsachnoitru/:id_khoa')
-  async danhsachnoitru(@Param('id_khoa', ParseIntPipe)  id_khoa: number) {   
-     return this.benhanNoiTruService.getDanhSachNoiTru(id_khoa);
-  }
+//   @Get('suatan/:ngay')
+//   async suatan(@Param('ngay')  ngay) {    
+//      return this.suatanService.getDanhMucThucDon();
+//   }
+  
+
+
+//   @Get('suatan/:ngay')
+//   async suatan(@Param('ngay')  ngay) {    
+//      return this.suatanService.getDanhMucThucDon();
+//   }
+  
+
+//   @Get('suatan/:id/suatanchitiet')
+//   async suatanchitiet(@Param('id', ParseIntPipe)  id: number) {    
+//      return this.suatanService.getDanhMucThucDon();
+//   }
+  
  
 
   // @Post('xuatxml')
