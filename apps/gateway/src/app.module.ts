@@ -25,6 +25,11 @@ import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
 import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
 import { ThucDonModule } from './thucdon/thucdon.module';
 import { SuatAnModule } from './suatan/suatan.module';
+import { AuthModule } from './auth/auth.module';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { join } from 'path';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/user.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -113,8 +118,25 @@ class BuildServiceModule {}
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
+        configDB.entities = [
+        
+          UserEntity,
+  
+        ];
         return configDB;
       },
+      inject: [ApiConfigService],
+    }),
+    I18nModule.forRootAsync({
+      useFactory: (configService: ApiConfigService) => ({
+        fallbackLanguage: configService.fallbackLanguage,
+        parserOptions: {
+          path: join(__dirname, '../../../../../../', 'libs/i18n'),
+          watch: configService.isDevelopment,
+        },
+      }),
+      imports: [SharedModule],
+      parser: I18nJsonParser,
       inject: [ApiConfigService],
     }),
 
@@ -136,6 +158,7 @@ class BuildServiceModule {}
     // }),
 
     ScheduleModule.forRoot(),
+    UserModule,
     GoogleNotificationModule,
     XmlBHYTModule,
     ThuocModule,
@@ -151,7 +174,8 @@ class BuildServiceModule {}
     BenhAnNoiTruModule,    
     DMPhongBanModule,
     ThucDonModule,
-    SuatAnModule
+    SuatAnModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
