@@ -308,7 +308,7 @@ export class UserDto extends AbstractDto {
     this.nickname = user?.nickname;
     this.holotNhanVien = user?.holotNhanVien;
     this.tennhanvien = user?.tennhanvien;
-    
+    this.phongbanId = user?.phongbanId;
     // this.isActive = options?.isActive;
   }
 }
