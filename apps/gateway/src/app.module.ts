@@ -30,6 +30,10 @@ import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/user.entity';
+import { SuatAn } from './suatan/suatan.entity';
+import { ChiTietSuatAnModule } from './chitietsuatan/chitietsuatan.module';
+import { ChiTietSuatAn } from './chitietsuatan/chitietsuatan.entity';
+import { VatTu } from './vattu/vattu.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -114,6 +118,7 @@ class BuildServiceModule {}
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
@@ -127,6 +132,24 @@ class BuildServiceModule {}
       },
       inject: [ApiConfigService],
     }),
+    //---------------
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      name : "SV_FAMILY_",
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
+        configDB.entities = [
+        
+          // UserEntity,
+          SuatAn,ChiTietSuatAn, VatTu
+  
+        ];
+  
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
@@ -175,6 +198,7 @@ class BuildServiceModule {}
     DMPhongBanModule,
     ThucDonModule,
     SuatAnModule,
+    // ChiTietSuatAnModule,
     AuthModule,
   ],
 })
