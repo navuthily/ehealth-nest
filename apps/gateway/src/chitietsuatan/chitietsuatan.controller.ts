@@ -1,29 +1,17 @@
 import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
-import { SuatAnService } from './suatan.service';
-import { dataFilterDTO } from './dto/dataFilter.dto';
 import { ApiTags } from '@nestjs/swagger';
-@ApiTags('suatan')
-@Controller('suatan')
-export class SuatAnController {
+import { ChiTietSuatAnService } from './chitietsuatan.service';
+@ApiTags('chitietsuatan')
+@Controller('chitietsuatan')
+export class ChiTietSuatAnController {
   constructor(
-    private suatanService: SuatAnService,
+    private chitietsuatanService: ChiTietSuatAnService,
   
   ) { }
 
-    //lấy suất ăn theo id_luotkham và ngày tạo
-  @Get('/:ngay/:id_luotkham')
-  async suatan(@Param('ngay')  ngay,@Param('id_luotkham')  id_luotkham) {    
-    let dayjs = require('dayjs')
-
-    const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
-     return this.suatanService.getSuatAnByDay(dayFomat, id_luotkham);
-  }
-
-
-  //lấy suất ăn theo id_phieu
-  @Get('/:id_phieu')
-  async getByIdPhieu(@Param('id_phieu')  id_phieu) {  
-     return this.suatanService.getSuatAnByIdPhieu(id_phieu);
+  @Get()
+  async getAll(@Param('ngay')  ngay) {    
+     return this.chitietsuatanService.getSuatAnByDay();
   }
 
   // @Get('suatan/:ngay')
