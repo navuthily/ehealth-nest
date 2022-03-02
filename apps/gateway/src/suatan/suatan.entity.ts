@@ -34,6 +34,8 @@ export class SuatAn {
 
     @Column({ name: 'Id_LuotKham' })
     Id_LuotKham: number
+
+
     
     @OneToMany(() => ChiTietSuatAn, chitietsuatan => chitietsuatan.suatan)
     chitietsuatans: ChiTietSuatAn[]

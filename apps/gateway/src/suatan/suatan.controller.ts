@@ -52,12 +52,12 @@ export class SuatAnController {
 
   //delete suatan
 
-  @Delete('/:id_phieu')
-  delete(@Param('id_phieu') id_phieu: number){
+  // @Delete('/:id_phieu')
+  // delete(@Param('id_phieu') id_phieu: number){
 
-    console.log(id_phieu)
-    return this.suatanService.deleteSuatan(id_phieu)
-  }
+  //   console.log(id_phieu)
+  //   return this.suatanService.deleteSuatan(id_phieu)
+  // }
 
 
 

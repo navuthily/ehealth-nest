@@ -90,12 +90,44 @@ export class SuatAnService {
           .getOne()
           // console.log(dayFomat)
           //NEU SUAT AN  DA TON TAI
+          console.log(suatan)
+          const stored = 
+          `select * from  ThongTinLuotKham
+               where ID_LuotKham = ${obj.Id_LuotKham }
+          `;
+          const thongtinluotkham = await this.connection.query(`${stored}`, []);
+
+          console.log(thongtinluotkham)
+
+
+          if(suatan?.Id_NguoiDuyet === null){
+              return {
+                   success: false,
+                   message: "Đã chốt đơn!"
+              }
+          }
+
+          if(thongtinluotkham[0]["DaThanhToanBill"] !== 0){
+               return {
+                    success: false,
+                    message: "Đã thanh toán!"
+               }
+          }
+          
+
+
+          // console.log(suatan)
           if(suatan){
-               throw "Suất ăn đã  tồn tại!"
+               return {
+                    success: false,
+                    message: "Đã đặt!",
+                    suatan
+               }
           }else{
                 //NEU SUAT AN CHƯA DA TON TAI
                // THEM VAO BANG SUATAN
                const newSuatan = await this.suatanRepo.create(obj)
+               newSuatan.ngay_ct = dayFomat;
                const dataResult = await this.suatanRepo.save(newSuatan).catch(err => {
                     throw new HttpException({
                          message: err.message
@@ -105,8 +137,14 @@ export class SuatAnService {
 
               //THEM VAO BANG CHI TIET SUAT AN
               if(dataResult){
-                    this.functionThemSuatAn(dataResult.Id_Phieu, obj);                   
+                    await  this.functionThemSuatAn(dataResult.Id_Phieu, obj);  
+                    return {
+                         success: false,
+                         message: "Thành công!",
+                         dataResult
+                    }                
               }
+           
           }
      }
 
@@ -145,11 +183,7 @@ export class SuatAnService {
 
 
 
-     async deleteSuatan(id_phieu: number){
-          return this.suatanRepo.delete({ Id_Phieu: id_phieu })
 
-
-     }
 
      //   async getPhieuAnChiTiet() {
      //      const stored = 
