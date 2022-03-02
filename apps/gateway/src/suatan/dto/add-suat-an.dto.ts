@@ -23,7 +23,7 @@ export class ThemSuatAnDTO  {
     @ApiProperty({type: Number})
     Id_LuotKham?: number
 
-    @ApiProperty({type: Number})
+    @ApiProperty({type: String})
     Diengiai?: string
 
     @ApiProperty({type : [ChiTietSuatAnDTO]})

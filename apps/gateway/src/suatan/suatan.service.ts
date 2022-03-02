@@ -9,6 +9,7 @@ import { dataFilterDTO } from './dto/dataFilter.dto';
 import { SuatAn } from './suatan.entity';
 import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
+import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
 
 
 @Injectable()
@@ -104,32 +105,51 @@ export class SuatAnService {
 
               //THEM VAO BANG CHI TIET SUAT AN
               if(dataResult){
-                    for(let i = 0; i < obj.chitietsuatan.length; i++){
-                         const newChitietsuatan = this.chitietsuatanRepo.create(obj.chitietsuatan[i])
-                         newChitietsuatan.ID_phieu = dataResult.Id_Phieu; //id_phieu
-                         newChitietsuatan.Ma_vt = newChitietsuatan.Ma_vt;
-                         //LAY GIA MA_VT
-                         const sql = `select * from  FAMILY_WRK.dbo.Dmgia2 where Ma_vt = CAST('${obj.chitietsuatan[i].Ma_vt}' as varchar)`;
-                         const data = await this.SV_FAMILYconnection.query(`${sql}`, []);
-                         // console.log(newChitietsuatan.Ma_vt)
-                         
-                         newChitietsuatan.Gia = data[0]["Gia2"]; //Gia vt
-                         newChitietsuatan.Dvt = data[0]["Dvt"]; //DVT
-                         // newChitietsuatan.Ma_vt ="N"+newChitietsuatan.Ma_vt
-                         // console.log(newChitietsuatan)
-                         // this.chitietsuatanRepo.save(newChitietsuatan)
-                         const sqlInsert =  `INSERT INTO FAMILY_WRK.dbo.Pos$ct66_EH ("ID_phieu", "Ma_vt", "So_luong", "Gia", "Dvt") 
-                         VALUES (@0, @1, @2, @3, @4)`;
-                         const data1 = await this.SV_FAMILYconnection.query(`${sqlInsert}`, [newChitietsuatan.ID_phieu,newChitietsuatan.Ma_vt,newChitietsuatan.So_luong,newChitietsuatan.Gia,newChitietsuatan.Dvt ]);
-
-                    }                   
+                    this.functionThemSuatAn(dataResult.Id_Phieu, obj);                   
               }
           }
      }
 
 
+     async updateSuatan(id_phieu: number, obj){
+          console.log(id_phieu)
+          const suatAn = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu });
+          suatAn.Diengiai = obj.Diengiai;
+          suatAn.Loai = obj.Loai;
+          this.suatanRepo.save(suatAn)
 
 
+          const stored = 
+               `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
+                    where ID_phieu = ${id_phieu}
+               `;
+          const data = await this.connection.query(`${stored}`, []);
+
+          //xóa hết tất cả add lại
+          return this.functionThemSuatAn(id_phieu, obj);     
+     }
+
+     async functionThemSuatAn(id_phieu, obj: ThemSuatAnDTO){
+          for(let i = 0; i < obj.chitietsuatan.length; i++){
+               //LAY GIA MA_VT
+               const sql = `select * from  FAMILY_WRK.dbo.Dmgia2 where Ma_vt = CAST('${obj.chitietsuatan[i].Ma_vt}' as varchar)`;
+               const data = await this.SV_FAMILYconnection.query(`${sql}`, []);
+               
+               const sqlInsert =  `INSERT INTO FAMILY_WRK.dbo.Pos$ct66_EH ("ID_phieu", "Ma_vt", "So_luong", "Gia", "Dvt") 
+               VALUES (@0, @1, @2, @3, @4)`;
+               const data1 = await this.SV_FAMILYconnection.query(`${sqlInsert}`, [id_phieu,obj.chitietsuatan[i].Ma_vt,obj.chitietsuatan[i].So_luong,data[0]["Gia2"],data[0]["Dvt"] ]);
+
+          } 
+     }
+
+
+
+
+     async deleteSuatan(id_phieu: number){
+          return this.suatanRepo.delete({ Id_Phieu: id_phieu })
+
+
+     }
 
      //   async getPhieuAnChiTiet() {
      //      const stored = 
