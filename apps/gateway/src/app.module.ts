@@ -144,7 +144,8 @@ class BuildServiceModule {}
           SuatAn,ChiTietSuatAn, VatTu
   
         ];
-  
+
+        configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],

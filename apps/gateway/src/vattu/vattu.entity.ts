@@ -14,8 +14,8 @@ export class VatTu {
     Ten_vt: string
     
 
-    @OneToOne(() => ChiTietSuatAn, chitietsuatan => chitietsuatan.vattu)
-    chitietsuatan: ChiTietSuatAn
+    // @OneToOne(() => ChiTietSuatAn, chitietsuatan => chitietsuatan.vattu)
+    // chitietsuatan: ChiTietSuatAn
 
 
 }

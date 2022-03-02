@@ -1,7 +1,9 @@
 import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
 import { SuatAnService } from './suatan.service';
 import { dataFilterDTO } from './dto/dataFilter.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiConsumes } from '@nestjs/swagger';
+import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
+import { getRepository } from 'typeorm';
 @ApiTags('suatan')
 @Controller('suatan')
 export class SuatAnController {
@@ -26,10 +28,19 @@ export class SuatAnController {
      return this.suatanService.getSuatAnByIdPhieu(id_phieu);
   }
 
-  // @Get('suatan/:ngay')
-  // async suatan(@Param('ngay')  ngay) {    
-  //    return this.suatanService.getDanhMucThucDon();
-  // }
+
+  
+  @Post()
+  // @ApiConsumes("multipart/form-data")
+  async themsuatan(@Body() obj: ThemSuatAnDTO) { 
+
+    // let dayjs = require('dayjs')
+    // const dayFomat = dayjs(obj.ngay_ct).format('YYYY/MM/DD');
+    return this.suatanService.themsuatan(obj)
+
+
+    
+  }
 
   
 
