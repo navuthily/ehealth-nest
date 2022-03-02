@@ -151,6 +151,27 @@ class BuildServiceModule {}
       inject: [ApiConfigService],
     }),
 
+    // TypeOrmModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   name : "ehealth_real_new12345",
+    //   useFactory: (configService: ApiConfigService) => {
+    //     const configDB = { ...configService.typeOrmConfig('ehealth_real_new12345') };
+    //     configDB.entities = [
+        
+    //       UserEntity,
+    //       SuatAn,ChiTietSuatAn, VatTu
+  
+    //     ];
+
+    //     // configDB.logging = true;
+    //     return configDB;
+    //   },
+    //   inject: [ApiConfigService],
+    // }),
+
+
+
+
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,

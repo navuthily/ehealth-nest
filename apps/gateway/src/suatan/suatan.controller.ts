@@ -1,9 +1,10 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query, Put, Delete } from '@nestjs/common';
 import { SuatAnService } from './suatan.service';
 import { dataFilterDTO } from './dto/dataFilter.dto';
 import { ApiTags, ApiConsumes } from '@nestjs/swagger';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { getRepository } from 'typeorm';
+import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
 @ApiTags('suatan')
 @Controller('suatan')
 export class SuatAnController {
@@ -41,6 +42,25 @@ export class SuatAnController {
 
     
   }
+
+  //update suat an
+  @Put("/:id_phieu")
+  update(@Param('id_phieu') id_phieu: number, @Body() suatanUpdateData: UpdateSuatAnDTO){
+    return this.suatanService.updateSuatan(id_phieu, suatanUpdateData)
+  }
+
+
+  //delete suatan
+
+  // @Delete('/:id_phieu')
+  // delete(@Param('id_phieu') id_phieu: number){
+
+  //   console.log(id_phieu)
+  //   return this.suatanService.deleteSuatan(id_phieu)
+  // }
+
+
+
 
   
 

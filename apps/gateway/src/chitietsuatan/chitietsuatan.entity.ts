@@ -28,9 +28,9 @@ export class ChiTietSuatAn {
     suatan: SuatAn
 
 
-    // @OneToOne(() => VatTu)
-    // @JoinColumn({ name: "Ma_vt"})
-    // vattu: VatTu
+    @OneToOne(() => VatTu)
+    @JoinColumn({ name: "Ma_vt"})
+    vattu: VatTu
 
 
 }
