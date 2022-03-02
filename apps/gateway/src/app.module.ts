@@ -21,6 +21,19 @@ import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lien
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
 import { GoiKhamModule } from './goikham/goikham.module';
 import { DMReportModule } from './dm_report/dm_report.module';
+import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
+import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
+import { ThucDonModule } from './thucdon/thucdon.module';
+import { SuatAnModule } from './suatan/suatan.module';
+import { AuthModule } from './auth/auth.module';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { join } from 'path';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/user.entity';
+import { SuatAn } from './suatan/suatan.entity';
+import { ChiTietSuatAnModule } from './chitietsuatan/chitietsuatan.module';
+import { ChiTietSuatAn } from './chitietsuatan/chitietsuatan.entity';
+import { VatTu } from './vattu/vattu.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -105,12 +118,70 @@ class BuildServiceModule {}
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
+        configDB.entities = [
+        
+          UserEntity,
+  
+        ];
         return configDB;
       },
+      inject: [ApiConfigService],
+    }),
+    //---------------
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      name : "SV_FAMILY_",
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
+        configDB.entities = [
+        
+          // UserEntity,
+          SuatAn,ChiTietSuatAn, VatTu
+  
+        ];
+
+        configDB.logging = true;
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+
+    // TypeOrmModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   name : "ehealth_real_new12345",
+    //   useFactory: (configService: ApiConfigService) => {
+    //     const configDB = { ...configService.typeOrmConfig('ehealth_real_new12345') };
+    //     configDB.entities = [
+        
+    //       UserEntity,
+    //       SuatAn,ChiTietSuatAn, VatTu
+  
+    //     ];
+
+    //     // configDB.logging = true;
+    //     return configDB;
+    //   },
+    //   inject: [ApiConfigService],
+    // }),
+
+
+
+
+    I18nModule.forRootAsync({
+      useFactory: (configService: ApiConfigService) => ({
+        fallbackLanguage: configService.fallbackLanguage,
+        parserOptions: {
+          path: join(__dirname, '../../../../../../', 'libs/i18n'),
+          watch: configService.isDevelopment,
+        },
+      }),
+      imports: [SharedModule],
+      parser: I18nJsonParser,
       inject: [ApiConfigService],
     }),
 
@@ -132,6 +203,7 @@ class BuildServiceModule {}
     // }),
 
     ScheduleModule.forRoot(),
+    UserModule,
     GoogleNotificationModule,
     XmlBHYTModule,
     ThuocModule,
@@ -144,42 +216,12 @@ class BuildServiceModule {}
     GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
     GoiKhamModule,
     DMReportModule,
+    BenhAnNoiTruModule,    
+    DMPhongBanModule,
+    ThucDonModule,
+    SuatAnModule,
+    // ChiTietSuatAnModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
-
-// @Module({
-//   imports: [
-//     GraphQLGatewayModule.forRoot({
-//       server: {
-//         // ... Apollo server options
-//         debug: true,
-//         cors: false,
-//         plugins: [
-//           ApolloServerPluginLandingPageGraphQLPlayground({
-//             cdnUrl: `${process.env.SV_GATEWAY_IP}:${process.env.SV_GATEWAY_PORT}`,
-//           }),
-//           ApolloServerPluginInlineTrace(),
-//         ],
-//         context: ({ req }) => ({
-//           jwt: req.headers.authorization,
-//         }),
-//       },
-//       gateway: {
-//         serviceList: [
-//           {
-//             name: 'thongtinluotkham',
-//             // url: 'http://localhost:3001/graphql'
-//             url: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}/graphql`,
-//           },
-//           {
-//             name: 'posph66EhH',
-//             // url: 'http://localhost:3002/graphql'
-//             url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
-//           },
-//         ],
-//       },
-//     }),
-//   ],
-// })
-// export class AppModule {}

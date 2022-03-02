@@ -9,6 +9,7 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from '@libs/interceptors/logging.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpStatus, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
 
 async function bootstrap(): Promise<NestFastifyApplication> {
 
@@ -26,7 +27,6 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     .setTitle('APIs')
     .setDescription('The APIs description')
     .setVersion('1.0')
-    // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
@@ -35,6 +35,17 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     root: join(__dirname, '../../../../../../', 'public'),
     prefix: '/',
   });
+
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+  //     transform: true,
+  //     dismissDefaultMessages: true,
+  //     exceptionFactory: (errors) => new UnprocessableEntityException(errors),
+  //   }),
+  // );
+
 
   // app
   //   .getHttpAdapter()

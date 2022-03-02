@@ -72,6 +72,7 @@
     "class-validator": "^0.13.1",
     "compression": "^1.7.4",
     "dataloader": "^2.0.0",
+    "dayjs": "^1.10.8",
     "dotenv": "^10.0.0",
     "eslint-plugin-unused-imports": "^1.1.5",
     "express": "^4.17.1",
