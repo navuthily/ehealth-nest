@@ -21,6 +21,8 @@ import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lien
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
 import { GoiKhamModule } from './goikham/goikham.module';
 import { DMReportModule } from './dm_report/dm_report.module';
+import { GD2DatLichOnlineModule } from './gd2_datlichonline/gd2_datlichonline.module';
+import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -55,7 +57,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule {}
+class BuildServiceModule { }
 
 @Module({
   imports: [
@@ -144,9 +146,11 @@ class BuildServiceModule {}
     GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
     GoiKhamModule,
     DMReportModule,
+    GD2DatLichOnlineModule,
+    ThongTinLuotKhamModule
   ],
 })
-export class AppModule {}
+export class AppModule { }
 
 // @Module({
 //   imports: [
