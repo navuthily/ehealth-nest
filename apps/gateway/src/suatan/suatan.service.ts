@@ -91,24 +91,26 @@ export class SuatAnService {
           // console.log(dayFomat)
           //NEU SUAT AN  DA TON TAI
           console.log(suatan)
-          const stored = 
-          `select * from  ThongTinLuotKham
-               where ID_LuotKham = ${obj.Id_LuotKham }
-          `;
-          const thongtinluotkham = await this.connection.query(`${stored}`, []);
+          
+          
+          
+          const ckeckDuyetdon = await this.checkDuyetDon(suatan)
 
-          console.log("-------", thongtinluotkham[0]["DaThanhToanBill"])
-
-
-          this.functionCheckInsertOrUpdate(suatan)
-
-          if(thongtinluotkham[0]["DaThanhToanBill"]){
-               console.log("helloooooo")
+          if(ckeckDuyetdon){
                return {
                     success: false,
-                    message: "Đã thanh toán!"
+                    message: "Đơn hàng đã được chốt!"
                }
           }
+
+          const ckeckThongtinluotkham = await this.checkThongtinluotkham(obj.Id_LuotKham)
+          if(ckeckThongtinluotkham){
+               return {
+                    success: false,
+                    message: "Đơn hàng đã được thanh toán!"
+               }
+          }
+
           
 
 
@@ -148,19 +150,54 @@ export class SuatAnService {
      async updateSuatan(id_phieu: number, obj){
           console.log(id_phieu)
           const suatAn = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu });
-          suatAn.Diengiai = obj.Diengiai;
-          suatAn.Loai = obj.Loai;
-          this.suatanRepo.save(suatAn)
+          console.log(suatAn)
 
 
-          const stored = 
-               `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
-                    where ID_phieu = ${id_phieu}
-               `;
-          const data = await this.connection.query(`${stored}`, []);
 
-          //xóa hết tất cả add lại
-          return this.functionThemSuatAn(id_phieu, obj);     
+          if(suatAn){
+               const ckeckDuyetdon = await this.checkDuyetDon(suatAn)
+               if(ckeckDuyetdon){
+                    return {
+                         success: false,
+                         message: "Đơn hàng đã được chốt. Không thể cập nhật!"
+                    }
+               }
+
+               const ckeckThongtinluotkham = await this.checkThongtinluotkham(suatAn.Id_LuotKham)
+               if(ckeckThongtinluotkham){
+                    return {
+                         success: false,
+                         message: "Đơn hàng đã được thanh toán, không thể cập nhật!"
+                    }
+               }
+               
+
+
+               suatAn.Diengiai = obj.Diengiai;
+               suatAn.Loai = obj.Loai;
+               this.suatanRepo.save(suatAn)
+
+               const stored = 
+                    `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
+                         where ID_phieu = ${id_phieu}
+                    `;
+               const data = await this.connection.query(`${stored}`, []);
+
+               //xóa hết tất cả add lại
+               await this.functionThemSuatAn(id_phieu, obj);
+
+               return{
+                    success: true,
+                    message: "Update thành công!"
+               }
+
+          }
+
+          
+
+          
+
+     
      }
 
      async functionThemSuatAn(id_phieu, obj: ThemSuatAnDTO){
@@ -177,21 +214,25 @@ export class SuatAnService {
      }
 
 
-     functionCheckInsertOrUpdate(suatan){
-
+     checkDuyetDon(suatan){
           if(suatan?.Id_NguoiDuyet === null){
-               return {
-                    success: false,
-                    message: "Đã chốt đơn!"
-               }
+               return true;
           }
- 
-          //  if(thongtinluotkham[0]["DaThanhToanBill"] !== 0){
-          //       return {
-          //            success: false,
-          //            message: "Đã thanh toán!"
-          //       }
-          //  }     
+     }
+
+     async checkThongtinluotkham(id_luotkham){
+          console.log("lượt khám")
+          const stored = 
+          `select * from  ThongTinLuotKham
+               where ID_LuotKham = ${id_luotkham }
+          `;
+          const thongtinluotkham = await this.connection.query(`${stored}`, []);
+
+          console.log("-------", thongtinluotkham[0]["DaThanhToanBill"])
+
+          if(thongtinluotkham[0]["DaThanhToanBill"]){
+               return true
+          }          
      }
 
 
