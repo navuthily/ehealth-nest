@@ -95,7 +95,7 @@ export class BenhAnNoiTruService {
 
      const thongtinsuatan = await this.getThongTinSuatAnBenhNhan(data)  
      
-     console.log(1)
+
      for(let i = 0; i < data.length; i++){
           const result  = thongtinsuatan.filter(item => item.Id_LuotKham ===  data[i]["ID_LuotKham"])
           if(result.length === 0){
