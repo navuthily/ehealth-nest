@@ -21,6 +21,8 @@ import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lien
 import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
 import { GoiKhamModule } from './goikham/goikham.module';
 import { DMReportModule } from './dm_report/dm_report.module';
+import { GD2DatLichOnlineModule } from './gd2_datlichonline/gd2_datlichonline.module';
+import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
 import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
 import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
 import { ThucDonModule } from './thucdon/thucdon.module';
@@ -68,7 +70,7 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule {}
+class BuildServiceModule { }
 
 @Module({
   imports: [
@@ -216,6 +218,48 @@ class BuildServiceModule {}
     GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
     GoiKhamModule,
     DMReportModule,
+    GD2DatLichOnlineModule,
+    ThongTinLuotKhamModule
+  ],
+})
+export class AppModule { }
+
+// @Module({
+//   imports: [
+//     GraphQLGatewayModule.forRoot({
+//       server: {
+//         // ... Apollo server options
+//         debug: true,
+//         cors: false,
+//         plugins: [
+//           ApolloServerPluginLandingPageGraphQLPlayground({
+//             cdnUrl: `${process.env.SV_GATEWAY_IP}:${process.env.SV_GATEWAY_PORT}`,
+//           }),
+//           ApolloServerPluginInlineTrace(),
+//         ],
+//         context: ({ req }) => ({
+//           jwt: req.headers.authorization,
+//         }),
+//       },
+//       gateway: {
+//         serviceList: [
+//           {
+//             name: 'thongtinluotkham',
+//             // url: 'http://localhost:3001/graphql'
+//             url: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}/graphql`,
+//           },
+//           {
+//             name: 'posph66EhH',
+//             // url: 'http://localhost:3002/graphql'
+//             url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
+//           },
+//         ],
+//       },
+//     }),
+//   ],
+// })
+// export class AppModule {}
+
     BenhAnNoiTruModule,    
     DMPhongBanModule,
     ThucDonModule,
