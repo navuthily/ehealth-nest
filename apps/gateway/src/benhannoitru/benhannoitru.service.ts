@@ -6,6 +6,7 @@ import { Queue } from 'bull';
 import { Cache } from 'cache-manager';
 import { Connection } from 'typeorm';
 import { dataFilterDTO } from './dto/dataFilter.dto';
+import { SuatAn } from '../suatan/suatan.entity';
 
 
 @Injectable()
@@ -13,6 +14,8 @@ export class BenhAnNoiTruService {
   constructor(
     @InjectConnection() readonly connection: Connection,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
+
+    @InjectConnection("SV_FAMILY_") private SV_FAMILYconnection: Connection,
   ) { }
  
   async getDanhSachNoiTru(id_khoa: number) {
@@ -88,8 +91,57 @@ export class BenhAnNoiTruService {
                DESC
           `;
      const data = await this.connection.query(`${stored}`, [id_khoa]);
+
+
+     const thongtinsuatan = await this.getThongTinSuatAnBenhNhan(data)  
+     
+
+     for(let i = 0; i < data.length; i++){
+          const result  = thongtinsuatan.filter(item => item.Id_LuotKham ===  data[i]["ID_LuotKham"])
+          if(result.length === 0){
+               data[i]["thongtinsuatan"] = false  //chưa đặt
+          }else{
+               data[i]["thongtinsuatan"] = true //đã đặt
+          }
+          
+     }
+
+
      return data;
              
+  }
+
+
+
+
+
+  async getThongTinSuatAnBenhNhan(data){
+     let dayjs = require('dayjs')
+     const homnay =  new Date()
+     let ngaymai =  new Date()
+     
+     ngaymai = dayjs(ngaymai.setDate(homnay.getDate() + 1)).format('YYYY/MM/DD');
+     // console.log(ngaymai)
+
+     let ids: number[] = [0];
+     for(let i = 0; i < data.length; i++){
+          ids.push(data[i]["ID_LuotKham"])
+     }
+
+     const dataSuatAn = await this.SV_FAMILYconnection.getRepository(SuatAn)
+     .createQueryBuilder("Pos$ph66_EH")
+     .select([
+          "Pos$ph66_EH.Id_LuotKham",
+     ])
+     .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
+     .where("Pos$ph66_EH.Id_LuotKham IN (:...ids)", { ids })
+     .andWhere("Pos$ph66_EH.ngay_ct = :ngay_ct", { ngay_ct: ngaymai})
+     .getMany()
+
+
+     return dataSuatAn
+     
+
   }
 
 
