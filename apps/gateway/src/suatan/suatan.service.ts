@@ -56,16 +56,6 @@ export class SuatAnService {
           // . getMany())
           // console.log(await this.suatanRepo.find( {relations: ["chitietsuatans"]} ))
           // const data = await this.suatanRepo.find( {relations: ["chitietsuatans"]} )
-
-
-          // const stored = 
-          //      `select top 100 * from  FAMILY_WRK.dbo.Pos$ph66_EH 
-          //      where Ngaygiotao = '2017-02-06 19:44:04.880' 
-          //       order by Id_Phieu desc 
-          
-          //      `;
-          //      // where Ngaygiotao = '2021-11-17T04:46:17.210Z' 
-          // const data = await this.connection.query(`${stored}`, []);
           
      }
 
@@ -118,7 +108,7 @@ export class SuatAnService {
           if(suatan){
                return {
                     success: false,
-                    message: "Đã đặt!",
+                    message: "Đơn hàng đã đặt rồi !huhu",
                     suatan
                }
           }else{
@@ -137,8 +127,8 @@ export class SuatAnService {
               if(dataResult){
                     await  this.functionThemSuatAn(dataResult.Id_Phieu, obj);  
                     return {
-                         success: false,
-                         message: "Thành công!",
+                         success: true,
+                         message: "Đơn hàng được đặt thành công!",
                          dataResult
                     }                
               }
@@ -215,7 +205,7 @@ export class SuatAnService {
 
 
      checkDuyetDon(suatan){
-          if(suatan?.Id_NguoiDuyet === null){
+          if(suatan?.Id_NguoiDuyet){
                return true;
           }
      }
