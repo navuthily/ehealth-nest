@@ -23,6 +23,19 @@ import { GoiKhamModule } from './goikham/goikham.module';
 import { DMReportModule } from './dm_report/dm_report.module';
 import { GD2DatLichOnlineModule } from './gd2_datlichonline/gd2_datlichonline.module';
 import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
+import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
+import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
+import { ThucDonModule } from './thucdon/thucdon.module';
+import { SuatAnModule } from './suatan/suatan.module';
+import { AuthModule } from './auth/auth.module';
+import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
+import { join } from 'path';
+import { UserModule } from './user/user.module';
+import { UserEntity } from './user/user.entity';
+import { SuatAn } from './suatan/suatan.entity';
+import { ChiTietSuatAnModule } from './chitietsuatan/chitietsuatan.module';
+import { ChiTietSuatAn } from './chitietsuatan/chitietsuatan.entity';
+import { VatTu } from './vattu/vattu.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -107,12 +120,70 @@ class BuildServiceModule { }
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
+
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
+        configDB.entities = [
+        
+          UserEntity,
+  
+        ];
         return configDB;
       },
+      inject: [ApiConfigService],
+    }),
+    //---------------
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      name : "SV_FAMILY_",
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
+        configDB.entities = [
+        
+          // UserEntity,
+          SuatAn,ChiTietSuatAn, VatTu
+  
+        ];
+
+        configDB.logging = true;
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+
+    // TypeOrmModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   name : "ehealth_real_new12345",
+    //   useFactory: (configService: ApiConfigService) => {
+    //     const configDB = { ...configService.typeOrmConfig('ehealth_real_new12345') };
+    //     configDB.entities = [
+        
+    //       UserEntity,
+    //       SuatAn,ChiTietSuatAn, VatTu
+  
+    //     ];
+
+    //     // configDB.logging = true;
+    //     return configDB;
+    //   },
+    //   inject: [ApiConfigService],
+    // }),
+
+
+
+
+    I18nModule.forRootAsync({
+      useFactory: (configService: ApiConfigService) => ({
+        fallbackLanguage: configService.fallbackLanguage,
+        parserOptions: {
+          path: join(__dirname, '../../../../../../', 'libs/i18n'),
+          watch: configService.isDevelopment,
+        },
+      }),
+      imports: [SharedModule],
+      parser: I18nJsonParser,
       inject: [ApiConfigService],
     }),
 
@@ -134,6 +205,7 @@ class BuildServiceModule { }
     // }),
 
     ScheduleModule.forRoot(),
+    UserModule,
     GoogleNotificationModule,
     XmlBHYTModule,
     ThuocModule,
@@ -187,3 +259,13 @@ export class AppModule { }
 //   ],
 // })
 // export class AppModule {}
+
+    BenhAnNoiTruModule,    
+    DMPhongBanModule,
+    ThucDonModule,
+    SuatAnModule,
+    // ChiTietSuatAnModule,
+    AuthModule,
+  ],
+})
+export class AppModule {}
