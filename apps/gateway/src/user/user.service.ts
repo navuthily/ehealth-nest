@@ -76,10 +76,10 @@ export class UserService {
   //   return items.toPageDto(pageMetaDto);
   // }
 
-  async getUser(userId: string): Promise<UserDto> {
-    const queryBuilder = this.userRepository.createQueryBuilder('user');
+  async getUser(userId: number): Promise<UserDto> {
+    const queryBuilder = this.userRepository.createQueryBuilder('dm_nhanvien');
 
-    queryBuilder.where('user.id = :userId', { userId });
+    queryBuilder.where('dm_nhanvien.id_nhanvien = :userId', { userId });
 
     const userEntity = await queryBuilder.getOne();
 

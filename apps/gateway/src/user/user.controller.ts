@@ -3,6 +3,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
@@ -56,14 +58,14 @@ export class UserController {
   // }
 
   @Get(':id')
-  @Auth([RoleType.USER])
+  // @Auth([RoleType.USER])
   @HttpCode(HttpStatus.OK)
   @ApiResponse({
     status: HttpStatus.OK,
     description: 'Get users list',
     type: UserDto,
   })
-  getUser(@UUIDParam('id') userId: string): Promise<UserDto> {
+  getUser(@Param('id', ParseIntPipe)  userId: number): Promise<UserDto> {
     return this.userService.getUser(userId);
   }
 }
