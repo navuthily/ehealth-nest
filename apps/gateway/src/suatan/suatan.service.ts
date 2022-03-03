@@ -118,7 +118,7 @@ export class SuatAnService {
           if(suatan){
                return {
                     success: false,
-                    message: "Đơn hàng đã được đặt từ trước!",
+                    message: "Đã đặt!",
                     suatan
                }
           }else{
