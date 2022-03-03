@@ -97,13 +97,17 @@ export class SuatAnService {
           `;
           const thongtinluotkham = await this.connection.query(`${stored}`, []);
 
-          console.log("-------", thongtinluotkham[0]["DaThanhToanBill"])
+          console.log(thongtinluotkham)
 
 
-          this.functionCheckInsertOrUpdate(suatan)
+          if(suatan?.Id_NguoiDuyet === null){
+              return {
+                   success: false,
+                   message: "Đã chốt đơn!"
+              }
+          }
 
-          if(thongtinluotkham[0]["DaThanhToanBill"]){
-               console.log("helloooooo")
+          if(thongtinluotkham[0]["DaThanhToanBill"] !== 0){
                return {
                     success: false,
                     message: "Đã thanh toán!"
@@ -116,7 +120,7 @@ export class SuatAnService {
           if(suatan){
                return {
                     success: false,
-                    message: "Đơn hàng đã được đặt từ trước!",
+                    message: "Đã đặt!",
                     suatan
                }
           }else{
@@ -176,23 +180,6 @@ export class SuatAnService {
           } 
      }
 
-
-     functionCheckInsertOrUpdate(suatan){
-
-          if(suatan?.Id_NguoiDuyet === null){
-               return {
-                    success: false,
-                    message: "Đã chốt đơn!"
-               }
-          }
- 
-          //  if(thongtinluotkham[0]["DaThanhToanBill"] !== 0){
-          //       return {
-          //            success: false,
-          //            message: "Đã thanh toán!"
-          //       }
-          //  }     
-     }
 
 
 
