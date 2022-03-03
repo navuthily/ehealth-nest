@@ -56,16 +56,6 @@ export class SuatAnService {
           // . getMany())
           // console.log(await this.suatanRepo.find( {relations: ["chitietsuatans"]} ))
           // const data = await this.suatanRepo.find( {relations: ["chitietsuatans"]} )
-
-
-          // const stored = 
-          //      `select top 100 * from  FAMILY_WRK.dbo.Pos$ph66_EH 
-          //      where Ngaygiotao = '2017-02-06 19:44:04.880' 
-          //       order by Id_Phieu desc 
-          
-          //      `;
-          //      // where Ngaygiotao = '2021-11-17T04:46:17.210Z' 
-          // const data = await this.connection.query(`${stored}`, []);
           
      }
 
@@ -91,28 +81,26 @@ export class SuatAnService {
           // console.log(dayFomat)
           //NEU SUAT AN  DA TON TAI
           console.log(suatan)
-          const stored = 
-          `select * from  ThongTinLuotKham
-               where ID_LuotKham = ${obj.Id_LuotKham }
-          `;
-          const thongtinluotkham = await this.connection.query(`${stored}`, []);
+          
+          
+          
+          const ckeckDuyetdon = await this.checkDuyetDon(suatan)
 
-          console.log(thongtinluotkham)
-
-
-          if(suatan?.Id_NguoiDuyet === null){
-              return {
-                   success: false,
-                   message: "Đã chốt đơn!"
-              }
-          }
-
-          if(thongtinluotkham[0]["DaThanhToanBill"] !== 0){
+          if(ckeckDuyetdon){
                return {
                     success: false,
-                    message: "Đã thanh toán!"
+                    message: "Đơn hàng đã được chốt!"
                }
           }
+
+          const ckeckThongtinluotkham = await this.checkThongtinluotkham(obj.Id_LuotKham)
+          if(ckeckThongtinluotkham){
+               return {
+                    success: false,
+                    message: "Đơn hàng đã được thanh toán!"
+               }
+          }
+
           
 
 
@@ -120,7 +108,7 @@ export class SuatAnService {
           if(suatan){
                return {
                     success: false,
-                    message: "Đã đặt!",
+                    message: "Đơn hàng đã đặt rồi !huhu",
                     suatan
                }
           }else{
@@ -139,8 +127,8 @@ export class SuatAnService {
               if(dataResult){
                     await  this.functionThemSuatAn(dataResult.Id_Phieu, obj);  
                     return {
-                         success: false,
-                         message: "Thành công!",
+                         success: true,
+                         message: "Đơn hàng được đặt thành công!",
                          dataResult
                     }                
               }
@@ -152,19 +140,54 @@ export class SuatAnService {
      async updateSuatan(id_phieu: number, obj){
           console.log(id_phieu)
           const suatAn = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu });
-          suatAn.Diengiai = obj.Diengiai;
-          suatAn.Loai = obj.Loai;
-          this.suatanRepo.save(suatAn)
+          console.log(suatAn)
 
 
-          const stored = 
-               `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
-                    where ID_phieu = ${id_phieu}
-               `;
-          const data = await this.connection.query(`${stored}`, []);
 
-          //xóa hết tất cả add lại
-          return this.functionThemSuatAn(id_phieu, obj);     
+          if(suatAn){
+               const ckeckDuyetdon = await this.checkDuyetDon(suatAn)
+               if(ckeckDuyetdon){
+                    return {
+                         success: false,
+                         message: "Đơn hàng đã được chốt. Không thể cập nhật!"
+                    }
+               }
+
+               const ckeckThongtinluotkham = await this.checkThongtinluotkham(suatAn.Id_LuotKham)
+               if(ckeckThongtinluotkham){
+                    return {
+                         success: false,
+                         message: "Đơn hàng đã được thanh toán, không thể cập nhật!"
+                    }
+               }
+               
+
+
+               suatAn.Diengiai = obj.Diengiai;
+               suatAn.Loai = obj.Loai;
+               this.suatanRepo.save(suatAn)
+
+               const stored = 
+                    `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
+                         where ID_phieu = ${id_phieu}
+                    `;
+               const data = await this.connection.query(`${stored}`, []);
+
+               //xóa hết tất cả add lại
+               await this.functionThemSuatAn(id_phieu, obj);
+
+               return{
+                    success: true,
+                    message: "Update thành công!"
+               }
+
+          }
+
+          
+
+          
+
+     
      }
 
      async functionThemSuatAn(id_phieu, obj: ThemSuatAnDTO){
@@ -180,6 +203,27 @@ export class SuatAnService {
           } 
      }
 
+
+     checkDuyetDon(suatan){
+          if(suatan?.Id_NguoiDuyet){
+               return true;
+          }
+     }
+
+     async checkThongtinluotkham(id_luotkham){
+          console.log("lượt khám")
+          const stored = 
+          `select * from  ThongTinLuotKham
+               where ID_LuotKham = ${id_luotkham }
+          `;
+          const thongtinluotkham = await this.connection.query(`${stored}`, []);
+
+          console.log("-------", thongtinluotkham[0]["DaThanhToanBill"])
+
+          if(thongtinluotkham[0]["DaThanhToanBill"]){
+               return true
+          }          
+     }
 
 
 
