@@ -10,8 +10,6 @@ import { SuatAn } from './suatan.entity';
 import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
-import { UserService } from '../user/user.service';
-import { UserEntity } from '../user/user.entity';
 
 
 @Injectable()
@@ -20,13 +18,12 @@ export class SuatAnService {
     @InjectConnection() readonly connection: Connection,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
 
-
     @InjectConnection("SV_FAMILY_") private SV_FAMILYconnection: Connection,
 //     @InjectEntityManager("SV_FAMILY_") private entityManager: SuatAn
 
      @InjectRepository(SuatAn, "SV_FAMILY_") private suatanRepo: Repository<SuatAn>,
      @InjectRepository(ChiTietSuatAn, "SV_FAMILY_") private chitietsuatanRepo: Repository<ChiTietSuatAn>,
-     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
+     
   ) { }
 
      //lấy suất ăn theo id_phieu
@@ -45,19 +42,12 @@ export class SuatAnService {
           const data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.ngay_ct = :ngay_ct", {ngay_ct: ngay})
           .andWhere("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
+
           .getMany();
 
-
-       
-          // userRepo
-          for(let i=0;i<data.length;i++){
-           const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
-           data[i]={...data[i],nguoitao}
-          }
-          console.log(data)
           return data;          
 
-      
+
           // console.log(await this.SV_FAMILYconnection.getRepository(ChiTietSuatAn)
           // .createQueryBuilder("Pos$ct66_EH")
           // .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
@@ -149,12 +139,18 @@ export class SuatAnService {
 
      async updateSuatan(id_phieu: number, obj){
           console.log(id_phieu)
-          const suatAn = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu });
+          const suatAn = await this.suatanRepo
+          .createQueryBuilder('Pos$ph66_EH')
+          .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
+          .where('Pos$ph66_EH.Id_Phieu = :Id_Phieu', { Id_Phieu: id_phieu })
+          .getOne()
           console.log(suatAn)
 
 
 
           if(suatAn){
+
+
                const ckeckDuyetdon = await this.checkDuyetDon(suatAn)
                if(ckeckDuyetdon){
                     return {
@@ -170,27 +166,62 @@ export class SuatAnService {
                          message: "Đơn hàng đã được thanh toán, không thể cập nhật!"
                     }
                }
+
+
+
+               await this.delete(id_phieu)
+
+               if(obj.chitietsuatan.length === 0){
+                    //xoa luon suat an
+                    const stored = 
+                    `delete from  FAMILY_WRK.dbo.Pos$ph66_EH
+                         where ID_phieu = ${id_phieu}
+                    `;
+                    await this.connection.query(`${stored}`, []);
+
+
+                    //xóa hết tất cả bảng ct 
+                    // await this.delete(id_phieu)
+                    
+                    return{
+                         success: true,
+                         message: "Huy suat an!"
+                    }
+               }else{
+                    //update bảng ph
+                    const suatAnHienTai = await this.suatanRepo.find({ Id_Phieu: id_phieu })
+                    console.log(id_phieu)
+                    suatAnHienTai["Diengiai"] = obj.Diengiai;
+                    suatAnHienTai["Loai"] = obj.Loai;
+                    this.suatanRepo.save(suatAnHienTai)   
+
+
+
+
+                    //xóa hết tất cả bảng ct add lại
+                    // await this.delete(id_phieu)
+
+                    
+                    await this.functionThemSuatAn(id_phieu, obj);
+
+                    return{
+                         success: true,
+                         message: "Update thành công!"
+                    }
+               }
+               
                
 
 
-               suatAn.Diengiai = obj.Diengiai;
-               suatAn.Loai = obj.Loai;
-               this.suatanRepo.save(suatAn)
 
-               const stored = 
-                    `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
-                         where ID_phieu = ${id_phieu}
-                    `;
-               const data = await this.connection.query(`${stored}`, []);
 
-               //xóa hết tất cả add lại
-               await this.functionThemSuatAn(id_phieu, obj);
 
+
+          }else{
                return{
-                    success: true,
-                    message: "Update thành công!"
+                    success: false,
+                    message: "Đơn hang không tồn tại!"
                }
-
           }
 
           
@@ -221,14 +252,16 @@ export class SuatAnService {
      }
 
      async checkThongtinluotkham(id_luotkham){
-          console.log("lượt khám")
+          
           const stored = 
           `select * from  ThongTinLuotKham
                where ID_LuotKham = ${id_luotkham }
           `;
           const thongtinluotkham = await this.connection.query(`${stored}`, []);
-
-          console.log("-------", thongtinluotkham[0]["DaThanhToanBill"])
+          if(thongtinluotkham.length === 0){
+               const error = {"Thongtinluotkham": "Không tìm thấy!"}
+               throw new HttpException({error}, 401)
+          }
 
           if(thongtinluotkham[0]["DaThanhToanBill"]){
                return true
@@ -236,8 +269,14 @@ export class SuatAnService {
      }
 
 
-
-
+     //chỉ bảng ct
+     async delete(id){
+          const stored = 
+          `delete from  FAMILY_WRK.dbo.Pos$ct66_EH
+               where ID_phieu = ${id}
+          `;
+          await this.connection.query(`${stored}`, []);
+     }
 
      //   async getPhieuAnChiTiet() {
      //      const stored = 
