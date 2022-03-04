@@ -40,5 +40,7 @@ export class SuatAn {
     @OneToMany(() => ChiTietSuatAn, chitietsuatan => chitietsuatan.suatan)
     chitietsuatans: ChiTietSuatAn[]
 
+    nguoitao:any
+
 
 }
