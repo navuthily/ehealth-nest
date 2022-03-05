@@ -45,9 +45,21 @@ export class SuatAnService {
      async getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai){
           console.log(ngay)
           const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
-          const data = await this.suatanRepo.find({ Id_LuotKham: id_luotkham, Id_Buoi: buoi, ngay_ct: dayFomat, Loai: loai })
-          console.log(data)
-          return data
+          // const data = await this.suatanRepo.find({ Id_LuotKham: id_luotkham, Id_Buoi: buoi, ngay_ct: dayFomat, Loai: loai })
+          // console.log(data)
+
+
+          const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
+          .createQueryBuilder('Pos$ph66_EH')
+          .where("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
+          .andWhere('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: buoi })
+          .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: loai })
+          .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
+          .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
+          .getMany()
+          console.log(suatan)
+          return suatan
          
 
 
