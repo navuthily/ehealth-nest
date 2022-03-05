@@ -10,6 +10,7 @@ import { SuatAn } from './suatan.entity';
 import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
+import { UserEntity } from '../user/user.entity';
 
 
 @Injectable()
@@ -23,17 +24,22 @@ export class SuatAnService {
 
      @InjectRepository(SuatAn, "SV_FAMILY_") private suatanRepo: Repository<SuatAn>,
      @InjectRepository(ChiTietSuatAn, "SV_FAMILY_") private chitietsuatanRepo: Repository<ChiTietSuatAn>,
-     
+     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) { }
 
      //lấy suất ăn theo id_phieu
      async getSuatAnByIdPhieu(id_phieu: number) {
-          const dataByIdPhieu = await (await this.getSuatAn())
+          const  data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.Id_Phieu = :Id_Phieu", { Id_Phieu: id_phieu})
           .getMany()
 
-          return dataByIdPhieu
-
+         
+          for(let i=0;i<data.length;i++){
+               const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
+               data[i]={...data[i],nguoitao}
+              }
+ 
+              return data;     
 
      }
 
@@ -44,7 +50,11 @@ export class SuatAnService {
           .andWhere("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
 
           .getMany();
-
+          for(let i=0;i<data.length;i++){
+               const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
+               data[i]={...data[i],nguoitao}
+              }
+         
           return data;          
 
 
