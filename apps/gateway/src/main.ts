@@ -9,6 +9,8 @@ import { join } from 'path';
 import { AppModule } from './app.module';
 import { LoggingInterceptor } from '@libs/interceptors/logging.interceptor';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { HttpStatus, UnprocessableEntityException, ValidationPipe } from '@nestjs/common';
+import rateLimit from 'express-rate-limit';
 
 async function bootstrap(): Promise<NestFastifyApplication> {
 
@@ -22,11 +24,19 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     { cors: false },
   );
 
+
+  app.use(
+    rateLimit({
+      windowMs: 15 * 60 * 1000, // 15 minuteDs
+      max: 1_000_000, // limit each IP to 100 requests per windowMs
+    }),
+  );
+  
+
   const config = new DocumentBuilder()
     .setTitle('APIs')
     .setDescription('The APIs description')
     .setVersion('1.0')
-    // .addTag('cats')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
@@ -35,6 +45,17 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     root: join(__dirname, '../../../../../../', 'public'),
     prefix: '/',
   });
+
+  // app.useGlobalPipes(
+  //   new ValidationPipe({
+  //     whitelist: true,
+  //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+  //     transform: true,
+  //     dismissDefaultMessages: true,
+  //     exceptionFactory: (errors) => new UnprocessableEntityException(errors),
+  //   }),
+  // );
+
 
   // app
   //   .getHttpAdapter()
