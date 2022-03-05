@@ -11,7 +11,7 @@ import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
 import { UserEntity } from '../user/user.entity';
-
+import dayjs from 'dayjs'
 
 @Injectable()
 export class SuatAnService {
@@ -38,6 +38,18 @@ export class SuatAnService {
           }
  
           return data;       
+
+     }
+
+     //-------
+     async getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai){
+          console.log(ngay)
+          const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
+          const data = await this.suatanRepo.find({ Id_LuotKham: id_luotkham, Id_Buoi: buoi, ngay_ct: dayFomat, Loai: loai })
+          console.log(data)
+          return data
+         
+
 
      }
 
@@ -72,6 +84,7 @@ export class SuatAnService {
           .where('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: obj.Id_Buoi })
           .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
           .andWhere('Pos$ph66_EH.Id_LuotKham = :Id_LuotKham', { Id_LuotKham: obj.Id_LuotKham })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
           // console.log(dayFomat)
           //NEU SUAT AN  DA TON TAI
@@ -138,6 +151,7 @@ export class SuatAnService {
           .createQueryBuilder('Pos$ph66_EH')
           .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
           .where('Pos$ph66_EH.Id_Phieu = :Id_Phieu', { Id_Phieu: id_phieu })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
           console.log(suatAn)
 
