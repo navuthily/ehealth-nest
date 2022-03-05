@@ -17,28 +17,35 @@ import { UserDto } from './dto/user-dto';
 import { UsersPageOptionsDto } from './dto/users-page-options.dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
+import { Crud, CrudController } from '@nestjsx/crud';
 
+@Crud({
+  model: {
+    type: UserEntity,
+  },
+})
 @Controller('users')
 @ApiTags('users')
-export class UserController {
+export class UserController implements CrudController<UserEntity> {
   constructor(
     private userService: UserService,
     private readonly translationService: TranslationService,
+    public service: UserService
   ) {}
 
-  @Get('admin')
-  @Auth([RoleType.USER])
-  @HttpCode(HttpStatus.OK)
-  async admin(@AuthUser() user: UserEntity): Promise<string> {
-    const translation = await this.translationService.translate(
-      'keywords.admin',
-      {
-        lang: 'en',
-      },
-    );
+  // @Get('admin')
+  // @Auth([RoleType.USER])
+  // @HttpCode(HttpStatus.OK)
+  // async admin(@AuthUser() user: UserEntity): Promise<string> {
+  //   const translation = await this.translationService.translate(
+  //     'keywords.admin',
+  //     {
+  //       lang: 'en',
+  //     },
+  //   );
 
-    return `${translation} ${user.username}`;
-  }
+  //   return `${translation} ${user.username}`;
+  // }
 
   // @Get()
   // @Auth([RoleType.USER])
@@ -55,15 +62,15 @@ export class UserController {
   //   return this.userService.getUsers(pageOptionsDto);
   // }
 
-  @Get(':id')
-  @Auth([RoleType.USER])
-  @HttpCode(HttpStatus.OK)
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: 'Get users list',
-    type: UserDto,
-  })
-  getUser(@UUIDParam('id') userId: string): Promise<UserDto> {
-    return this.userService.getUser(userId);
-  }
+  // @Get(':id')
+  // @Auth([RoleType.USER])
+  // @HttpCode(HttpStatus.OK)
+  // @ApiResponse({
+  //   status: HttpStatus.OK,
+  //   description: 'Get users list',
+  //   type: UserDto,
+  // })
+  // getUser(@UUIDParam('id') userId: string): Promise<UserDto> {
+  //   return this.userService.getUser(userId);
+  // }
 }

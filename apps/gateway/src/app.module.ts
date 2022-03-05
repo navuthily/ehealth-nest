@@ -219,47 +219,7 @@ class BuildServiceModule { }
     GoiKhamModule,
     DMReportModule,
     GD2DatLichOnlineModule,
-    ThongTinLuotKhamModule
-  ],
-})
-export class AppModule { }
-
-// @Module({
-//   imports: [
-//     GraphQLGatewayModule.forRoot({
-//       server: {
-//         // ... Apollo server options
-//         debug: true,
-//         cors: false,
-//         plugins: [
-//           ApolloServerPluginLandingPageGraphQLPlayground({
-//             cdnUrl: `${process.env.SV_GATEWAY_IP}:${process.env.SV_GATEWAY_PORT}`,
-//           }),
-//           ApolloServerPluginInlineTrace(),
-//         ],
-//         context: ({ req }) => ({
-//           jwt: req.headers.authorization,
-//         }),
-//       },
-//       gateway: {
-//         serviceList: [
-//           {
-//             name: 'thongtinluotkham',
-//             // url: 'http://localhost:3001/graphql'
-//             url: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}/graphql`,
-//           },
-//           {
-//             name: 'posph66EhH',
-//             // url: 'http://localhost:3002/graphql'
-//             url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
-//           },
-//         ],
-//       },
-//     }),
-//   ],
-// })
-// export class AppModule {}
-
+    ThongTinLuotKhamModule,
     BenhAnNoiTruModule,    
     DMPhongBanModule,
     ThucDonModule,
