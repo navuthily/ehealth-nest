@@ -220,11 +220,6 @@ class BuildServiceModule { }
     DMReportModule,
     GD2DatLichOnlineModule,
     ThongTinLuotKhamModule,
-
-
-
-
-
     BenhAnNoiTruModule,    
     DMPhongBanModule,
     ThucDonModule,

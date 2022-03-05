@@ -13,42 +13,46 @@ import type { UserDto } from './dto/user-dto';
 import type { UsersPageOptionsDto } from './dto/users-page-options.dto';
 import type { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
-
+import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class UserService {
+export class UserService extends TypeOrmCrudService<UserEntity> {
   constructor(
     public readonly userRepository: UserRepository,
     public readonly validatorService: ValidatorService,
     public readonly awsS3Service: AwsS3Service,
-  ) {}
+    @InjectRepository(UserRepository) repo
+  ) {
+    super(repo);
+  }
 
   /**
    * Find single user
    */
-  findOne(findData: FindConditions<UserEntity>): Promise<Optional<UserEntity>> {
-    return this.userRepository.findOne(findData);
-  }
+  // findOne(findData: FindConditions<UserEntity>): Promise<Optional<UserEntity>> {
+  //   return this.userRepository.findOne(findData);
+  // }
 
-  async findByUsernameOrEmail(
-    options: Partial<{ username: string; email: string }>,
-  ): Promise<Optional<UserEntity>> {
-    const queryBuilder = this.userRepository.createQueryBuilder('user');
+  // async findByUsernameOrEmail(
+  //   options: Partial<{ username: string; email: string }>,
+  // ): Promise<Optional<UserEntity>> {
+  //   const queryBuilder = this.userRepository.createQueryBuilder('user');
 
-    if (options.email) {
-      queryBuilder.orWhere('user.email = :email', {
-        email: options.email,
-      });
-    }
+  //   if (options.email) {
+  //     queryBuilder.orWhere('user.email = :email', {
+  //       email: options.email,
+  //     });
+  //   }
 
-    if (options.username) {
-      queryBuilder.orWhere('user.username = :username', {
-        username: options.username,
-      });
-    }
+  //   if (options.username) {
+  //     queryBuilder.orWhere('user.username = :username', {
+  //       username: options.username,
+  //     });
+  //   }
 
-    return queryBuilder.getOne();
-  }
+  //   return queryBuilder.getOne();
+  // }
 
   async createUser(
     userRegisterDto: UserRegisterDto,

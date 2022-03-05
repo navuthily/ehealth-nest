@@ -11,8 +11,8 @@ export class ThucDonService {
       d.Ma_vt  as ma_vt,
       d.Ten_vt as ten_vt,
       d.Dvt as dvt,
-      g.Gia2 as gia,
-      d.So_tt as  So_tt
+      g.Gia2 as gia ,
+      d.So_tt     
       FROM FAMILY_WRK.dbo.dmvt2 d
       JOIN FAMILY_WRK.dbo.Dmgia2 g ON d.Ma_vt=g.Ma_vt
       WHERE d.Su_dung=1

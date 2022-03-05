@@ -11,7 +11,7 @@ import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
 import { UserEntity } from '../user/user.entity';
-
+import dayjs from 'dayjs'
 
 @Injectable()
 export class SuatAnService {
@@ -29,44 +29,53 @@ export class SuatAnService {
 
      //lấy suất ăn theo id_phieu
      async getSuatAnByIdPhieu(id_phieu: number) {
-          const  data = await (await this.getSuatAn())
+          const data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.Id_Phieu = :Id_Phieu", { Id_Phieu: id_phieu})
           .getMany()
-
-         
           for(let i=0;i<data.length;i++){
                const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
                data[i]={...data[i],nguoitao}
-              }
+          }
  
-              return data;     
+          return data;       
 
      }
 
-     //lấy suất ăn theo id_luotkham và ngày tạo
+     //-------
+     async getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai){
+          console.log(ngay)
+          const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
+          // const data = await this.suatanRepo.find({ Id_LuotKham: id_luotkham, Id_Buoi: buoi, ngay_ct: dayFomat, Loai: loai })
+          // console.log(data)
+
+
+          const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
+          .createQueryBuilder('Pos$ph66_EH')
+          .where("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
+          .andWhere('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: buoi })
+          .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: loai })
+          .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
+          .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
+          .getMany()
+          console.log(suatan)
+          return suatan
+         
+
+
+     }
+
      async getSuatAnByDay(ngay, id_luotkham: number) {
           const data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.ngay_ct = :ngay_ct", {ngay_ct: ngay})
           .andWhere("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
-
           .getMany();
+
           for(let i=0;i<data.length;i++){
                const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
                data[i]={...data[i],nguoitao}
-              }
-         
+          }
           return data;          
-
-
-          // console.log(await this.SV_FAMILYconnection.getRepository(ChiTietSuatAn)
-          // .createQueryBuilder("Pos$ct66_EH")
-          // .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
-
-          // .limit(10)
-          // . getMany())
-          // console.log(await this.suatanRepo.find( {relations: ["chitietsuatans"]} ))
-          // const data = await this.suatanRepo.find( {relations: ["chitietsuatans"]} )
-          
      }
 
      async getSuatAn(){
@@ -87,6 +96,7 @@ export class SuatAnService {
           .where('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: obj.Id_Buoi })
           .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
           .andWhere('Pos$ph66_EH.Id_LuotKham = :Id_LuotKham', { Id_LuotKham: obj.Id_LuotKham })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
           // console.log(dayFomat)
           //NEU SUAT AN  DA TON TAI
@@ -153,6 +163,7 @@ export class SuatAnService {
           .createQueryBuilder('Pos$ph66_EH')
           .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
           .where('Pos$ph66_EH.Id_Phieu = :Id_Phieu', { Id_Phieu: id_phieu })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
           console.log(suatAn)
 
