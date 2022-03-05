@@ -72,7 +72,7 @@ interface IContextArgs {
     BenhAnGiuongBenhModule,
     DMBuongGiuongBenhModule,
     AuthModule,
-    UserModule,
+    // UserModule,
     CommonModule,
     DMLoaiKhamModule,
     DMLoiKhuyenModule,

@@ -14,7 +14,7 @@ export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  @PrimaryColumn()
+  @PrimaryColumn({ name: 'ID_NhanVien' })
   id: string;
 
   @Column({ nullable: true, type: 'datetime2' })
