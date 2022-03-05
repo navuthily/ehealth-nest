@@ -3,6 +3,8 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Param,
+  ParseIntPipe,
   Query,
   ValidationPipe,
 } from '@nestjs/common';
