@@ -210,8 +210,8 @@ export class SuatAnService {
                     }
                }else{
                     //update bảng ph
-                    const suatAnHienTai = await this.suatanRepo.find({ Id_Phieu: id_phieu })
-                    console.log(id_phieu)
+                    const suatAnHienTai = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu })
+                    console.log(suatAnHienTai)
                     suatAnHienTai["Diengiai"] = obj.Diengiai;
                     suatAnHienTai["Loai"] = obj.Loai;
                     this.suatanRepo.save(suatAnHienTai)   
