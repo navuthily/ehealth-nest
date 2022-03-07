@@ -45,10 +45,6 @@ export class SuatAnService {
      async getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai){
           console.log(ngay)
           const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
-          // const data = await this.suatanRepo.find({ Id_LuotKham: id_luotkham, Id_Buoi: buoi, ngay_ct: dayFomat, Loai: loai })
-          // console.log(data)
-
-
           const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
           .createQueryBuilder('Pos$ph66_EH')
           .where("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
@@ -57,7 +53,7 @@ export class SuatAnService {
           .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: loai })
           .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
           .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
-          .getMany()
+          .getOne() //////--------------------------------------------
           console.log(suatan)
           return suatan
          
@@ -88,9 +84,9 @@ export class SuatAnService {
 
 
      async themsuatan(obj: ThemSuatAnDTO){
-          let dayjs = require('dayjs')
+          // let dayjs = require('dayjs')
           const dayFomat = dayjs(obj.ngay_ct).format('YYYY/MM/DD');
-
+          console.log("------",dayFomat)
           const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
           .createQueryBuilder('Pos$ph66_EH')
           .where('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: obj.Id_Buoi })
@@ -98,12 +94,7 @@ export class SuatAnService {
           .andWhere('Pos$ph66_EH.Id_LuotKham = :Id_LuotKham', { Id_LuotKham: obj.Id_LuotKham })
           .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
-          // console.log(dayFomat)
-          //NEU SUAT AN  DA TON TAI
-          console.log(suatan)
-          
-          
-          
+
           const ckeckDuyetdon = await this.checkDuyetDon(suatan)
 
           if(ckeckDuyetdon){
@@ -135,7 +126,7 @@ export class SuatAnService {
                 //NEU SUAT AN CHƯA DA TON TAI
                // THEM VAO BANG SUATAN
                const newSuatan = await this.suatanRepo.create(obj)
-               newSuatan.ngay_ct = dayFomat;
+               // newSuatan.ngay_ct = dayFomat;
                const dataResult = await this.suatanRepo.save(newSuatan).catch(err => {
                     throw new HttpException({
                          message: err.message
@@ -215,13 +206,6 @@ export class SuatAnService {
                     suatAnHienTai["Diengiai"] = obj.Diengiai;
                     suatAnHienTai["Loai"] = obj.Loai;
                     this.suatanRepo.save(suatAnHienTai)   
-
-
-
-
-                    //xóa hết tất cả bảng ct add lại
-                    // await this.delete(id_phieu)
-
                     
                     await this.functionThemSuatAn(id_phieu, obj);
 
@@ -230,13 +214,6 @@ export class SuatAnService {
                          message: "Update thành công!"
                     }
                }
-               
-               
-
-
-
-
-
 
           }else{
                return{
@@ -244,11 +221,6 @@ export class SuatAnService {
                     message: "Đơn hang không tồn tại!"
                }
           }
-
-          
-
-          
-
      
      }
 
@@ -298,25 +270,6 @@ export class SuatAnService {
           `;
           await this.connection.query(`${stored}`, []);
      }
-
-     //   async getPhieuAnChiTiet() {
-     //      const stored = 
-     //           `select * from  FAMILY_WRK.dbo.Pos$ph66_EH
-     //                where Su_dung=1
-     //           `;
-     //      const data = await this.connection.query(`${stored}`, []);
-     //      return data;             
-     //   }
-
-
-     //   async getPhieuAnChiTietTheoNgay() {
-     //      const stored = 
-     //           `select * from  FAMILY_WRK.dbo.dmvt2
-     //                where Su_dung=1
-     //           `;
-     //      const data = await this.connection.query(`${stored}`, []);
-     //      return data;             
-     //   }
  
 
 }
