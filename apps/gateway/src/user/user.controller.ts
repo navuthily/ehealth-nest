@@ -25,6 +25,85 @@ import { Crud, CrudController } from '@nestjsx/crud';
   model: {
     type: UserEntity,
   },
+
+
+  query: {
+    limit:5,
+    join: {
+      chucvu: {
+        eager:false
+      },
+      chucdanh: {
+        eager: false
+      }, 
+      thoihanhopdong: {
+        eager: false
+      }, 
+      dmhopdong: {
+        eager: false
+      }, 
+      dmtrinhdo: {
+        eager: false
+      },  
+      dmdantoc: {
+        eager: false
+      },   
+      dmquoctich: {
+        eager: false
+      }, 
+      dmloaitinhluong:{
+        eager: false
+      },
+      dmnganhang:{
+        eager:false
+      },   
+      dmdonvi:{
+        eager:false
+      },         
+      dmbophan:{
+        eager:false
+      },
+      dmphongban:{
+        eager:false
+      }, 
+      dmloaikhoi:{
+        eager:false
+      },
+      tinhtranghonnhan:{
+        eager:false
+      },
+      nhanvienhopdongs:{
+        eager:false
+      },
+      'nhanvienhopdongs.loaihopdong':{
+        eager:false
+      },
+      chuyenkhoa:{
+        eager:false
+      },
+      nccchn:{
+        eager:false
+      },
+      nccmnd:{
+        eager:false
+      },
+      phamvichungchihanhnghe:{
+        eager:false
+      },
+      phamvihanhnghebosung:{
+        eager:false
+      },
+      dienthianhvans:{
+        eager:false
+      },
+      nhanvienbangcaps:{
+        eager:false
+      },
+      'nhanvienbangcaps.loaibangcap':{
+        eager:false
+      },
+    }
+  }
 })
 @Controller('users')
 @ApiTags('users')
@@ -35,44 +114,4 @@ export class UserController implements CrudController<UserEntity> {
     public service: UserService
   ) {}
 
-  // @Get('admin')
-  // @Auth([RoleType.USER])
-  // @HttpCode(HttpStatus.OK)
-  // async admin(@AuthUser() user: UserEntity): Promise<string> {
-  //   const translation = await this.translationService.translate(
-  //     'keywords.admin',
-  //     {
-  //       lang: 'en',
-  //     },
-  //   );
-
-  //   return `${translation} ${user.username}`;
-  // }
-
-  // @Get()
-  // @Auth([RoleType.USER])
-  // @HttpCode(HttpStatus.OK)
-  // @ApiResponse({
-  //   status: HttpStatus.OK,
-  //   description: 'Get users list',
-  //   type: PageDto,
-  // })
-  // getUsers(
-  //   @Query(new ValidationPipe({ transform: true }))
-  //   pageOptionsDto: UsersPageOptionsDto,
-  // ): Promise<PageDto<UserDto>> {
-  //   return this.userService.getUsers(pageOptionsDto);
-  // }
-
-  // @Get(':id')
-  // @Auth([RoleType.USER])
-  // @HttpCode(HttpStatus.OK)
-  // @ApiResponse({
-  //   status: HttpStatus.OK,
-  //   description: 'Get users list',
-  //   type: UserDto,
-  // })
-  // getUser(@UUIDParam('id') userId: string): Promise<UserDto> {
-  //   return this.userService.getUser(userId);
-  // }
 }

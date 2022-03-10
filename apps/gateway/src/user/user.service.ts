@@ -26,34 +26,6 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
   ) {
     super(repo);
   }
-
-  /**
-   * Find single user
-   */
-  // findOne(findData: FindConditions<UserEntity>): Promise<Optional<UserEntity>> {
-  //   return this.userRepository.findOne(findData);
-  // }
-
-  // async findByUsernameOrEmail(
-  //   options: Partial<{ username: string; email: string }>,
-  // ): Promise<Optional<UserEntity>> {
-  //   const queryBuilder = this.userRepository.createQueryBuilder('user');
-
-  //   if (options.email) {
-  //     queryBuilder.orWhere('user.email = :email', {
-  //       email: options.email,
-  //     });
-  //   }
-
-  //   if (options.username) {
-  //     queryBuilder.orWhere('user.username = :username', {
-  //       username: options.username,
-  //     });
-  //   }
-
-  //   return queryBuilder.getOne();
-  // }
-
   async createUser(
     userRegisterDto: UserRegisterDto,
     file: IFile,
@@ -64,21 +36,8 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
       throw new FileNotImageException();
     }
 
-    // if (file) {
-    //   user.avatar = await this.awsS3Service.uploadImage(file);
-    // }
-
     return this.userRepository.save(user);
   }
-
-  // async getUsers(
-  //   pageOptionsDto: UsersPageOptionsDto,
-  // ): Promise<PageDto<UserDto>> {
-  //   const queryBuilder = this.userRepository.createQueryBuilder('user');
-
-  //   const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
-  //   return items.toPageDto(pageMetaDto);
-  // }
 
   async getUser(userId: number): Promise<UserDto> {
     const queryBuilder = this.userRepository.createQueryBuilder('dm_nhanvien');
