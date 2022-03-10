@@ -37,6 +37,8 @@
     "docs:deploy": "yarn docs:build && gh-pages -d .vuepress/dist"
   },
   "dependencies": {
+    "@nestjsx/crud": "^5.0.0-alpha.3",
+    "@nestjsx/crud-typeorm": "^5.0.0-alpha.3",
     "@apollo/gateway": "^0.42.3",
     "@godaddy/terminus": "^4.9.0",
     "@nestjs-query/core": "^0.30.0",

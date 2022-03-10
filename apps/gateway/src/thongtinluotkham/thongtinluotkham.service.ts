@@ -25,9 +25,9 @@ export class ThongTinLuotKhamService {
     const data = await this.connection.query(`
       SELECT dmlk.TenLoaiKham, dmnv.NickName, k.*
       FROM Kham k
-      join DM_LoaiKham dmlk on k.ID_LoaiKham = dmlk.ID_LoaiKham
-      join DM_NhanVien dmnv on k.NguoiThucHien = dmnv.ID_NhanVien
-      WHERE ID_LuotKham = 2911282
+      left join DM_LoaiKham dmlk on k.ID_LoaiKham = dmlk.ID_LoaiKham
+      left join DM_NhanVien dmnv on k.NguoiThucHien = dmnv.ID_NhanVien
+      WHERE ID_LuotKham = @0
     `, [idLuotKham]);
     return data;
   }
@@ -37,8 +37,8 @@ export class ThongTinLuotKhamService {
       SELECT dmlk.TenLoaiKham, dmnv.NickName, dtph.*
       FROM DieuTriPhoiHop dtph
       JOIN Kham k ON dtph.ID_Kham = k.ID_Kham
-      JOIN DM_LoaiKham dmlk on dtph.ID_LoaiKham = dmlk.ID_LoaiKham
-      join DM_NhanVien dmnv on dtph.ID_NguoiThucHien = dmnv.ID_NhanVien
+      left JOIN DM_LoaiKham dmlk on dtph.ID_LoaiKham = dmlk.ID_LoaiKham
+      left join DM_NhanVien dmnv on dtph.ID_NguoiThucHien = dmnv.ID_NhanVien
       WHERE k.ID_LuotKham = @0
     `, [idLuotKham]);
     return data;
@@ -49,8 +49,8 @@ export class ThongTinLuotKhamService {
       SELECT dmlk.TenLoaiKham, dmnv.NickName, phy.*
       FROM PHYSIOTHERAPY phy
       JOIN Kham k ON phy.ID_Kham = k.ID_Kham
-      JOIN DM_LoaiKham dmlk on phy.ID_LoaiKham = dmlk.ID_LoaiKham
-      join DM_NhanVien dmnv on phy.ID_NguoiThucHien = dmnv.ID_NhanVien
+      left JOIN DM_LoaiKham dmlk on phy.ID_LoaiKham = dmlk.ID_LoaiKham
+      left join DM_NhanVien dmnv on phy.ID_NguoiThucHien = dmnv.ID_NhanVien
       WHERE k.ID_LuotKham = @0
     `, [idLuotKham]);
     return data;

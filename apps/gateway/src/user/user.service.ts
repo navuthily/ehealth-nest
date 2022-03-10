@@ -13,43 +13,19 @@ import type { UserDto } from './dto/user-dto';
 import type { UsersPageOptionsDto } from './dto/users-page-options.dto';
 import type { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
-
+import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
-export class UserService {
+export class UserService extends TypeOrmCrudService<UserEntity> {
   constructor(
     public readonly userRepository: UserRepository,
     public readonly validatorService: ValidatorService,
     public readonly awsS3Service: AwsS3Service,
-  ) {}
-
-  /**
-   * Find single user
-   */
-  findOne(findData: FindConditions<UserEntity>): Promise<Optional<UserEntity>> {
-    return this.userRepository.findOne(findData);
+    @InjectRepository(UserRepository) repo
+  ) {
+    super(repo);
   }
-
-  async findByUsernameOrEmail(
-    options: Partial<{ username: string; email: string }>,
-  ): Promise<Optional<UserEntity>> {
-    const queryBuilder = this.userRepository.createQueryBuilder('user');
-
-    if (options.email) {
-      queryBuilder.orWhere('user.email = :email', {
-        email: options.email,
-      });
-    }
-
-    if (options.username) {
-      queryBuilder.orWhere('user.username = :username', {
-        username: options.username,
-      });
-    }
-
-    return queryBuilder.getOne();
-  }
-
   async createUser(
     userRegisterDto: UserRegisterDto,
     file: IFile,
@@ -60,21 +36,8 @@ export class UserService {
       throw new FileNotImageException();
     }
 
-    // if (file) {
-    //   user.avatar = await this.awsS3Service.uploadImage(file);
-    // }
-
     return this.userRepository.save(user);
   }
-
-  // async getUsers(
-  //   pageOptionsDto: UsersPageOptionsDto,
-  // ): Promise<PageDto<UserDto>> {
-  //   const queryBuilder = this.userRepository.createQueryBuilder('user');
-
-  //   const [items, pageMetaDto] = await queryBuilder.paginate(pageOptionsDto);
-  //   return items.toPageDto(pageMetaDto);
-  // }
 
   async getUser(userId: number): Promise<UserDto> {
     const queryBuilder = this.userRepository.createQueryBuilder('dm_nhanvien');

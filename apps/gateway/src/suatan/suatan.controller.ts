@@ -29,6 +29,14 @@ export class SuatAnController {
      return this.suatanService.getSuatAnByIdPhieu(id_phieu);
   }
 
+  //get lk, buoi, ngay, loai
+  @Get('/:id_luotkham/:buoi/:ngay/:loai')
+  async getSuatAnByLkBuoiNgayLoai(@Param('id_luotkham')  id_luotkham: number,  @Param('buoi')  buoi: number,@Param('ngay')  ngay: string, @Param('loai')  loai: number) {  
+     return this.suatanService.getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai);
+  }
+
+
+
 
   
   @Post()

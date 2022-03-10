@@ -10,7 +10,8 @@ import { SuatAn } from './suatan.entity';
 import { ChiTietSuatAn } from '../chitietsuatan/chitietsuatan.entity';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
-
+import { UserEntity } from '../user/user.entity';
+import dayjs from 'dayjs'
 
 @Injectable()
 export class SuatAnService {
@@ -23,40 +24,54 @@ export class SuatAnService {
 
      @InjectRepository(SuatAn, "SV_FAMILY_") private suatanRepo: Repository<SuatAn>,
      @InjectRepository(ChiTietSuatAn, "SV_FAMILY_") private chitietsuatanRepo: Repository<ChiTietSuatAn>,
-     
+     @InjectRepository(UserEntity) private userRepo: Repository<UserEntity>,
   ) { }
 
      //lấy suất ăn theo id_phieu
      async getSuatAnByIdPhieu(id_phieu: number) {
-          const dataByIdPhieu = await (await this.getSuatAn())
+          const data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.Id_Phieu = :Id_Phieu", { Id_Phieu: id_phieu})
           .getMany()
+          for(let i=0;i<data.length;i++){
+               const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
+               data[i]={...data[i],nguoitao}
+          }
+ 
+          return data;       
 
-          return dataByIdPhieu
+     }
+
+     //-------
+     async getSuatAnByLkBuoiNgayLoai(id_luotkham, buoi, ngay, loai){
+          console.log(ngay)
+          const dayFomat = dayjs(ngay).format('YYYY/MM/DD');
+          const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
+          .createQueryBuilder('Pos$ph66_EH')
+          .where("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
+          .andWhere('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: buoi })
+          .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: loai })
+          .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
+          .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
+          .getOne() //////--------------------------------------------
+          console.log(suatan)
+          return suatan
+         
 
 
      }
 
-     //lấy suất ăn theo id_luotkham và ngày tạo
      async getSuatAnByDay(ngay, id_luotkham: number) {
           const data = await (await this.getSuatAn())
           .where("Pos$ph66_EH.ngay_ct = :ngay_ct", {ngay_ct: ngay})
           .andWhere("Pos$ph66_EH.Id_LuotKham = :Id_LuotKham", {Id_LuotKham: id_luotkham})
-
           .getMany();
 
+          for(let i=0;i<data.length;i++){
+               const nguoitao= await (await this.userRepo.findOneOrFail(data[i].Id_NguoiTao)).nickname
+               data[i]={...data[i],nguoitao}
+          }
           return data;          
-
-
-          // console.log(await this.SV_FAMILYconnection.getRepository(ChiTietSuatAn)
-          // .createQueryBuilder("Pos$ct66_EH")
-          // .leftJoinAndSelect("Pos$ct66_EH.vattu",  "dmvt2")
-
-          // .limit(10)
-          // . getMany())
-          // console.log(await this.suatanRepo.find( {relations: ["chitietsuatans"]} ))
-          // const data = await this.suatanRepo.find( {relations: ["chitietsuatans"]} )
-          
      }
 
      async getSuatAn(){
@@ -69,21 +84,17 @@ export class SuatAnService {
 
 
      async themsuatan(obj: ThemSuatAnDTO){
-          let dayjs = require('dayjs')
+          // let dayjs = require('dayjs')
           const dayFomat = dayjs(obj.ngay_ct).format('YYYY/MM/DD');
-
+          console.log("------",dayFomat)
           const suatan = await this.SV_FAMILYconnection.getRepository(SuatAn)
           .createQueryBuilder('Pos$ph66_EH')
           .where('Pos$ph66_EH.Id_Buoi = :Id_Buoi', { Id_Buoi: obj.Id_Buoi })
           .andWhere('Pos$ph66_EH.ngay_ct = :ngay_ct', { ngay_ct: dayFomat })
           .andWhere('Pos$ph66_EH.Id_LuotKham = :Id_LuotKham', { Id_LuotKham: obj.Id_LuotKham })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
-          // console.log(dayFomat)
-          //NEU SUAT AN  DA TON TAI
-          console.log(suatan)
-          
-          
-          
+
           const ckeckDuyetdon = await this.checkDuyetDon(suatan)
 
           if(ckeckDuyetdon){
@@ -115,7 +126,7 @@ export class SuatAnService {
                 //NEU SUAT AN CHƯA DA TON TAI
                // THEM VAO BANG SUATAN
                const newSuatan = await this.suatanRepo.create(obj)
-               newSuatan.ngay_ct = dayFomat;
+               // newSuatan.ngay_ct = dayFomat;
                const dataResult = await this.suatanRepo.save(newSuatan).catch(err => {
                     throw new HttpException({
                          message: err.message
@@ -143,6 +154,7 @@ export class SuatAnService {
           .createQueryBuilder('Pos$ph66_EH')
           .leftJoinAndSelect("Pos$ph66_EH.chitietsuatans",  "Pos$ct66_EH")
           .where('Pos$ph66_EH.Id_Phieu = :Id_Phieu', { Id_Phieu: id_phieu })
+          .andWhere('Pos$ph66_EH.Loai = :Loai', { Loai: obj.Loai })
           .getOne()
           console.log(suatAn)
 
@@ -189,18 +201,11 @@ export class SuatAnService {
                     }
                }else{
                     //update bảng ph
-                    const suatAnHienTai = await this.suatanRepo.find({ Id_Phieu: id_phieu })
-                    console.log(id_phieu)
+                    const suatAnHienTai = await this.suatanRepo.findOneOrFail({ Id_Phieu: id_phieu })
+                    console.log(suatAnHienTai)
                     suatAnHienTai["Diengiai"] = obj.Diengiai;
                     suatAnHienTai["Loai"] = obj.Loai;
                     this.suatanRepo.save(suatAnHienTai)   
-
-
-
-
-                    //xóa hết tất cả bảng ct add lại
-                    // await this.delete(id_phieu)
-
                     
                     await this.functionThemSuatAn(id_phieu, obj);
 
@@ -209,13 +214,6 @@ export class SuatAnService {
                          message: "Update thành công!"
                     }
                }
-               
-               
-
-
-
-
-
 
           }else{
                return{
@@ -223,11 +221,6 @@ export class SuatAnService {
                     message: "Đơn hang không tồn tại!"
                }
           }
-
-          
-
-          
-
      
      }
 
@@ -277,25 +270,6 @@ export class SuatAnService {
           `;
           await this.connection.query(`${stored}`, []);
      }
-
-     //   async getPhieuAnChiTiet() {
-     //      const stored = 
-     //           `select * from  FAMILY_WRK.dbo.Pos$ph66_EH
-     //                where Su_dung=1
-     //           `;
-     //      const data = await this.connection.query(`${stored}`, []);
-     //      return data;             
-     //   }
-
-
-     //   async getPhieuAnChiTietTheoNgay() {
-     //      const stored = 
-     //           `select * from  FAMILY_WRK.dbo.dmvt2
-     //                where Su_dung=1
-     //           `;
-     //      const data = await this.connection.query(`${stored}`, []);
-     //      return data;             
-     //   }
  
 
 }
