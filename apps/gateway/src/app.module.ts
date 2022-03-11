@@ -80,6 +80,12 @@ import { LoaibangcapModule } from './loaibangcap/loaibangcap.module';
 import { NhanvienbangcapModule } from './nhanvienbangcap/nhanvienbangcap.module';
 import { LoaibangcapEntity } from './loaibangcap/loaibangcap.entity';
 import { NhanvienbangcapEntity } from './nhanvienbangcap/nhanvienbangcap.entity';
+import { LichSuChamDiemCap1Module } from './LichSuChamDiemCap1/lichsuchamdiemcap1.module';
+import { LichSuChamDiemCap1 } from './LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
+import { CauHinhToolCap1Entity } from './cauhinhtoolcap1/cauhinhtoolcap1.entity';
+import { DinhNghiaLoaiCongThucEntity } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
+import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2/lichsuchamdiemcap2.entity';
+import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -182,7 +188,9 @@ class BuildServiceModule { }
           NhanvienhopdongEntity,DmloaihopdongEntity,
           ChuyenkhoaEntity, DmtinhthanhphoEntity,
           PhamvichungchihanhngheEntity,DiemthianhvanEntity,
-          LoaibangcapEntity, NhanvienbangcapEntity
+          LoaibangcapEntity, NhanvienbangcapEntity,
+          LichSuChamDiemCap1, CauHinhToolCap1Entity,
+          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity
         ];
         return configDB;
       },
@@ -256,7 +264,8 @@ class BuildServiceModule { }
     NhanvienhopdongModule, DmloaihopdongModule, 
     ChuyenkhoaModule, DmtinhthanhphoModule,
     PhamvichungchihanhngheModule,DiemthianhvanModule,
-    LoaibangcapModule, NhanvienbangcapModule
+    LoaibangcapModule, NhanvienbangcapModule,
+    LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule
   ],
 })
 export class AppModule {}
