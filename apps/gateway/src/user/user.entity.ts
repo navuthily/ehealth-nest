@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 import { AbstractEntity } from '@libs/common/abstract.entity';
 import { UseDto } from '@libs/decorators/use-dto.decorator';
@@ -25,6 +25,7 @@ import { DmtinhthanhphoEntity } from '../dmtinhthanhpho/dmtinhthanhpho.entity';
 import { PhamvichungchihanhngheEntity } from '../phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
 import { DiemthianhvanEntity } from '../diemthianhvan/diemthianhvan.entity';
 import { NhanvienbangcapEntity } from '../nhanvienbangcap/nhanvienbangcap.entity';
+import { LichSuChamDiemCap1 } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
 
 @Entity({ name: 'DM_NhanVien' })
 @UseDto(UserDto)
@@ -381,4 +382,8 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   phamvihanhnghebosung: PhamvichungchihanhngheEntity
   @OneToMany(() => DiemthianhvanEntity, dienthianhvans => dienthianhvans.nhanvien)
   dienthianhvans: DiemthianhvanEntity[]
+
+  @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1s => lichsuchamdiemcap1s.nhanvien)
+  lichsuchamdiemcap1s: LichSuChamDiemCap1[]
+
 }

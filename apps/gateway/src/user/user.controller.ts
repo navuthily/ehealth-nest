@@ -34,10 +34,10 @@ import { Crud, CrudController } from '@nestjsx/crud';
         eager:false
       },
       chucdanh: {
-        eager: false
+        eager: true
       }, 
       thoihanhopdong: {
-        eager: false
+        eager: true
       }, 
       dmhopdong: {
         eager: false

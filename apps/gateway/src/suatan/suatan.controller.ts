@@ -1,11 +1,13 @@
-import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query, Put, Delete } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, ParseIntPipe, Post, Query, Put, Delete, UseGuards } from '@nestjs/common';
 import { SuatAnService } from './suatan.service';
 import { dataFilterDTO } from './dto/dataFilter.dto';
 import { ApiTags, ApiConsumes } from '@nestjs/swagger';
 import { ThemSuatAnDTO } from './dto/add-suat-an.dto';
 import { getRepository } from 'typeorm';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
+import { AuthGuard } from '@libs/guards/auth.guard';
 @ApiTags('suatan')
+@UseGuards(AuthGuard())
 @Controller('suatan')
 export class SuatAnController {
   constructor(
