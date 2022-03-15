@@ -36,6 +36,56 @@ import { SuatAn } from './suatan/suatan.entity';
 import { ChiTietSuatAnModule } from './chitietsuatan/chitietsuatan.module';
 import { ChiTietSuatAn } from './chitietsuatan/chitietsuatan.entity';
 import { VatTu } from './vattu/vattu.entity';
+import { ChucvuModule } from './chucvu/chucvu.module';
+import { ChucvuEntity } from './chucvu/chucvu.entity';
+import { ChucdanhEntity } from './chucdanh/chucdanh.entity';
+import { ChucdanhModule } from './chucdanh/chucdanh.module';
+import { ThoihanhopdongModule } from './thoihanhopdong/thoihanhopdong.module';
+import { ThoihanhopdongEntity } from './thoihanhopdong/thoihanhopdong.entity';
+import { DmhopdongModule } from './dmhopdong/dmhopdong.module';
+import { DmhopdongEntity } from './dmhopdong/dmhopdong.entity';
+import { DmtrinhdoEntity } from './dmtrinhdo/dmtrinhdo.entity';
+import { DmtrinhdoModule } from './dmtrinhdo/dmtrinhdo.module';
+import { DmdantocModule } from './dmdantoc/dmdantoc.module';
+import { DmdantocEntity } from './dmdantoc/dmdantoc.entity';
+import { DmquoctichModule } from './dmquoctich/dmquoctich.module';
+import { DmquoctichEntity } from './dmquoctich/dmquoctich.entity';
+import { DmloaitinhluongEntity } from './dmloaitinhluong/dmloaitinhluong.entity';
+import { DmloaitinhluongModule } from './dmloaitinhluong/dmloaitinhluong.module';
+import { DmnganhangModule } from './dmnganhang/dmnganhang.module';
+import { DmnganhangEntity } from './dmnganhang/dmnganhang.entity';
+import { DmdonviEntity } from './dmdonvi/dmdonvi.entity';
+import { DmdonviModule } from './dmdonvi/dmdonvi.module';
+import { DmbophanModule } from './dmbophan/dmbophan.module';
+import { DmbophanEntity } from './dmbophan/dmbophan.entity';
+import { DmphongbanEntity } from './dmphongban/dmphongban.entity';
+import { DmphongbanModule } from './dmphongban/dmphongban.module';
+import { DmloaikhoiModule } from './dmloaikhoi/dmloaikhoi.module';
+import { DmloaikhoiEntity } from './dmloaikhoi/dmloaikhoi.entity';
+import { TinhtranghonnhanModule } from './tinhtranghonnhan/tinhtranghonnhan.module';
+import { TinhtranghonnhanEntity } from './tinhtranghonnhan/tinhtranghonnhan.entity';
+import { NhanvienhopdongEntity } from './nhanvienhopdong/nhanvienhopdong.entity';
+import { NhanvienhopdongModule } from './nhanvienhopdong/nhanvienhopdong.module';
+import { DmloaihopdongEntity } from './dmloaihopdong/dmloaihopdong.entity';
+import { DmloaihopdongModule } from './dmloaihopdong/dmloaihopdong.module';
+import { ChuyenkhoaModule } from './chuyenkhoa/chuyenkhoa.module';
+import { ChuyenkhoaEntity } from './chuyenkhoa/chuyenkhoa.entity';
+import { DmtinhthanhphoEntity } from './dmtinhthanhpho/dmtinhthanhpho.entity';
+import { DmtinhthanhphoModule } from './dmtinhthanhpho/dmtinhthanhpho.module';
+import { PhamvichungchihanhngheEntity } from './phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
+import { PhamvichungchihanhngheModule } from './phamvichungchihanhnghe/phamvichungchihanhnghe.module';
+import { DiemthianhvanEntity } from './diemthianhvan/diemthianhvan.entity';
+import { DiemthianhvanModule } from './diemthianhvan/diemthianhvan.module';
+import { LoaibangcapModule } from './loaibangcap/loaibangcap.module';
+import { NhanvienbangcapModule } from './nhanvienbangcap/nhanvienbangcap.module';
+import { LoaibangcapEntity } from './loaibangcap/loaibangcap.entity';
+import { NhanvienbangcapEntity } from './nhanvienbangcap/nhanvienbangcap.entity';
+import { LichSuChamDiemCap1Module } from './LichSuChamDiemCap1/lichsuchamdiemcap1.module';
+import { LichSuChamDiemCap1 } from './LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
+import { CauHinhToolCap1Entity } from './cauhinhtoolcap1/cauhinhtoolcap1.entity';
+import { DinhNghiaLoaiCongThucEntity } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
+import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2/lichsuchamdiemcap2.entity';
+import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -128,7 +178,19 @@ class BuildServiceModule { }
         configDB.entities = [
         
           UserEntity,
-  
+          ChucvuEntity, ChucdanhEntity,
+          ThoihanhopdongEntity,
+          DmhopdongEntity, DmtrinhdoEntity,
+          DmdantocEntity, DmquoctichEntity,
+          DmloaitinhluongEntity, DmnganhangEntity,
+          DmdonviEntity, DmbophanEntity,
+          DmphongbanEntity, DmloaikhoiEntity,TinhtranghonnhanEntity,
+          NhanvienhopdongEntity,DmloaihopdongEntity,
+          ChuyenkhoaEntity, DmtinhthanhphoEntity,
+          PhamvichungchihanhngheEntity,DiemthianhvanEntity,
+          LoaibangcapEntity, NhanvienbangcapEntity,
+          LichSuChamDiemCap1, CauHinhToolCap1Entity,
+          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity
         ];
         return configDB;
       },
@@ -153,24 +215,6 @@ class BuildServiceModule { }
       inject: [ApiConfigService],
     }),
 
-    // TypeOrmModule.forRootAsync({
-    //   imports: [SharedModule],
-    //   name : "ehealth_real_new12345",
-    //   useFactory: (configService: ApiConfigService) => {
-    //     const configDB = { ...configService.typeOrmConfig('ehealth_real_new12345') };
-    //     configDB.entities = [
-        
-    //       UserEntity,
-    //       SuatAn,ChiTietSuatAn, VatTu
-  
-    //     ];
-
-    //     // configDB.logging = true;
-    //     return configDB;
-    //   },
-    //   inject: [ApiConfigService],
-    // }),
-
 
 
 
@@ -186,23 +230,6 @@ class BuildServiceModule { }
       parser: I18nJsonParser,
       inject: [ApiConfigService],
     }),
-
-    // SequelizeModule.forRoot({
-    //   dialect: 'mssql',
-    //   host: '192.168.1.107',
-    //   port: 1433,
-    //   username: 'dev',
-    //   password: '1234',
-    //   database: 'EhealthRea_dev',
-    //   models: [],
-    //   pool:{
-    //     max:5,
-    //     min:0,
-    //     acquire:30000,
-    //     idle:10000
-    //   }
-
-    // }),
 
     ScheduleModule.forRoot(),
     UserModule,
@@ -224,8 +251,21 @@ class BuildServiceModule { }
     DMPhongBanModule,
     ThucDonModule,
     SuatAnModule,
-    // ChiTietSuatAnModule,
     AuthModule,
+    ChucvuModule,
+    ChucdanhModule,
+    ThoihanhopdongModule,
+    DmhopdongModule, DmtrinhdoModule, 
+    DmdantocModule, DmquoctichModule,
+    DmloaitinhluongModule,DmnganhangModule,
+    DmdonviModule, DmbophanModule,
+    DmphongbanModule, DmloaikhoiModule,
+    TinhtranghonnhanModule, 
+    NhanvienhopdongModule, DmloaihopdongModule, 
+    ChuyenkhoaModule, DmtinhthanhphoModule,
+    PhamvichungchihanhngheModule,DiemthianhvanModule,
+    LoaibangcapModule, NhanvienbangcapModule,
+    LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule
   ],
 })
 export class AppModule {}

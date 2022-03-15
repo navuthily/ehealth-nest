@@ -21,6 +21,19 @@ export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietController {
       );
     return result;
   }
+  @Post('modulegoikham')
+  async show(@Body() data: any) {
+    const { goikham_id,module_id } = data;
+    const addModuleGoikham = await this.quanlyAppbenhnhanService.addModuleGoikham(goikham_id,module_id);
+  }
+  @Post('updatemodulegoikham')
+  async up(@Body() data: any) {
+    console.log(data);
+    
+    const { id,goikham_id,module_id } = data;
+    const updateModuleGoikham = await this.quanlyAppbenhnhanService.updateModuleGoikham( id,goikham_id,module_id);
+  }
+
   @Get('updateGoiKhamStuff/:id')
   async updateGoiKhamStuff(@Param('id') id_loaikham: number) {
     const dataSQL = await this.quanlyAppbenhnhanService.getGoiKhamStuff(id_loaikham);
@@ -34,4 +47,3 @@ export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietController {
     return {};
   }
 }
-

@@ -1,10 +1,31 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 import { AbstractEntity } from '@libs/common/abstract.entity';
 import { UseDto } from '@libs/decorators/use-dto.decorator';
 import type { UserDtoOptions } from './dto/user-dto';
 import { UserDto } from './dto/user-dto';
+import { ChucvuEntity } from '../chucvu/chucvu.entity';
+import { ChucdanhEntity } from '../chucdanh/chucdanh.entity';
+import { ThoihanhopdongEntity } from '../thoihanhopdong/thoihanhopdong.entity';
+import { DmhopdongEntity } from '../dmhopdong/dmhopdong.entity';
+import { DmtrinhdoEntity } from '../dmtrinhdo/dmtrinhdo.entity';
+import { DmdantocEntity } from '../dmdantoc/dmdantoc.entity';
+import { DmquoctichEntity } from '../dmquoctich/dmquoctich.entity';
+import { DmloaitinhluongEntity } from '../dmloaitinhluong/dmloaitinhluong.entity';
+import { DmnganhangEntity } from '../dmnganhang/dmnganhang.entity';
+import { DmdonviEntity } from '../dmdonvi/dmdonvi.entity';
+import { DmbophanEntity } from '../dmbophan/dmbophan.entity';
+import { DmphongbanEntity } from '../dmphongban/dmphongban.entity';
+import { DmloaikhoiEntity } from '../dmloaikhoi/dmloaikhoi.entity';
+import { TinhtranghonnhanEntity } from '../tinhtranghonnhan/tinhtranghonnhan.entity';
+import { NhanvienhopdongEntity } from '../nhanvienhopdong/nhanvienhopdong.entity';
+import { ChuyenkhoaEntity } from '../chuyenkhoa/chuyenkhoa.entity';
+import { DmtinhthanhphoEntity } from '../dmtinhthanhpho/dmtinhthanhpho.entity';
+import { PhamvichungchihanhngheEntity } from '../phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
+import { DiemthianhvanEntity } from '../diemthianhvan/diemthianhvan.entity';
+import { NhanvienbangcapEntity } from '../nhanvienbangcap/nhanvienbangcap.entity';
+import { LichSuChamDiemCap1 } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
 
 @Entity({ name: 'DM_NhanVien' })
 @UseDto(UserDto)
@@ -278,4 +299,91 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @Column({ nullable: true, name: 'IsHuongLSP' })
   isLuongLSP?: boolean;
+
+  @ManyToOne(() => ChucvuEntity, chucvu => chucvu.nhanviens)
+  @JoinColumn({ name: "ID_ChucVu" })
+  chucvu: ChucvuEntity
+
+  @ManyToOne(() => ChucdanhEntity, chucdanh => chucdanh.nhanviens)
+  @JoinColumn({ name: "ID_ChucDanh" })
+  chucdanh: ChucdanhEntity
+
+  @ManyToOne(() => ThoihanhopdongEntity, thoihanhopdong => thoihanhopdong.nhanviens)
+  @JoinColumn({ name: "ID_ChucDanh" })
+  thoihanhopdong: ChucdanhEntity
+  
+  @ManyToOne(() => DmhopdongEntity, dmhopdong => dmhopdong.nhanviens)
+  @JoinColumn({ name: "Id_HopDong" })
+  dmhopdong: DmhopdongEntity
+  
+  @ManyToOne(() => DmtrinhdoEntity, dmtrinhdo => dmtrinhdo.nhanviens)
+  @JoinColumn({ name: "ID_TrinhDo" })
+  dmtrinhdo: DmtrinhdoEntity  
+
+  @ManyToOne(() => DmdantocEntity, dmdantoc => dmdantoc.nhanviens)
+  @JoinColumn({ name: "ID_DanToc" })
+  dmdantoc: DmdantocEntity  
+
+  @ManyToOne(() => DmquoctichEntity, dmquoctich =>dmquoctich.nhanviens)
+  @JoinColumn({ name: "ID_QuocTich" })
+  dmquoctich: DmquoctichEntity  
+
+  @ManyToOne(() => DmloaitinhluongEntity, dmloaitinhluong =>dmloaitinhluong.nhanviens)
+  @JoinColumn({ name: "ID_LoaiTinhLuong" })
+  dmloaitinhluong:DmloaitinhluongEntity
+
+  @ManyToOne(() => DmnganhangEntity,  dmnganhang=> dmnganhang.nhanviens)
+  @JoinColumn({ name: "ID_NganHang" })
+  dmnganhang: DmnganhangEntity  
+
+  @ManyToOne(() => DmdonviEntity,  dmdonvi=> dmdonvi.nhanviens)
+  @JoinColumn({ name: "ID_DonVi" })
+  dmdonvi: DmdonviEntity
+
+  @ManyToOne(() => DmbophanEntity,  dmbophan=> dmbophan.nhanviens)
+  @JoinColumn({ name: "ID_BoPhan" })
+  dmbophan: DmbophanEntity
+
+  @ManyToOne(() => DmphongbanEntity,  dmphongban=> dmphongban.nhanviens)
+  @JoinColumn({ name: "ID_PhongBan" })
+  dmphongban: DmphongbanEntity
+
+  @ManyToOne(() => DmloaikhoiEntity,  dmloaikhoi=>  dmloaikhoi.nhanviens)
+  @JoinColumn({ name: "ID_LoaiKhoi" })
+  dmloaikhoi: DmloaikhoiEntity
+
+  @ManyToOne(() => TinhtranghonnhanEntity, tinhtranghonnhan=>  tinhtranghonnhan.nhanviens)
+  @JoinColumn({ name: "ID_TinhTrangHonNhan" })
+  tinhtranghonnhan: TinhtranghonnhanEntity
+
+  @ManyToOne(() => ChuyenkhoaEntity, chuyenkhoa=>  chuyenkhoa.nhanviens)
+  @JoinColumn({ name: "ID_ChuyenKhoa" })
+  chuyenkhoa: ChuyenkhoaEntity
+
+  @OneToMany(() => NhanvienhopdongEntity, nhanvienhopdongs => nhanvienhopdongs.nhanvien)
+  nhanvienhopdongs: NhanvienhopdongEntity[]
+  @OneToMany(() => NhanvienbangcapEntity, nhanvienbangcaps => nhanvienbangcaps.nhanvien)
+  nhanvienbangcaps: NhanvienbangcapEntity[]
+
+  @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens)
+  @JoinColumn({ name: "NoiCapCMND" })
+
+  nccmnd: DmtinhthanhphoEntity
+  @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens2)
+  @JoinColumn({ name: "NoiCapChungChiHanhNghe" })
+  nccchn: DmtinhthanhphoEntity
+
+  @ManyToOne(() => PhamvichungchihanhngheEntity, phamvichungchihanhnghe => phamvichungchihanhnghe.nhanviens)
+  @JoinColumn({ name: "PhamViHoatDongChungChiHanhNghe" })
+  phamvichungchihanhnghe: PhamvichungchihanhngheEntity
+
+  @ManyToOne(() => PhamvichungchihanhngheEntity, phamvihanhnghebosung => phamvihanhnghebosung.nhanviens)
+  @JoinColumn({ name: "PhamViHanhNgheBoSung" })
+  phamvihanhnghebosung: PhamvichungchihanhngheEntity
+  @OneToMany(() => DiemthianhvanEntity, dienthianhvans => dienthianhvans.nhanvien)
+  dienthianhvans: DiemthianhvanEntity[]
+
+  @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1s => lichsuchamdiemcap1s.nhanvien)
+  lichsuchamdiemcap1s: LichSuChamDiemCap1[]
+
 }
