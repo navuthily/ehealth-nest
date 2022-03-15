@@ -7,7 +7,7 @@ import { getRepository } from 'typeorm';
 import { UpdateSuatAnDTO } from './dto/update-suatan-dto.dto';
 import { AuthGuard } from '@libs/guards/auth.guard';
 @ApiTags('suatan')
-@UseGuards(AuthGuard())
+// @UseGuards(AuthGuard())
 @Controller('suatan')
 export class SuatAnController {
   constructor(
