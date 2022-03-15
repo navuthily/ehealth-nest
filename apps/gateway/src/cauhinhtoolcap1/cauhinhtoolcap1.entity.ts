@@ -6,7 +6,7 @@ export class CauHinhToolCap1Entity  {
 
 
   @PrimaryColumn({ name: 'ID_Cap1' })
-  ID_Cap1: number;
+  id: number;
 
 
   @Column({ name: 'TenTool' })
@@ -25,7 +25,7 @@ export class CauHinhToolCap1Entity  {
   
 
 
-  // @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1 => lichsuchamdiemcap1.cauhinhtoolcap1)
-  // lichsuchamdiemcap1s: LichSuChamDiemCap1[]
+  @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1 => lichsuchamdiemcap1.cauhinhtoolcap1)
+  lichsuchamdiemcap1s: LichSuChamDiemCap1[]
 
 }

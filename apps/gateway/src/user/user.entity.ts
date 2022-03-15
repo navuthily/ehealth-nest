@@ -1,5 +1,5 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 import { AbstractEntity } from '@libs/common/abstract.entity';
 import { UseDto } from '@libs/decorators/use-dto.decorator';

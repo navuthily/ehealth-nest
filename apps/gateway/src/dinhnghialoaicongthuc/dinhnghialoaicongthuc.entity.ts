@@ -7,7 +7,7 @@ export class DinhNghiaLoaiCongThucEntity  {
 
 
   @PrimaryColumn({ name: 'ID_Loai' })
-  ID_Loai: number;
+  id: number;
 
 
   @Column({ name: 'TenLoai' })

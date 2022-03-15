@@ -14,18 +14,21 @@ import { LichSuChamDiemCap1 } from './lichsuchamdiemcap1.entity';
   query: {
     join: {
       dinhnghialoaicongthuc: {
-        eager: true
+        eager: false
       },
       nhanvien: {
-        eager: true
+        eager: false
       },
-      // cauhinhtoolcap1: {
-      //   eager: true
-      // },
+      cauhinhtoolcap1: {
+        eager: false
+      },
       lichsuchamdiemcap2s: {
-        eager: true
-      }
-    }
+        eager: false,
+        
+      },
+      
+      
+    },
   }
 })
 @Controller('lichsuchamdiemcap1')
