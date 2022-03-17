@@ -17,8 +17,9 @@ export class DMlanguageService {
   ) { }
 
 
-  getAll(){
-    return this.ngonnguRepo.find({ relations: ["labelToLanguages"] })
+  getLanguageByCode(code){
+    
+    return this.ngonnguRepo.find({ code: code})
   }
 
 

@@ -14,7 +14,7 @@ export class DmbenhnhanController {
 
   }
   // lấy suất ăn theo id_phieu
-  @Get('/:id_benhnhan')
+  @Get('/avatar/:id_benhnhan')
   @Header('Content-Type', 'image/png')
   async getByIdPhieu(@Param('id_benhnhan') id_benhnhan, @Res() res) {
     const data = await this.service.getAvatar(id_benhnhan)
