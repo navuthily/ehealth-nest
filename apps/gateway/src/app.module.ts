@@ -86,6 +86,12 @@ import { CauHinhToolCap1Entity } from './cauhinhtoolcap1/cauhinhtoolcap1.entity'
 import { DinhNghiaLoaiCongThucEntity } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
 import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2/lichsuchamdiemcap2.entity';
 import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.module';
+import { DMbenhnhanModule } from './dmbenhnhan/dmbenhnhan.module';
+import { DMbenhnhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
+import { DMngonnguModule } from './ngonngu/ngonngu.module';
+import { DMlanguageEntity } from './ngonngu/ngonngu.entity';
+import { DMlabelEntity } from './dmlabel/dmlabel.entity';
+import { DMlabellanguageEntity } from './dmlabellanguage/dmlabellanguage.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -190,7 +196,8 @@ class BuildServiceModule { }
           PhamvichungchihanhngheEntity,DiemthianhvanEntity,
           LoaibangcapEntity, NhanvienbangcapEntity,
           LichSuChamDiemCap1, CauHinhToolCap1Entity,
-          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity
+          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity,
+          DMbenhnhanEntity
         ];
         return configDB;
       },
@@ -210,6 +217,25 @@ class BuildServiceModule { }
         ];
 
         configDB.logging = true;
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+
+      //server thanhvien
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      name : "SV_THANHVIEN_",
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
+        configDB.entities = [
+        
+          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity
+         
+  
+        ];
+
+        // configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],
@@ -265,7 +291,8 @@ class BuildServiceModule { }
     ChuyenkhoaModule, DmtinhthanhphoModule,
     PhamvichungchihanhngheModule,DiemthianhvanModule,
     LoaibangcapModule, NhanvienbangcapModule,
-    LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule
+    LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule,
+    DMbenhnhanModule,DMngonnguModule
   ],
 })
 export class AppModule {}
