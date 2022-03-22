@@ -92,6 +92,20 @@ import { DMngonnguModule } from './ngonngu/ngonngu.module';
 import { DMlanguageEntity } from './ngonngu/ngonngu.entity';
 import { DMlabelEntity } from './dmlabel/dmlabel.entity';
 import { DMlabellanguageEntity } from './dmlabellanguage/dmlabellanguage.entity';
+import { CauHinhToolCap3Entity } from './cauhinhtoolcap3/cauhinhtoolcap3.entity';
+import { CauHinhToolCap2Entity } from './cauhinhtoolcap2/cauhinhtoolcap2.entity';
+import { DauVaoCap1Entity } from './dauvaocap1/dauvaocap1.entity';
+import { DauVaoCap2Entity } from './dauvaocap2/dauvaocap2.entity';
+import { DauVaoCap3Entity } from './dauvaocap3/dauvaocap3.entity';
+import { DanhMucLoaiDinhNghiaEntity } from './danhmucloaidinhnghia/danhmucloaidinhnghia.entity';
+import { LichSuChamDiemCap2Module } from './lichsuchamdiemcap2/lichsuchamdiemcap2.module';
+import { CauHinhToolCap1Module } from './cauhinhtoolcap1/cauhinhtoolcap1.module';
+import { CauHinhToolCap2Module } from './cauhinhtoolcap2/cauhinhtoolcap2.module';
+import { CauHinhToolCap3Module } from './cauhinhtoolcap3/cauhinhtoolcap3.module';
+import { CauHinhDiemChamCap1Module } from './cauhinhdiemchamcap1/cauhinhchamdiemcap1.module';
+import { CauHinhDiemChamCap1Entity } from './cauhinhdiemchamcap1/cauhinhdiemchamcap1.entity';
+import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemchamcap2.entity';
+
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -197,8 +211,23 @@ class BuildServiceModule { }
           LoaibangcapEntity, NhanvienbangcapEntity,
           LichSuChamDiemCap1, CauHinhToolCap1Entity,
           DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity,
-          DMbenhnhanEntity
+          DMbenhnhanEntity, CauHinhToolCap3Entity,
+          CauHinhToolCap2Entity, DauVaoCap1Entity,CauHinhToolCap1Entity,
+          DauVaoCap2Entity,DauVaoCap3Entity,
+          DanhMucLoaiDinhNghiaEntity,CauHinhDiemChamCap1Entity,
+          CauHinhDiemChamCap2Entity
         ];
+        configDB.logging = true;
+        // configDB.cache = {
+        //   type: 'redis',
+        //   options: {
+        //     host: "localhost",
+        //     port: 6379
+        //   }
+        // }
+
+
+
         return configDB;
       },
       inject: [ApiConfigService],
@@ -292,7 +321,10 @@ class BuildServiceModule { }
     PhamvichungchihanhngheModule,DiemthianhvanModule,
     LoaibangcapModule, NhanvienbangcapModule,
     LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule,
-    DMbenhnhanModule,DMngonnguModule
+    DMbenhnhanModule,DMngonnguModule,
+    LichSuChamDiemCap2Module, CauHinhToolCap1Module,
+    CauHinhToolCap2Module,CauHinhToolCap3Module,
+    CauHinhDiemChamCap1Module
   ],
 })
 export class AppModule {}

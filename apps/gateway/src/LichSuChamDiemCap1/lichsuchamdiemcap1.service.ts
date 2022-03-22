@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, CACHE_MANAGER } from '@nestjs/common';
 import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
 import { LichSuChamDiemCap1 } from './lichsuchamdiemcap1.entity';
@@ -11,5 +11,11 @@ export class LichSuChamDiemCap1Service extends TypeOrmCrudService<LichSuChamDiem
     @InjectRepository(LichSuChamDiemCap1Repository) repo
   ) {
     super(repo);
+  }
+
+
+
+  getAll(){
+    return this.repo.find()
   }
 }

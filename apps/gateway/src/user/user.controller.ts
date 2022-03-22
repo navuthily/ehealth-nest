@@ -29,12 +29,13 @@ import { Crud, CrudController } from '@nestjsx/crud';
 
   query: {
     limit:5,
+
     join: {
       chucvu: {
         eager:false
       },
       chucdanh: {
-        eager: true
+        eager: true,
       }, 
       thoihanhopdong: {
         eager: true
