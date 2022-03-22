@@ -4,7 +4,8 @@ import { Connection } from 'typeorm';
 
 @Injectable()
 export class DMLoaiKhamService {
-  constructor(@InjectConnection() readonly connection: Connection) {}
+  constructor(@InjectConnection() readonly connection: Connection) { }
+
   async exec_gd2_dmloaikham() {
     const stored = `SET NOCOUNT ON
     SELECT
@@ -58,19 +59,26 @@ export class DMLoaiKhamService {
       [DM_LoaiKham].hang_id
       --,cast([DM_LoaiKham].KhauHaoThuocVTYT as float) AS KhauHaoThuocVTYT
       --,cast([DM_LoaiKham].KhauHaoDichVu as float) AS KhauHaoDichVu
-       
-    
+
+
     FROM
       [DM_LoaiKham]
     join NhomCLS on DM_LoaiKham.ID_NhomCLS=NhomCLS.ID_NhomCLS
     left join GD2_DMNHOM_BHYT on DM_LoaiKham.ID_Nhom_BHYT=GD2_DMNHOM_BHYT.ID_NHOM_BHYT
     ORDER BY DM_LoaiKham.ID_NhomCLS`;
     const data = await this.connection.query(`${stored}`);
-    data.map((item: any) => {
+    data.forEach((item: any) => {
       item['id'] = item['ID_LoaiKham'];
       item['Active'] = item['Active'] == null ? '' : item['Active'] ? 1 : 0;
-      return item;
     });
+    return data;
+  }
+
+  async getTenLoaiKhamHasInRiengByIdReportInRieng(IdReportInRieng: number) {
+    let data = await this.connection.query(`select DM_LoaiKham.TenLoaiKham from DM_LoaiKham
+    JOIN GD2_DM_ReportInRieng on DM_LoaiKham.ID_Report_InRieng = GD2_DM_ReportInRieng.id
+    where DM_LoaiKham.ID_Report_InRieng = @0`, [IdReportInRieng]);
+    data = data.map((item: any) => item.TenLoaiKham);
     return data;
   }
 }

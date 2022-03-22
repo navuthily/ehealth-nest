@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   UseInterceptors,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -17,7 +18,7 @@ export class DMLoaiKhamController {
   constructor(
     private dmLoaiKhamService: DMLoaiKhamService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
+  ) { }
 
   @Get('getAll')
   async getDMLoaiKham() {
@@ -29,5 +30,20 @@ export class DMLoaiKhamController {
       });
     }
     return dataDMLoaiKham;
+  }
+
+  @Get('getTenLoaiKhamHasInRiengByIdReportInRieng/:id')
+  async getTenLoaiKhamHasInRiengByIdReportInRieng(@Param('id') IdReportInRieng: number) {
+    // 1: SarCov2
+    // 2: DoubleTest
+    // 3: Xét nghiệm HBV & HPV
+    let dataTenLoaiKhamHasInRiengByIdReportInRieng = await this.cacheManager.get('dataTenLoaiKhamHasInRiengByIdReportInRieng');
+    if (!dataTenLoaiKhamHasInRiengByIdReportInRieng) {
+      dataTenLoaiKhamHasInRiengByIdReportInRieng = await this.dmLoaiKhamService.getTenLoaiKhamHasInRiengByIdReportInRieng(IdReportInRieng);
+      await this.cacheManager.set('dataTenLoaiKhamHasInRiengByIdReportInRieng', dataTenLoaiKhamHasInRiengByIdReportInRieng, {
+        ttl: 60,
+      });
+    }
+    return dataTenLoaiKhamHasInRiengByIdReportInRieng;
   }
 }
