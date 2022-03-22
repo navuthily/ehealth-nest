@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, CacheModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DmdantocController } from './lichsuchamdiemcap1.controller';
 import { LichSuChamDiemCap1Service } from './lichsuchamdiemcap1.service';

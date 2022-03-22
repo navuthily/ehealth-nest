@@ -14,9 +14,9 @@ export class DmlanguageController {
 
   }
 
-  @Get(':/code')
-  async getLanguageByCode(@Param('code') code) {
-    return this.service.getLanguageByCode(code);
+  @Get()
+  async getLanguageByCode() {
+    return this.service.getLanguageByCode();
 
   }
 

@@ -34,7 +34,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
         eager:false
       },
       chucdanh: {
-        eager: true
+        eager: true,
       }, 
       thoihanhopdong: {
         eager: true
