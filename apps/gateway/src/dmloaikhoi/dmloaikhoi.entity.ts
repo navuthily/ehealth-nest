@@ -9,7 +9,7 @@ export class DmloaikhoiEntity  {
   id: number;
 
   @Column({ name: 'TenLoaiKhoi' })
-  tenloaikham?: string;
+  tenloaikhoi?: string;
   
 
 

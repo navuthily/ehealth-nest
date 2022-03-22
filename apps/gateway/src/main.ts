@@ -21,7 +21,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
         file: '../../text.txt' // Will use pino.destination()
       }
     }),
-    { cors: false },
+    { cors: true },
   );
 
 
