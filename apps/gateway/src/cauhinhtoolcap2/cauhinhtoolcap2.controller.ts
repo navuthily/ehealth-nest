@@ -12,9 +12,25 @@ import { CauHinhToolCap2Entity } from './cauhinhtoolcap2.entity';
     type: CauHinhToolCap2Entity,
   },
   query: {
+
+    filter:[
+        {
+          field: "SuDung",
+          operator: "$eq",
+          value: "1"
+        }
+        
+      ],
     join: {
       cauhinhtoolcap1: {
-        eager: false
+        eager: false,
+      },
+      cauhinhtoolcap3s:{
+        eager: false,
+        
+      },
+      'cauhinhtoolcap3s.dauvaocap1':{
+        eager: false,
       }
       
       
@@ -28,13 +44,6 @@ export class CauHinhToolCap2Controller implements CrudController<CauHinhToolCap2
   constructor(
     public service: CauHinhToolCap2Service,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {
-
-
-
-
-
-
-  }
+  ) {}
 
 }
