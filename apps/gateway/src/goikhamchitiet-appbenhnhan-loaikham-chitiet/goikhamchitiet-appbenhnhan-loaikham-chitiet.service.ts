@@ -56,4 +56,18 @@ export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService {
     });
     return result;
   }
+  async addModuleGoikham(goikham_id: number,module_id:number) {
+  await this.connection.query(`
+  INSERT INTO thanhvien.dbo.module_goikham (goikham_id, module_id)
+  VALUES (@0,@1);
+`, [goikham_id, module_id])
+}
+async updateModuleGoikham(id:number, goikham_id: number, module_id:number) {
+  await this.connection.query(`
+  UPDATE thanhvien.dbo.module_goikham
+      SET goikham_id = @0,
+      module_id = @1
+      where thanhvien.dbo.module_goikham.id = @2
+    `, [goikham_id, module_id,id])
+}
 }

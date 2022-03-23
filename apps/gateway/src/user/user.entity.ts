@@ -309,7 +309,7 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   chucdanh: ChucdanhEntity
 
   @ManyToOne(() => ThoihanhopdongEntity, thoihanhopdong => thoihanhopdong.nhanviens)
-  @JoinColumn({ name: "ID_ChucDanh" })
+  @JoinColumn({ name: "ID_ThoiHanHopDong" })
   thoihanhopdong: ChucdanhEntity
   
   @ManyToOne(() => DmhopdongEntity, dmhopdong => dmhopdong.nhanviens)
@@ -367,8 +367,8 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens)
   @JoinColumn({ name: "NoiCapCMND" })
-
   nccmnd: DmtinhthanhphoEntity
+
   @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens2)
   @JoinColumn({ name: "NoiCapChungChiHanhNghe" })
   nccchn: DmtinhthanhphoEntity
