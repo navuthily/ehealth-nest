@@ -12,10 +12,14 @@ import { CauHinhToolCap3Entity } from './cauhinhtoolcap3.entity';
     type: CauHinhToolCap3Entity,
   },
   query: {
+ 
     join: {
       cauhinhtoolcap2: {
-        eager: true
+        eager: false
       },
+      dauvaocap1: {
+        eager: true
+      }
 
       
       
