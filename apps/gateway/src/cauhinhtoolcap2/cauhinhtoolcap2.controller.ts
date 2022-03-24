@@ -30,8 +30,13 @@ import { CauHinhToolCap2Entity } from './cauhinhtoolcap2.entity';
         
       },
       'cauhinhtoolcap3s.dauvaocap1':{
+        alias: "c2d1",
         eager: false,
-      }
+      },
+      'cauhinhtoolcap3s.dauvaocap1.danhmucloaidinhnghia':{
+        eager: false,
+      },
+
       
       
     },
@@ -47,3 +52,6 @@ export class CauHinhToolCap2Controller implements CrudController<CauHinhToolCap2
   ) {}
 
 }
+
+
+//http://localhost:7000/cauhinhtoolcap2?join=cauhinhtoolcap3s&join=cauhinhtoolcap3s.dauvaocap1&join=cauhinhtoolcap3s.dauvaocap1.danhmucloaidinhnghia&filter=cauhinhtoolcap3s.SuDungC3||$eq||1

@@ -6,6 +6,7 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { CauHinhToolCap3Service } from './cauhinhtoolcap3.service';
 import { Cache } from 'cache-manager';
 import { CauHinhToolCap3Entity } from './cauhinhtoolcap3.entity';
+import { truncate } from 'fs';
 
 @Crud({
   model: {
@@ -18,8 +19,13 @@ import { CauHinhToolCap3Entity } from './cauhinhtoolcap3.entity';
         eager: false
       },
       dauvaocap1: {
-        eager: true
+        eager: false
+      },
+      "dauvaocap1.danhmucloaidinhnghia":{
+        eager: false
       }
+
+
 
       
       
