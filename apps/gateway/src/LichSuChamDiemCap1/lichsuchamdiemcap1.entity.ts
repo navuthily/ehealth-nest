@@ -9,7 +9,7 @@ export class LichSuChamDiemCap1  {
 
 
   @PrimaryColumn({ name: 'Id_AutoCap1' })
-  Id_AutoCap1: number;
+  id: number;
 
 
   @Column({ name: 'ID_BsCham' })

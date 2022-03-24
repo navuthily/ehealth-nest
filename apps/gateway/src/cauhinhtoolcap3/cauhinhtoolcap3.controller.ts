@@ -6,16 +6,26 @@ import { Crud, CrudController } from '@nestjsx/crud';
 import { CauHinhToolCap3Service } from './cauhinhtoolcap3.service';
 import { Cache } from 'cache-manager';
 import { CauHinhToolCap3Entity } from './cauhinhtoolcap3.entity';
+import { truncate } from 'fs';
 
 @Crud({
   model: {
     type: CauHinhToolCap3Entity,
   },
   query: {
+ 
     join: {
       cauhinhtoolcap2: {
-        eager: true
+        eager: false
       },
+      dauvaocap1: {
+        eager: false
+      },
+      "dauvaocap1.danhmucloaidinhnghia":{
+        eager: false
+      }
+
+
 
       
       

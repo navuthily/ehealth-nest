@@ -105,6 +105,9 @@ import { CauHinhToolCap3Module } from './cauhinhtoolcap3/cauhinhtoolcap3.module'
 import { CauHinhDiemChamCap1Module } from './cauhinhdiemchamcap1/cauhinhchamdiemcap1.module';
 import { CauHinhDiemChamCap1Entity } from './cauhinhdiemchamcap1/cauhinhdiemchamcap1.entity';
 import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemchamcap2.entity';
+import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
+import { ToDieuTriModule } from './todieutri/todieutri.module';
+import { ToDieuTriEntity } from './todieutri/todieutri.entity';
 
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
@@ -215,7 +218,7 @@ class BuildServiceModule { }
           CauHinhToolCap2Entity, DauVaoCap1Entity,CauHinhToolCap1Entity,
           DauVaoCap2Entity,DauVaoCap3Entity,
           DanhMucLoaiDinhNghiaEntity,CauHinhDiemChamCap1Entity,
-          CauHinhDiemChamCap2Entity
+          CauHinhDiemChamCap2Entity, ToDieuTriEntity
         ];
         configDB.logging = true;
         // configDB.cache = {
@@ -324,7 +327,8 @@ class BuildServiceModule { }
     DMbenhnhanModule,DMngonnguModule,
     LichSuChamDiemCap2Module, CauHinhToolCap1Module,
     CauHinhToolCap2Module,CauHinhToolCap3Module,
-    CauHinhDiemChamCap1Module
+    CauHinhDiemChamCap1Module, DauVaoCap1Module,
+    ToDieuTriModule
   ],
 })
 export class AppModule {}

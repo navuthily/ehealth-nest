@@ -22,7 +22,7 @@ export class CauHinhToolCap2Entity  {
 
 
   @OneToMany(() => CauHinhToolCap3Entity, cauhinhtoolcap3 => cauhinhtoolcap3.cauhinhtoolcap2)
-  cauhinhtoolcap3s: CauHinhToolCap3Entity[]
+  cauhinhtoolcap3s: CauHinhToolCap3Entity[] 
 
 
   @ManyToOne(() => CauHinhToolCap1Entity, cauhinhtoolcap1 => cauhinhtoolcap1.cauhinhtoolcap2s)

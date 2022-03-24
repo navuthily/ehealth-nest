@@ -28,6 +28,28 @@ export class CauHinhToolCap3Entity  {
   @Column({ name: 'GhiChu' })
   GhiChu?: string;
 
+
+
+  @Column({ name: 'TenCauHinhCuThe' })
+  tencauhinhcuthe?: string;
+
+  @Column({ name: 'Max' })
+  max?: number;
+
+  @Column({ name: 'Min' })
+  min?: number;
+
+
+
+
+
+
+
+
+
+
+
+
   // @OneToMany(() => LichSuChamDiemCap2Entity, lichsuchamdiemcap2 => lichsuchamdiemcap2.cauhinhtoolcap3)
   // lichsuchamdiemcap2s: LichSuChamDiemCap2Entity[]
 
