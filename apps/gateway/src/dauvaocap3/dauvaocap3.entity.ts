@@ -21,6 +21,8 @@ export class DauVaoCap3Entity  {
   @JoinColumn({ name: "ID_Cap2" })
   dauvaocap2: DauVaoCap2Entity
 
+  
+
   // @OneToMany(() => CauHinhToolCap3Entity, cauhinhtoolcap3 => cauhinhtoolcap3.dauvaocap1)
   // cauhinhtoolcap3s: CauHinhToolCap3Entity[]
 
