@@ -1,8 +1,8 @@
 import {
-  Controller, Get, Inject, CACHE_MANAGER
+  Controller, Get, Inject, CACHE_MANAGER, Post, Body, UseInterceptors
 } from '@nestjs/common';
-import {  ApiTags } from '@nestjs/swagger';
-import { Crud, CrudController } from '@nestjsx/crud';
+import {  ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { CreateManyDto, Crud, CrudController, CrudRequest, CrudRequestInterceptor, Override, ParsedBody, ParsedRequest } from '@nestjsx/crud';
 import { LichSuChamDiemCap1Service } from './lichsuchamdiemcap1.service';
 import { LichSuChamDiemCap1 } from './lichsuchamdiemcap1.entity';
 import { Cache } from 'cache-manager';
@@ -40,36 +40,25 @@ export class DmdantocController implements CrudController<LichSuChamDiemCap1> {
     public service: LichSuChamDiemCap1Service,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
-
-
-
-
-
-
   }
 
 
-  // @Get("hello")
-  // async getAll(){
-  //   var dataThucDon = await this.cacheManager.get('dataThucDon');
-  //   if (!dataThucDon) {
-  //     dataThucDon = await  this.service.getAll()
-  //     await this.cacheManager.set('dataThucDon', dataThucDon, {
-  //       ttl: 3,
-  //     });
 
-  //     return {
-  //       loadFrom: "sever",
-  //       data: dataThucDon,
-        
-  //     }
+
+
+  // @UseInterceptors(CrudRequestInterceptor)
+  // @ApiConsumes('multipart/form-data')
+  // @Post('/luu')
+  // async abc(
+  //   @ParsedRequest() req: CrudRequest, 
+  //   @ParsedBody() dto: CreateManyDto<LichSuChamDiemCap1>
+  // ){
+  //   if(this.base.createManyBase){
+  //     const data = await this.base.createManyBase(req, dto);
+  //     console.log(data)
+  //     return data
   //   }
-
-
-
-  //   return {
-  //     loadFrom: "cache",
-  //     data: dataThucDon,
-  //   }
+    
+    
   // }
 }
