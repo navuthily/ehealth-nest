@@ -13,6 +13,10 @@ export class CauHinhDiemChamCap2Entity  {
   @Column({ name: 'ID_AutoCap1' })
   ID_AutoCap1?: number;
 
+  @Column({ name: 'NguyCo' })
+  NguyCo?: number;
+
+
   @Column({ name: 'Diem' })
   Diem?: number;
 
