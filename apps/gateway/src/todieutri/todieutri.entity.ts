@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany, PrimaryColumn, ManyToOne, JoinColumn } from 
 import { LichSuChamDiemCap1 } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
 import { CauHinhToolCap3Entity } from '../cauhinhtoolcap3/cauhinhtoolcap3.entity';
 import { CauHinhToolCap1Entity } from '../cauhinhtoolcap1/cauhinhtoolcap1.entity';
+import { ToDieuTriChiTietEntity } from '../todieutrichitiet/todieutrichitiet.entity';
 
 @Entity({ name: 'GD2_TODIEUTRI' })
 export class ToDieuTriEntity  {
@@ -32,7 +33,7 @@ export class ToDieuTriEntity  {
   
 
 
-  // @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1 => lichsuchamdiemcap1.cauhinhtoolcap1)
-  // lichsuchamdiemcap1s: LichSuChamDiemCap1[]
+  @OneToMany(() => ToDieuTriChiTietEntity, todieutrichitiet => todieutrichitiet.todieutri)
+  todieutrichitiets: ToDieuTriChiTietEntity[]
 
 }

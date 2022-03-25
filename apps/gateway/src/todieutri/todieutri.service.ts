@@ -12,11 +12,15 @@ export class ToDieuTriService extends TypeOrmCrudService<ToDieuTriEntity> {
     @InjectRepository(ToDieuTriRepository) repo
   ) {
     super(repo);
+
+
+
   }
 
 
 
-  getAll(){
-    return this.repo.find()
-  }
+  
+
+
+
 }

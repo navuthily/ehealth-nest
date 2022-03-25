@@ -4,12 +4,13 @@ import {
 import {  ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController, CrudRequest, Override, ParsedRequest, CrudRequestInterceptor } from '@nestjsx/crud';
 import { Cache } from 'cache-manager';
-import { ToDieuTriEntity } from './todieutri.entity';
-import { ToDieuTriService } from './todieutri.service';
+import { ToDieuTriChiTietEntity } from './todieutrichitiet.entity';
+import { ToDieuTriChiTietService } from './todieutrichitiet.service';
+
 
 @Crud({
   model: {
-    type: ToDieuTriEntity,
+    type: ToDieuTriChiTietEntity,
   },
   query: {
 
@@ -22,12 +23,10 @@ import { ToDieuTriService } from './todieutri.service';
         
     //   ],
     join: {
-      todieutrichitiets: {
+      todieutri: {
         eager: false,
       },
-      'todieutrichitiets.nhanvien':{
-        eager: false
-      }
+
 
 
       
@@ -39,15 +38,15 @@ import { ToDieuTriService } from './todieutri.service';
 
   }
 })
-@Controller('todieutri')
-@ApiTags('todieutri')
-export class ToDieuTriController implements CrudController<ToDieuTriEntity> {
+@Controller('todieutrichitiet')
+@ApiTags('todieutrichitiet')
+export class ToDieuTriChiTietController implements CrudController<ToDieuTriChiTietEntity> {
   constructor(
-    public service: ToDieuTriService,
+    public service: ToDieuTriChiTietService,
     @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
-  get base(): CrudController<ToDieuTriEntity>{
+  get base(): CrudController<ToDieuTriChiTietEntity>{
     return this
   }
 
