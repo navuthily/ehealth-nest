@@ -13,7 +13,8 @@ export class GoiKhamChiTietAppBenhNhanLoaiKhamChiTietService {
     let stored = ` SELECT dlk.ID_LoaiKham,dlk.TenLoaiKham,nc.TenNhom NhomLoaiKham,gk.ID_GoiKhamChiTiet,gk.ID_GoiKham,dlk.GiaBaoChoBN,gk.BatBuoc_App
     FROM DM_LoaiKham dlk
     JOIN NhomCLS nc ON nc.ID_NhomCLS = dlk.ID_NhomCLS
-    LEFT JOIN GoiKhamChiTiet gk ON gk.ID_LoaiKham = dlk.ID_LoaiKham AND gk.ID_GoiKham=@0`;
+    LEFT JOIN GoiKhamChiTiet gk ON gk.ID_LoaiKham = dlk.ID_LoaiKham AND gk.ID_GoiKham=@0
+    where dlk.Active = '1'`;
 
     const result = await this.connection.query(`${stored}`, [id]);
     result.map((index: { id: any; }, key: any) => {
