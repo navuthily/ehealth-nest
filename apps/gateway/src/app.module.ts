@@ -108,6 +108,8 @@ import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemcham
 import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
 import { ToDieuTriModule } from './todieutri/todieutri.module';
 import { ToDieuTriEntity } from './todieutri/todieutri.entity';
+import { ThoiGianDatLichdoModule } from './cauhinhthoigianchophepdatlich/cauhinhthoigianchophepdatlich.module';
+import { moduleEntity } from './cauhinhthoigianchophepdatlich/cauhinhthoigianchophepdatlich.entity';
 
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
@@ -262,7 +264,7 @@ class BuildServiceModule { }
         const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
         configDB.entities = [
         
-          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity
+          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity, moduleEntity
          
   
         ];
@@ -328,7 +330,7 @@ class BuildServiceModule { }
     LichSuChamDiemCap2Module, CauHinhToolCap1Module,
     CauHinhToolCap2Module,CauHinhToolCap3Module,
     CauHinhDiemChamCap1Module, DauVaoCap1Module,
-    ToDieuTriModule
+    ToDieuTriModule, ThoiGianDatLichdoModule
   ],
 })
 export class AppModule {}
