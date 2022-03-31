@@ -9,7 +9,7 @@ import {
   OffsetConnection,
   Relation,
 } from '@nestjs-query/query-graphql';
-import { ID, ObjectType } from '@nestjs/graphql';
+import { Field, ID, InputType, ObjectType } from '@nestjs/graphql';
 import { DMLoiKhuyenDTO } from '../../dm-loikhuyen/dto/dm-loikhuyen.dto';
 import { DMModuleLoaiKhamDTO } from './dm-module-loaikham.dto';
 // import { DMBenhNhanDTO } from '../../dmbenhnhan/dto/dmbenhnhan.dto';
@@ -33,11 +33,11 @@ import { DMModuleLoaiKhamDTO } from './dm-module-loaikham.dto';
   // defaultFilter: { trangthai: { neq: 'Hủy bỏ' } },
   defaultResultSize: 1,
 }) 
-// @Relation('dmModuleLoaiKhams', () => DMModuleLoaiKhamDTO,{
-//   disableRemove: true,
-//   disableUpdate: true,
-//   nullable: true,
-// } )
+@Relation('dmModuleLoaiKhams', () => DMModuleLoaiKhamDTO,{
+  disableRemove: true,
+  disableUpdate: true,
+  nullable: true,
+} )
 @OffsetConnection('dmModuleLoaiKhams', () => DMModuleLoaiKhamDTO, {
   disableRemove: true,
   disableUpdate: true,
@@ -50,6 +50,7 @@ import { DMModuleLoaiKhamDTO } from './dm-module-loaikham.dto';
   maxResultsSize: 100,
   enableTotalCount: false,
 })
+@InputType('DMLoaiKhamDTO')
 export class DMLoaiKhamDTO {
   @FilterableField(() => ID)
   ID_LoaiKham!: number;
@@ -108,4 +109,7 @@ export class DMLoaiKhamDTO {
 
   // @FilterableField({ nullable: true })
   // soluongbsthuchien?: number;
+  // @FilterableField({ nullable: true })
+  // @Field()
+  // dmModuleLoaiKhams: DMModuleLoaiKhamDTO[]
 }
