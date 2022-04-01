@@ -108,6 +108,16 @@ import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemcham
 import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
 import { ToDieuTriModule } from './todieutri/todieutri.module';
 import { ToDieuTriEntity } from './todieutri/todieutri.entity';
+import { ToDieuTriChiTietEntity } from './todieutrichitiet/todieutrichitiet.entity';
+import { ToDieuTriChiTietModule } from './todieutrichitiet/todieutrichitiet.module';
+import { DonthuocEntity } from './donthuoc/donthuoc.entity';
+import { DonthuocModule } from './donthuoc/donthuoc.module';
+import { DonthuocchitietEntity } from './donthuocchitiet/donthuocchitiet.entity';
+import { DonthuocchitietModule } from './donthuocchitiet/donthuocchitiet.module';
+import { DMThuocEntity } from './thuoc/thuoc.entity';
+import { DonthuoctralaiEntity } from './donthuoctralai/donthuoctralai.entity';
+import { DonthuoctralaichitietEntity } from './donthuoctralaichitiet/donthuoctralaichitiet.entity';
+import { DonthuoctralaiModule } from './donthuoctralai/donthuoctralai.module';
 
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
@@ -218,7 +228,10 @@ class BuildServiceModule { }
           CauHinhToolCap2Entity, DauVaoCap1Entity,CauHinhToolCap1Entity,
           DauVaoCap2Entity,DauVaoCap3Entity,
           DanhMucLoaiDinhNghiaEntity,CauHinhDiemChamCap1Entity,
-          CauHinhDiemChamCap2Entity, ToDieuTriEntity
+          CauHinhDiemChamCap2Entity, ToDieuTriEntity,
+          ToDieuTriChiTietEntity,DonthuocEntity,
+          DonthuocchitietEntity,DMThuocEntity,
+          DonthuoctralaiEntity,DonthuoctralaichitietEntity
         ];
         configDB.logging = true;
         // configDB.cache = {
@@ -328,7 +341,9 @@ class BuildServiceModule { }
     LichSuChamDiemCap2Module, CauHinhToolCap1Module,
     CauHinhToolCap2Module,CauHinhToolCap3Module,
     CauHinhDiemChamCap1Module, DauVaoCap1Module,
-    ToDieuTriModule
+    ToDieuTriModule, ToDieuTriChiTietModule,
+    DonthuocModule,DonthuocchitietModule,
+    DonthuoctralaiModule
   ],
 })
 export class AppModule {}

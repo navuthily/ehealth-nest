@@ -643,6 +643,41 @@ type BenhAnGiuongBenhMaxAggregate {
   ngaygiobatdauSuDung: Date
 }
 
+type DMLoiKhuyenEntity {
+  autoId: Float!
+  noidungloikhuyen: String
+}
+
+type DMModuleLoaiKhamEntity {
+  moduleId: Float
+  loaikhamId: Float
+  tenloaikham: String
+  dmLoaiKham: DMLoaiKhamEntity
+  dmmodule: String
+}
+
+type DMLoaiKhamEntity {
+  ID_LoaiKham: Float
+  id: Float
+  TenLoaiKham: String
+  Active: Boolean
+  SoLuongBs_ThucHien: Float
+  LoiKhuyen_App: Float
+  maviettat: String
+  maviettatbn: String
+  nhomclsId: Float
+  mota: String
+  giabaochobn: Float
+  SoLuongNhanVien_ThucHien: Float
+  IsTamUng: Boolean
+  IsDauHieuSinhTon: Boolean
+  GioiTinh_LoaiKham: Float
+  IsSoLuongNhieu: Boolean
+  YNghia: String
+  dmLoiKhuyen: DMLoiKhuyenEntity
+  dmModuleLoaiKhams: [DMModuleLoaiKhamEntity!]
+}
+
 type DmLoiKhuyen {
   autoId: ID!
   noidungloikhuyen: String
@@ -1565,7 +1600,56 @@ type gd2benhnhanquanheMaxAggregate {
   DiaChi_NguoiLienHe: String
 }
 
+input DMLoaiKhamDTO {
+  ID_LoaiKham: ID!
+  TenLoaiKham: String
+  id: Float
+  Active: Boolean
+  SoLuongBs_ThucHien: Float
+  LoiKhuyen_App: Float
+  maviettat: String
+  maviettatbn: String
+  nhomclsId: Float
+  mota: String
+  giabaochobn: Float
+  SoLuongNhanVien_ThucHien: Float
+  IsTamUng: Boolean
+  IsDauHieuSinhTon: Boolean
+  GioiTinh_LoaiKham: Float
+  IsSoLuongNhieu: Boolean
+  YNghia: String
+}
+
 type Query {
+  findAll: [DMLoaiKhamEntity!]
+  dmLoaiKham(
+    """The id of the record to find."""
+    id: ID!
+  ): DmLoaiKham
+  dmLoaiKhams(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 100}
+
+    """Specify to filter the records returned."""
+    filter: DmLoaiKhamFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DmLoaiKhamSort!] = [{field: ID_LoaiKham, direction: ASC}]
+  ): DmLoaiKhamConnection!
+  dmModuleLoaiKham(
+    """The id of the record to find."""
+    id: ID!
+  ): DmModuleLoaiKham
+  dmModuleLoaiKhams(
+    """Limit or page results."""
+    paging: OffsetPaging = {limit: 10}
+
+    """Specify to filter the records returned."""
+    filter: DmModuleLoaiKhamFilter = {}
+
+    """Specify to sort results."""
+    sorting: [DmModuleLoaiKhamSort!] = [{field: id, direction: ASC}]
+  ): DmModuleLoaiKhamConnection!
   thongTinLuotKham(
     """The id of the record to find."""
     id: ID!
@@ -1636,34 +1720,6 @@ type Query {
     """Specify to sort results."""
     sorting: [UserSort!] = []
   ): UserConnection!
-  dmLoaiKham(
-    """The id of the record to find."""
-    id: ID!
-  ): DmLoaiKham
-  dmLoaiKhams(
-    """Limit or page results."""
-    paging: OffsetPaging = {limit: 100}
-
-    """Specify to filter the records returned."""
-    filter: DmLoaiKhamFilter = {}
-
-    """Specify to sort results."""
-    sorting: [DmLoaiKhamSort!] = [{field: ID_LoaiKham, direction: ASC}]
-  ): DmLoaiKhamConnection!
-  dmModuleLoaiKham(
-    """The id of the record to find."""
-    id: ID!
-  ): DmModuleLoaiKham
-  dmModuleLoaiKhams(
-    """Limit or page results."""
-    paging: OffsetPaging = {limit: 10}
-
-    """Specify to filter the records returned."""
-    filter: DmModuleLoaiKhamFilter = {}
-
-    """Specify to sort results."""
-    sorting: [DmModuleLoaiKhamSort!] = [{field: id, direction: ASC}]
-  ): DmModuleLoaiKhamConnection!
   dmLoiKhuyen(
     """The id of the record to find."""
     id: ID!
@@ -1748,6 +1804,59 @@ type Query {
     """Specify to sort results."""
     sorting: [gd2benhnhanquanheSort!] = [{field: ID_MoiQuanHe, direction: ASC}]
   ): Gd2benhnhanquanheConnection!
+}
+
+input DmLoaiKhamFilter {
+  and: [DmLoaiKhamFilter!]
+  or: [DmLoaiKhamFilter!]
+  ID_LoaiKham: IDFilterComparison
+  TenLoaiKham: StringFieldComparison
+  id: NumberFieldComparison
+  Active: BooleanFieldComparison
+  SoLuongBs_ThucHien: NumberFieldComparison
+  LoiKhuyen_App: NumberFieldComparison
+  maviettat: StringFieldComparison
+  maviettatbn: StringFieldComparison
+  nhomclsId: NumberFieldComparison
+  mota: StringFieldComparison
+  giabaochobn: NumberFieldComparison
+  SoLuongNhanVien_ThucHien: NumberFieldComparison
+  IsTamUng: BooleanFieldComparison
+  IsDauHieuSinhTon: BooleanFieldComparison
+  GioiTinh_LoaiKham: NumberFieldComparison
+  IsSoLuongNhieu: BooleanFieldComparison
+  YNghia: StringFieldComparison
+}
+
+input BooleanFieldComparison {
+  is: Boolean
+  isNot: Boolean
+}
+
+input DmLoaiKhamSort {
+  field: DmLoaiKhamSortFields!
+  direction: SortDirection!
+  nulls: SortNulls
+}
+
+enum DmLoaiKhamSortFields {
+  ID_LoaiKham
+  TenLoaiKham
+  id
+  Active
+  SoLuongBs_ThucHien
+  LoiKhuyen_App
+  maviettat
+  maviettatbn
+  nhomclsId
+  mota
+  giabaochobn
+  SoLuongNhanVien_ThucHien
+  IsTamUng
+  IsDauHieuSinhTon
+  GioiTinh_LoaiKham
+  IsSoLuongNhieu
+  YNghia
 }
 
 input CursorPaging {
@@ -1951,11 +2060,6 @@ input UserFilter {
   isLuongLSP: BooleanFieldComparison
 }
 
-input BooleanFieldComparison {
-  is: Boolean
-  isNot: Boolean
-}
-
 input UserSort {
   field: UserSortFields!
   direction: SortDirection!
@@ -2054,54 +2158,6 @@ enum UserSortFields {
   ghichuReview
   ghichuPhongVan
   isLuongLSP
-}
-
-input DmLoaiKhamFilter {
-  and: [DmLoaiKhamFilter!]
-  or: [DmLoaiKhamFilter!]
-  ID_LoaiKham: IDFilterComparison
-  TenLoaiKham: StringFieldComparison
-  id: NumberFieldComparison
-  Active: BooleanFieldComparison
-  SoLuongBs_ThucHien: NumberFieldComparison
-  LoiKhuyen_App: NumberFieldComparison
-  maviettat: StringFieldComparison
-  maviettatbn: StringFieldComparison
-  nhomclsId: NumberFieldComparison
-  mota: StringFieldComparison
-  giabaochobn: NumberFieldComparison
-  SoLuongNhanVien_ThucHien: NumberFieldComparison
-  IsTamUng: BooleanFieldComparison
-  IsDauHieuSinhTon: BooleanFieldComparison
-  GioiTinh_LoaiKham: NumberFieldComparison
-  IsSoLuongNhieu: BooleanFieldComparison
-  YNghia: StringFieldComparison
-}
-
-input DmLoaiKhamSort {
-  field: DmLoaiKhamSortFields!
-  direction: SortDirection!
-  nulls: SortNulls
-}
-
-enum DmLoaiKhamSortFields {
-  ID_LoaiKham
-  TenLoaiKham
-  id
-  Active
-  SoLuongBs_ThucHien
-  LoiKhuyen_App
-  maviettat
-  maviettatbn
-  nhomclsId
-  mota
-  giabaochobn
-  SoLuongNhanVien_ThucHien
-  IsTamUng
-  IsDauHieuSinhTon
-  GioiTinh_LoaiKham
-  IsSoLuongNhieu
-  YNghia
 }
 
 input DmLoiKhuyenFilter {
@@ -2594,9 +2650,9 @@ enum gd2benhnhanquanheSortFields {
 }
 
 type Mutation {
-  login(password: String!, username: String!): LoginPayloadDto!
   setDmLoaiKhamOnDmModuleLoaiKham(input: SetDmLoaiKhamOnDmModuleLoaiKhamInput!): DmModuleLoaiKham!
   removeDmLoaiKhamFromDmModuleLoaiKham(input: RemoveDmLoaiKhamFromDmModuleLoaiKhamInput!): DmModuleLoaiKham!
+  login(password: String!, username: String!): LoginPayloadDto!
 }
 
 input SetDmLoaiKhamOnDmModuleLoaiKhamInput {

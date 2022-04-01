@@ -15,7 +15,4 @@ export class CauHinhToolCap2Service extends TypeOrmCrudService<CauHinhToolCap2En
 
 
 
-  getAll(){
-    return this.repo.find()
-  }
 }

@@ -12,6 +12,14 @@ import { CauHinhDiemChamCap1Entity } from './cauhinhdiemchamcap1.entity';
     type: CauHinhDiemChamCap1Entity,
   },
   query: {
+    filter:[
+      {
+        field: "SuDung",
+        operator: "$eq",
+        value: "1"
+      }
+      
+    ],
     join: {
       cauhinhdiemchamcap2s: {
         eager: false
