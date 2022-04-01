@@ -13,14 +13,6 @@ import { ToDieuTriService } from './todieutri.service';
   },
   query: {
 
-    // filter:[
-    //     {
-    //       field: "SuDung",
-    //       operator: "$eq",
-    //       value: "1"
-    //     }
-        
-    //   ],
     join: {
       todieutrichitiets: {
         eager: false,
@@ -55,9 +47,29 @@ export class ToDieuTriController implements CrudController<ToDieuTriEntity> {
   @UseInterceptors(CrudRequestInterceptor)
   @Get('/abc')
   async abc(@ParsedRequest() req: CrudRequest){
-    if(this.base.getManyBase){
-      const data = await this.base.getManyBase(req);
+    if(this.base.getOneBase){
+      console.log("hihihihihi");
+      
+      const data = await this.base.getOneBase(req);
+      const id_donthuoc = data.todieutrichitiets.map((item) => item.id_donthuoc) // array id_donthuoc
+      const id_donthuoctralai = data.todieutrichitiets.map((item) => item.id_donthuoctralai) // array id_donthuoc
+
+      if(id_donthuoc){
+        //GET donthuocs
+        const donthuocs = await this.service.getDonthuocs(id_donthuoc)        
+      }
+
+      if(id_donthuoctralai){
+        //GET donthuocs trả lại
+        const donthuoctralais = await this.service.getDonthuoctralais(id_donthuoctralai)
+
+        
+      }
+
+
+
       return data
+      
     }
     
     

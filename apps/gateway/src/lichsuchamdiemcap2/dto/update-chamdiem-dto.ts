@@ -1,25 +1,18 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Lichsuchamdiemcap2sDTO } from './Lichsuchamdiemcap2sDTO'
 
-export class Cap2DTO  {
+export class UpdateChamDiemDTO  {
     @ApiProperty({type: Number})
-    ID_BsCham?: number
-  
-    @ApiProperty({type: Number})
-    ID_BenhNhan?: number
+    ID_AutoCap1?: number
 
-    @ApiProperty({type: Number})
-    ID_LuotKham?: Date
-
+    
     @ApiProperty({type: String})
     ketqua?: string
 
-    @ApiProperty({type: String})
-    ID_Tool?: string
 
-
-    @ApiProperty({type: String})
+    @ApiProperty({type: Number})
     TongDiem?: number
+
 
     @ApiProperty({type : [Lichsuchamdiemcap2sDTO]})
     lichsuchamdiemcap2s: Lichsuchamdiemcap2sDTO[]

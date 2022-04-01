@@ -1,13 +1,14 @@
 import {
   Body,
-  Controller, Post, UseInterceptors
+  Controller, Param, Patch, Post, Put, UseInterceptors
 } from '@nestjs/common';
-import {  ApiTags } from '@nestjs/swagger';
+import {  ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { CreateManyDto, Crud, CrudController, CrudRequest, CrudRequestInterceptor, Override, ParsedBody, ParsedRequest } from '@nestjsx/crud';
 import { LichSuChamDiemCap2Service } from './lichsuchamdiemcap2.service';
 import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2.entity';
 import { Cap2DTO } from './dto/cap2DTO';
 import { LichSuChamDiemCap1Service } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.service';
+import { UpdateChamDiemDTO } from './dto/update-chamdiem-dto';
 
 
 @Crud({
@@ -52,26 +53,50 @@ export class LichSuChamDiemCap2Controller implements CrudController<LichSuChamDi
   {
     const data = await this.lichsuchamdiemcap1Service.createLSCDC1(obj)  //thêm bảng lich sủ cham diem cap1 
     const idCap1 = data["id"]; //nhận id cấp 1
+    const result = await this.addCap2(obj,req, idCap1)
+    return result
+  }
 
 
-    console.log(data);
-    
-    for(let i = 0; i < obj["lichsuchamdiemcap2s"].length; i++){
-      obj["lichsuchamdiemcap2s"][i]["ID_AutoCap1"] = idCap1
+
+
+
+  //update suat an
+  @UseInterceptors(CrudRequestInterceptor)
+  @Post("editchamdiem")
+  async update(@ParsedRequest() req: CrudRequest, @Body() obj: UpdateChamDiemDTO){
+    const data = await this.lichsuchamdiemcap1Service.updateCap1(obj)  //update cap1 
+    if(data){
+      // console.log(obj);
+        //xóa tất cả dữ liệu bảng lscdcap2
+        await this.service.delete(obj.ID_AutoCap1)
+        //thêm lại dữ liệu cho bảng cấp 2
+        await this.addCap2(obj, req)
+        return {
+          message: "Update thành công!"
+        }      
     }
-    
-    const dataCap2 = {
+
+    return {
+      message: "Không tìm thấy idCap1!"
+    }
+  }
+
+  async addCap2(obj,req,idCap1 = null){
+    for(let i = 0; i < obj["lichsuchamdiemcap2s"].length; i++){
+      obj["lichsuchamdiemcap2s"][i]["ID_AutoCap1"] = idCap1 ? idCap1 : obj.ID_AutoCap1
+    }
+
+    const dataCap2: any = {
       "bulk": obj["lichsuchamdiemcap2s"]
     };
-  
     if(this.base.createManyBase){
       const data = await this.base.createManyBase(req, dataCap2);
       return data
     }
-
-
-    
-
   }
 
+
 }
+
+
