@@ -15,18 +15,20 @@ import { LichSuChamDiemCap1Service } from '../LichSuChamDiemCap1/lichsuchamdiemc
     type: LichSuChamDiemCap2Entity,
   },
   query: {
-    limit:50,
 
     join: {
       cauhinhtoolcap3: {
         eager: false
       },
-      "cauhinhtoolcap3.cauhinhtoolcap2":{
-        eager: false
-      },
+
       lichsuchamdiemcap1:{
         eager: false
-      }
+      },
+      "cauhinhtoolcap3.cauhinhtoolcap2":{
+    
+        eager: false
+      },
+
     }
   }
 })

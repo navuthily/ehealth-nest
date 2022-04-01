@@ -12,6 +12,14 @@ import { Cache } from 'cache-manager';
     type: LichSuChamDiemCap1,
   },
   query: {
+    filter:[
+      {
+        field: "lichsuchamdiemcap2s.Value",
+        operator: "$eq",
+        value: "1"
+      }
+      
+    ],
     join: {
       dinhnghialoaicongthuc: {
         eager: false
@@ -26,11 +34,18 @@ import { Cache } from 'cache-manager';
         eager: false,
         
       },
+      'lichsuchamdiemcap2s.cauhinhtoolcap3':{
+        alias: "l3c3",
+        eager: false
+      },
+      'lichsuchamdiemcap2s.cauhinhtoolcap3.cauhinhtoolcap2':{
+        eager: false
+      }
       
       
     },
 
-    cache: 100000
+
   }
 })
 @Controller('lichsuchamdiemcap1')
@@ -38,7 +53,6 @@ import { Cache } from 'cache-manager';
 export class DmdantocController implements CrudController<LichSuChamDiemCap1> {
   constructor(
     public service: LichSuChamDiemCap1Service,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
   }
 
@@ -62,3 +76,6 @@ export class DmdantocController implements CrudController<LichSuChamDiemCap1> {
     
   // }
 }
+
+
+//http://localhost:7000/lichsuchamdiemcap1?join=lichsuchamdiemcap2s&join=lichsuchamdiemcap2s.cauhinhtoolcap3&join=lichsuchamdiemcap2s.cauhinhtoolcap3.cauhinhtoolcap2&filter=lichsuchamdiemcap2s.ID_AutoCap1||$eq||${40}&filter=lichsuchamdiemcap2s.Value||$eq||1

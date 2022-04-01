@@ -7,12 +7,15 @@ import { DMLoaiKhamDTO } from './dto/dm-loaikham.dto';
 import { DMLoaiKhamEntity } from './dm-loaikham.entity';
 import { DMModuleLoaiKhamDTO } from './dto/dm-module-loaikham.dto';
 import { DMModuleLoaiKhamEntity } from './dm-module-loaikham.entity';
+import { DMLoaikhamResolver } from './dm-loaikham.resolver';
+import { DMLoaikhamService } from './dm-loaikham.service';
 // import { SuatAnService } from './suatan.service';
 
 @Module({
   imports: [
     NestjsQueryGraphQLModule.forFeature({
       imports: [NestjsQueryTypeOrmModule.forFeature([DMLoaiKhamEntity,DMModuleLoaiKhamEntity])],
+      dtos:[{ DTOClass: DMLoaiKhamDTO}],
       // services: [SuatAnService],
       resolvers: [
         {
@@ -31,6 +34,7 @@ import { DMModuleLoaiKhamEntity } from './dm-module-loaikham.entity';
           delete: { disabled: true },
           // referenceBy: { key: 'luotkhamId' },
         },
+        
         // {
         //   type: 'federated',
         //   DTOClass: SuatAnReferenceDTO,
@@ -39,6 +43,7 @@ import { DMModuleLoaiKhamEntity } from './dm-module-loaikham.entity';
       ],
     }),
   ],
-  providers: [],
+  providers: [DMLoaikhamResolver, DMLoaikhamService, ],
+  exports: [DMLoaikhamService]
 })
 export class DMLoaiKhamModule {}

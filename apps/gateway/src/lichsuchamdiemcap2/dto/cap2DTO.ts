@@ -15,6 +15,10 @@ export class Cap2DTO  {
     ketqua?: string
 
     @ApiProperty({type: String})
+    ID_Tool?: string
+
+
+    @ApiProperty({type: String})
     TongDiem?: number
 
 
