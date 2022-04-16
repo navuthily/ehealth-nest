@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from 'typeorm';
+import { NhomvattuEntity } from '../dm_nhomvattu/nhomvattu.entity';
 
 // @Entity('SV_FAMILY_.Pos$ph66_E')
 @Entity({ name: 'dmvt2' })
@@ -17,4 +18,11 @@ export class VatTu {
 
   @Column({ name: 'Dvt' })
   Dvt?: string;
+
+  @Column({ name: 'id_dm_nhomvattu' })
+  id_dm_nhomvattu?: number;
+
+  @ManyToOne(() => NhomvattuEntity, (nhomvattu) => nhomvattu.vattus)
+  @JoinColumn({ name: "id_dm_nhomvattu" })
+  nhomvattu: NhomvattuEntity
 }

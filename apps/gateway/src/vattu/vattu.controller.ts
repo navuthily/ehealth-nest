@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { Crud, CrudController } from '@nestjsx/crud';
+import { updatevattu } from './dto/updatevattu.dto';
 import { VatTu } from './vattu.entity';
 import { VattuService } from './vattu.service';
 
@@ -16,6 +17,16 @@ import { VattuService } from './vattu.service';
       disabled: false,
     },
   },
+  dto: {
+    update: updatevattu,
+  },
+  query: {
+    join: {
+      nhomvattu: {
+        eager: false,
+      },
+    },
+  }
 })
 @ApiTags('vattu')
 @Controller('vattu')

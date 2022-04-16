@@ -24,7 +24,6 @@ async function bootstrap(): Promise<NestFastifyApplication> {
         file: '../../text.txt', // Will use pino.destination()
       },
     }),
-
     // {cors:true}
   );
 
@@ -55,15 +54,15 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     prefix: '/',
   });
 
-  // app.useGlobalPipes(
-  //   new ValidationPipe({
-  //     whitelist: true,
-  //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-  //     transform: true,
-  //     dismissDefaultMessages: true,
-  //     exceptionFactory: (errors) => new UnprocessableEntityException(errors),
-  //   }),
-  // );
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+      transform: true,
+      dismissDefaultMessages: true,
+      exceptionFactory: (errors) => new UnprocessableEntityException(errors),
+    }),
+  );
 
   // app
   //   .getHttpAdapter()
