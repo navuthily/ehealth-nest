@@ -1,12 +1,15 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { CrudValidationGroups } from '@nestjsx/crud';
+import { IsEmpty, IsNotEmpty, IsNumber, IsOptional, IsString, Length, MaxLength, Validate } from 'class-validator';
+import { Column, Entity, OneToMany, PrimaryColumn, Unique } from 'typeorm';
 
+const { CREATE, UPDATE } = CrudValidationGroups;
 @Entity({ name: 'module' })
 export class moduleEntity  {
 
   @PrimaryColumn()
   id: number;
-
-  @Column({ name: 'module_name' })
+  
+  @Column({ name: 'module_name'})
   module_name?: string;
   
   @Column({ name: 'datlichtruoctoida' })
