@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn, ManyToOne, JoinColumn, OneToOne, AfterLoad, getRepository } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryColumn, ManyToOne, JoinColumn, OneToOne, AfterLoad, getRepository, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { CauHinhToolCap1Entity } from '../cauhinhtoolcap1/cauhinhtoolcap1.entity';
 import { DinhNghiaLoaiCongThucEntity } from '../dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
@@ -8,7 +8,7 @@ import { LichSuChamDiemCap2Entity } from '../lichsuchamdiemcap2/lichsuchamdiemca
 export class LichSuChamDiemCap1  {
 
 
-  @PrimaryColumn({ name: 'Id_AutoCap1' })
+  @PrimaryGeneratedColumn({ name: 'Id_AutoCap1' })
   id: number;
 
 
@@ -25,7 +25,7 @@ export class LichSuChamDiemCap1  {
   ID_LuotKham?: number;
 
   @Column({ name: 'ID_Tool' })
-  ID_Tool?: number;
+  ID_Tool?: string;
 
   @Column({ name: 'TongDiem' })
   TongDiem?: number;

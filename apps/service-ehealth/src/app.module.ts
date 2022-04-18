@@ -6,7 +6,7 @@ import { SharedModule } from '@libs/shared/shared.module';
 import type { MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { GraphQLFederationModule } from '@nestjs/graphql';
+import { GraphQLFederationModule, GraphQLModule } from '@nestjs/graphql';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
@@ -36,7 +36,11 @@ import { DmLabelLanguageEntity } from './dm-label-language/dm-label-language.ent
 import { DMLabelLanguageModule } from './dm-label-language/dm-label-language.module';
 import { MoiQuanHeBenhNhanEntity } from './benhnhan-quanhe/benhnhan-quanhe.entity';
 import { MoiQuanHeBenhnhanModule } from './benhnhan-quanhe/benhnhan-quanhe.module';
-
+import { dmloaikhamToModuleLoader } from './dm-loaikham/loader/loaikhamToModuleLoaikham.loader';
+import { dmloaikhamToLoikhuyenLoader } from './dm-loaikham/loader/loaikhamToLoikhuyen.loader';
+import { DMModuleLoaiKham } from './dm-loaikham/dm-module-loaikham.module';
+import { moduleLoaiKhamToModuleNameLoader } from './dm-loaikham/loader/moduleLoaikhamToModuleName.loader';
+import { DMLoaikhamService } from './dm-loaikham/dm-loaikham.service'
 
 interface IHeadersContainer {
   headers?: Record<string, string>;
@@ -48,25 +52,56 @@ interface IContextArgs {
 
 @Module({
   imports: [
-    GraphQLFederationModule.forRoot({
-      autoSchemaFile: join(
-        __dirname,
-        '../../../../../../',
-        'apps/schemas/schema-ehealth.gpl',
-      ),
-      playground: {
-        cdnUrl: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}`,
-      },
-      context: ({ req, connection }: IContextArgs) => {
-        // console.log(req);
+    GraphQLFederationModule.forRootAsync({
+      // autoSchemaFile: join(
+      //   __dirname,
+      //   '../../../../../../',
+      //   'apps/schemas/schema-ehealth.gpl',
+      // ),
+ 
+      // playground: {
+      //   cdnUrl: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}`,
+      // },
+    
+      // context: ({ req, connection }: IContextArgs) => {
+      //   // console.log(req);
 
-        // console.log(connection);
+      //   // console.log(connection);
 
-        return {
-          req: { ...req, ...connection?.context },
-        };
-      },
+      //   return {
+      //     dmloaikhamToModuleLoader: dmloaikhamToModuleLoader(),
+      //     dmloaikhamToLoikhuyenLoader: dmloaikhamToLoikhuyenLoader(),
+      //     moduleLoaiKhamToModuleNameLoader: moduleLoaiKhamToModuleNameLoader(),
+      //     req: { ...req, ...connection?.context },
+      //   };
+      // },
+      imports: [DMLoaiKhamModule,DMModuleLoaiKham],
+      useFactory: (service: DMLoaikhamService) => ({
+        playground: {
+          cdnUrl: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}`,
+        },
+        autoSchemaFile: join(
+          __dirname,
+          '../../../../../../',
+          'apps/schemas/schema-ehealth.gpl',
+        ),
+        context: () => ({
+          dmloaikhamToModuleLoader: dmloaikhamToModuleLoader(),
+          dmloaikhamToLoikhuyenLoader: dmloaikhamToLoikhuyenLoader(),
+          moduleLoaiKhamToModuleNameLoader: moduleLoaiKhamToModuleNameLoader(service),
+        }),
+      }),
+      inject: [DMLoaikhamService],
+
+
+      
+
+
     }),
+
+
+
+
     ThongTinLuotKhamModule,
     DMBenhNhanModule,
     BenhAnGiuongBenhModule,
@@ -81,10 +116,17 @@ interface IContextArgs {
     ThongTinBenhVienModule,
     DMLabelLanguageModule,
     MoiQuanHeBenhnhanModule,
+    DMModuleLoaiKham,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'test' ? '.env.test' : '.env',
     }),
+
+
+    // GraphQLModule.forRootAsync({
+    //     imports: [],
+    //     inject: []
+    // }),
 
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
@@ -111,6 +153,14 @@ interface IContextArgs {
       },
       inject: [ApiConfigService],
     }),
+
+
+
+
+
+
+
+
 
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({

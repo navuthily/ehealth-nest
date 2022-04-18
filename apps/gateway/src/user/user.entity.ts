@@ -26,12 +26,13 @@ import { PhamvichungchihanhngheEntity } from '../phamvichungchihanhnghe/phamvich
 import { DiemthianhvanEntity } from '../diemthianhvan/diemthianhvan.entity';
 import { NhanvienbangcapEntity } from '../nhanvienbangcap/nhanvienbangcap.entity';
 import { LichSuChamDiemCap1 } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
+import { ToDieuTriChiTietEntity } from '../todieutrichitiet/todieutrichitiet.entity';
 
 @Entity({ name: 'DM_NhanVien' })
 @UseDto(UserDto)
 export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   // @Column({ name: 'ID_NhanVien' })
-  // nhanvienId?: number;
+  // nhanvienId?: number; 
 
   // @Column({ nullable: true })
   // createdBy: string;
@@ -385,5 +386,9 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1s => lichsuchamdiemcap1s.nhanvien)
   lichsuchamdiemcap1s: LichSuChamDiemCap1[]
+
+  @OneToMany(() => ToDieuTriChiTietEntity, todieutrichitiet => todieutrichitiet.nhanvien)
+  todieutrichitiets: ToDieuTriChiTietEntity[]
+
 
 }

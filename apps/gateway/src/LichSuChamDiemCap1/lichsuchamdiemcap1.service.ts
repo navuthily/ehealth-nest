@@ -15,7 +15,24 @@ export class LichSuChamDiemCap1Service extends TypeOrmCrudService<LichSuChamDiem
 
 
 
-  getAll(){
-    return this.repo.find()
+  async createLSCDC1(obj){
+    const data = await this.repo.create(obj)
+    return this.repo.save(data)
+  }
+
+  //tìm lscdcap1
+  async updateCap1(obj){
+    
+    const data = await this.repo.findOne({ id: obj["ID_AutoCap1"] })
+    if(data){
+      data.KetQua = obj.ketqua;
+      data.TongDiem = obj.TongDiem;     
+      return this.repo.save(data) 
+    }
+
+
+
+    
+    // 
   }
 }
