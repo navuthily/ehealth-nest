@@ -86,6 +86,9 @@ import { CauHinhToolCap1Entity } from './cauhinhtoolcap1/cauhinhtoolcap1.entity'
 import { DinhNghiaLoaiCongThucEntity } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
 import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2/lichsuchamdiemcap2.entity';
 import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.module';
+import {  VattuModule } from './vattu/vattu.module';
+import { NhomvattuEntity } from './dm_nhomvattu/nhomvattu.entity';
+import { NhomvattuModule } from './dm_nhomvattu/nhomvattu.module';
 import { DMbenhnhanModule } from './dmbenhnhan/dmbenhnhan.module';
 import { DMbenhnhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
 import { DMngonnguModule } from './ngonngu/ngonngu.module';
@@ -118,7 +121,6 @@ import { DMThuocEntity } from './thuoc/thuoc.entity';
 import { DonthuoctralaiEntity } from './donthuoctralai/donthuoctralai.entity';
 import { DonthuoctralaichitietEntity } from './donthuoctralaichitiet/donthuoctralaichitiet.entity';
 import { DonthuoctralaiModule } from './donthuoctralai/donthuoctralai.module';
-
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -257,7 +259,7 @@ class BuildServiceModule { }
         configDB.entities = [
         
           // UserEntity,
-          SuatAn,ChiTietSuatAn, VatTu
+          SuatAn,ChiTietSuatAn, VatTu, NhomvattuEntity
   
         ];
 
@@ -337,7 +339,7 @@ class BuildServiceModule { }
     PhamvichungchihanhngheModule,DiemthianhvanModule,
     LoaibangcapModule, NhanvienbangcapModule,
     LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule,
-    DMbenhnhanModule,DMngonnguModule,
+    VattuModule, NhomvattuModule ,DMngonnguModule,
     LichSuChamDiemCap2Module, CauHinhToolCap1Module,
     CauHinhToolCap2Module,CauHinhToolCap3Module,
     CauHinhDiemChamCap1Module, DauVaoCap1Module,
