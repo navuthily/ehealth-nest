@@ -24,7 +24,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
         file: '../../text.txt', // Will use pino.destination()
       },
     }),
-    // {cors:true}
+    { cors: true },
   );
 
   // CẤP QUYỀN CHO FE

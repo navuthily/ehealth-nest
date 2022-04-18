@@ -89,6 +89,38 @@ import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialo
 import {  VattuModule } from './vattu/vattu.module';
 import { NhomvattuEntity } from './dm_nhomvattu/nhomvattu.entity';
 import { NhomvattuModule } from './dm_nhomvattu/nhomvattu.module';
+import { DMbenhnhanModule } from './dmbenhnhan/dmbenhnhan.module';
+import { DMbenhnhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
+import { DMngonnguModule } from './ngonngu/ngonngu.module';
+import { DMlanguageEntity } from './ngonngu/ngonngu.entity';
+import { DMlabelEntity } from './dmlabel/dmlabel.entity';
+import { DMlabellanguageEntity } from './dmlabellanguage/dmlabellanguage.entity';
+import { CauHinhToolCap3Entity } from './cauhinhtoolcap3/cauhinhtoolcap3.entity';
+import { CauHinhToolCap2Entity } from './cauhinhtoolcap2/cauhinhtoolcap2.entity';
+import { DauVaoCap1Entity } from './dauvaocap1/dauvaocap1.entity';
+import { DauVaoCap2Entity } from './dauvaocap2/dauvaocap2.entity';
+import { DauVaoCap3Entity } from './dauvaocap3/dauvaocap3.entity';
+import { DanhMucLoaiDinhNghiaEntity } from './danhmucloaidinhnghia/danhmucloaidinhnghia.entity';
+import { LichSuChamDiemCap2Module } from './lichsuchamdiemcap2/lichsuchamdiemcap2.module';
+import { CauHinhToolCap1Module } from './cauhinhtoolcap1/cauhinhtoolcap1.module';
+import { CauHinhToolCap2Module } from './cauhinhtoolcap2/cauhinhtoolcap2.module';
+import { CauHinhToolCap3Module } from './cauhinhtoolcap3/cauhinhtoolcap3.module';
+import { CauHinhDiemChamCap1Module } from './cauhinhdiemchamcap1/cauhinhchamdiemcap1.module';
+import { CauHinhDiemChamCap1Entity } from './cauhinhdiemchamcap1/cauhinhdiemchamcap1.entity';
+import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemchamcap2.entity';
+import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
+import { ToDieuTriModule } from './todieutri/todieutri.module';
+import { ToDieuTriEntity } from './todieutri/todieutri.entity';
+import { ToDieuTriChiTietEntity } from './todieutrichitiet/todieutrichitiet.entity';
+import { ToDieuTriChiTietModule } from './todieutrichitiet/todieutrichitiet.module';
+import { DonthuocEntity } from './donthuoc/donthuoc.entity';
+import { DonthuocModule } from './donthuoc/donthuoc.module';
+import { DonthuocchitietEntity } from './donthuocchitiet/donthuocchitiet.entity';
+import { DonthuocchitietModule } from './donthuocchitiet/donthuocchitiet.module';
+import { DMThuocEntity } from './thuoc/thuoc.entity';
+import { DonthuoctralaiEntity } from './donthuoctralai/donthuoctralai.entity';
+import { DonthuoctralaichitietEntity } from './donthuoctralaichitiet/donthuoctralaichitiet.entity';
+import { DonthuoctralaiModule } from './donthuoctralai/donthuoctralai.module';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -193,8 +225,27 @@ class BuildServiceModule { }
           PhamvichungchihanhngheEntity,DiemthianhvanEntity,
           LoaibangcapEntity, NhanvienbangcapEntity,
           LichSuChamDiemCap1, CauHinhToolCap1Entity,
-          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity
+          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity,
+          DMbenhnhanEntity, CauHinhToolCap3Entity,
+          CauHinhToolCap2Entity, DauVaoCap1Entity,CauHinhToolCap1Entity,
+          DauVaoCap2Entity,DauVaoCap3Entity,
+          DanhMucLoaiDinhNghiaEntity,CauHinhDiemChamCap1Entity,
+          CauHinhDiemChamCap2Entity, ToDieuTriEntity,
+          ToDieuTriChiTietEntity,DonthuocEntity,
+          DonthuocchitietEntity,DMThuocEntity,
+          DonthuoctralaiEntity,DonthuoctralaichitietEntity
         ];
+        configDB.logging = true;
+        // configDB.cache = {
+        //   type: 'redis',
+        //   options: {
+        //     host: "localhost",
+        //     port: 6379
+        //   }
+        // }
+
+
+
         return configDB;
       },
       inject: [ApiConfigService],
@@ -213,6 +264,25 @@ class BuildServiceModule { }
         ];
 
         configDB.logging = true;
+        return configDB;
+      },
+      inject: [ApiConfigService],
+    }),
+
+      //server thanhvien
+    TypeOrmModule.forRootAsync({
+      imports: [SharedModule],
+      name : "SV_THANHVIEN_",
+      useFactory: (configService: ApiConfigService) => {
+        const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
+        configDB.entities = [
+        
+          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity
+         
+  
+        ];
+
+        // configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],
@@ -269,7 +339,13 @@ class BuildServiceModule { }
     PhamvichungchihanhngheModule,DiemthianhvanModule,
     LoaibangcapModule, NhanvienbangcapModule,
     LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule,
-    VattuModule, NhomvattuModule
+    VattuModule, NhomvattuModule ,DMngonnguModule,
+    LichSuChamDiemCap2Module, CauHinhToolCap1Module,
+    CauHinhToolCap2Module,CauHinhToolCap3Module,
+    CauHinhDiemChamCap1Module, DauVaoCap1Module,
+    ToDieuTriModule, ToDieuTriChiTietModule,
+    DonthuocModule,DonthuocchitietModule,
+    DonthuoctralaiModule
   ],
 })
 export class AppModule {}

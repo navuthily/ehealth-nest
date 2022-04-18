@@ -1,11 +1,18 @@
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Column, Entity, PrimaryColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { DMLoaiKhamEntity } from '../dm-loaikham/dm-loaikham.entity';
 
 @Entity('Gd2_DanhMuc_LoiKhuyen')
+
+
+@ObjectType()
 export class DMLoiKhuyenEntity {
+
   @PrimaryColumn({ name: 'Id_Auto' })
+  @Field()
   autoId!: number;
 
+  @Field({nullable: true })
   @Column({ name: 'NoiDungLoiKhuyen' })
   noidungloikhuyen?: string;
 

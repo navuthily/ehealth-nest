@@ -57,4 +57,10 @@ export class ThongTinLuotKhamController {
 
     return thongTinLuotKham;
   }
+
+  @Get('getThongTinLuotKhamByIdLuotkham/:id')
+  async getThongTinLuotKhamByIdLuotkham(@Param('id') idLuotKham: any) {
+    const data = await this.thongtinluotkhamService.getThongTinLuotKhamByIdLuotKham(idLuotKham);
+    return data;
+  }
 }
