@@ -23,16 +23,17 @@ async function bootstrap(): Promise<NestFastifyApplication> {
       logger: {
         file: '../../text.txt', // Will use pino.destination()
       },
-    }),
-    { cors: true },
-  );
+    })
+    // { cors: true },
+  )
 
   // CẤP QUYỀN CHO FE
+
   app.enableCors({
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-  });
+  })
 
   app.use(
     rateLimit({
@@ -46,6 +47,12 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     .setDescription('The APIs description')
     .setVersion('1.0')
     .build();
+    // .setTitle('Cats example')
+    // .setDescription('The cats API description')
+    // .setVersion('1.0')
+    // .addBearerAuth()
+    // .addTag('cats')
+    // .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 

@@ -111,6 +111,8 @@ import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemcham
 import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
 import { ToDieuTriModule } from './todieutri/todieutri.module';
 import { ToDieuTriEntity } from './todieutri/todieutri.entity';
+import { ThoiGianDatLichdoModule } from './cauhinhthoigianchophepdatlich/cauhinhthoigianchophepdatlich.module';
+import { moduleEntity } from './cauhinhthoigianchophepdatlich/cauhinhthoigianchophepdatlich.entity';
 import { ToDieuTriChiTietEntity } from './todieutrichitiet/todieutrichitiet.entity';
 import { ToDieuTriChiTietModule } from './todieutrichitiet/todieutrichitiet.module';
 import { DonthuocEntity } from './donthuoc/donthuoc.entity';
@@ -236,61 +238,35 @@ class BuildServiceModule { }
           DonthuoctralaiEntity,DonthuoctralaichitietEntity
         ];
         configDB.logging = true;
-        // configDB.cache = {
-        //   type: 'redis',
-        //   options: {
-        //     host: "localhost",
-        //     port: 6379
-        //   }
-        // }
-
-
-
         return configDB;
       },
       inject: [ApiConfigService],
     }),
-    //---------------
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       name : "SV_FAMILY_",
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
         configDB.entities = [
-        
-          // UserEntity,
-          SuatAn,ChiTietSuatAn, VatTu, NhomvattuEntity
-  
+          SuatAn,ChiTietSuatAn, VatTu, NhomvattuEntity  
         ];
-
         configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],
     }),
-
-      //server thanhvien
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
       name : "SV_THANHVIEN_",
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
-        configDB.entities = [
-        
-          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity
-         
-  
+        configDB.entities = [        
+          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity, moduleEntity       
         ];
-
-        // configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],
     }),
-
-
-
-
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
@@ -343,8 +319,9 @@ class BuildServiceModule { }
     LichSuChamDiemCap2Module, CauHinhToolCap1Module,
     CauHinhToolCap2Module,CauHinhToolCap3Module,
     CauHinhDiemChamCap1Module, DauVaoCap1Module,
-    ToDieuTriModule, ToDieuTriChiTietModule,
-    DonthuocModule,DonthuocchitietModule,
+    ToDieuTriModule, ThoiGianDatLichdoModule ,
+    ToDieuTriChiTietModule ,
+    DonthuocModule ,DonthuocchitietModule ,
     DonthuoctralaiModule
   ],
 })

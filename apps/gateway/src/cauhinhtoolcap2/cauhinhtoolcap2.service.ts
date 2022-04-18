@@ -13,6 +13,4 @@ export class CauHinhToolCap2Service extends TypeOrmCrudService<CauHinhToolCap2En
     super(repo);
   }
 
-
-
 }
