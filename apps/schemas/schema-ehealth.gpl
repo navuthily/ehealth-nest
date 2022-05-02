@@ -648,12 +648,19 @@ type DMLoiKhuyenEntity {
   noidungloikhuyen: String
 }
 
+type ModuleThanhVienEntity {
+  id: Float
+  moduleName: String
+  nhomId: Float
+}
+
 type DMModuleLoaiKhamEntity {
+  id: Float!
   moduleId: Float
   loaikhamId: Float
   tenloaikham: String
   dmLoaiKham: DMLoaiKhamEntity
-  dmmodule: String
+  dmmodule: ModuleThanhVienEntity
 }
 
 type DMLoaiKhamEntity {

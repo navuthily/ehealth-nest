@@ -2,19 +2,17 @@ import {
   BeforeInsert,
   BeforeUpdate,
   Column,
-  PrimaryColumn,
   PrimaryGeneratedColumn,
+
 } from 'typeorm';
 import type { Constructor } from '../types';
 import type { AbstractDto } from './dto/abstract.dto';
-import type { AbstractUserEntity } from './abstract-user.entity';
-import { v4 as uuid } from 'uuid';
 
 export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  @PrimaryColumn({ name: 'ID_NhanVien' })
+  @PrimaryGeneratedColumn({ name: 'ID_NhanVien' })
   id: string;
 
   @Column({ nullable: true, type: 'datetime2' })
@@ -27,7 +25,7 @@ export abstract class AbstractEntity<
   beforeInsert(): void {
     this.createdAt = new Date();
     this.updatedAt = new Date();
-    this.id = uuid();
+    // this.id = uuid();
   }
 
   @BeforeUpdate()

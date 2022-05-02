@@ -72,6 +72,7 @@ export class ApiConfigService {
 
         return entity as string;
       });
+      
       const migrationContext = require.context(
         './../../database/migrations',
         false,

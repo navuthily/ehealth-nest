@@ -1,11 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'DM_TinhThanhPho' })
 export class DmtinhthanhphoEntity  {
 
 
-  @PrimaryColumn({ name: 'ID_ThanhPho' })
+  @PrimaryGeneratedColumn({ name: 'ID_ThanhPho' })
   id: number;
 
   @Column({ name: 'TenTinhThanhPho' })

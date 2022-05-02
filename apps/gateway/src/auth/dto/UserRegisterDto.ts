@@ -15,13 +15,19 @@ export class UserRegisterDto {
   @IsString()
   @IsNotEmpty()
   @Trim()
-  readonly firstName: string;
+  readonly tennhanvien: string;
 
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
   @Trim()
-  readonly lastName: string;
+  readonly holotNhanVien: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsNotEmpty()
+  @Trim()
+  readonly username: string;
 
   @ApiProperty()
   @IsString()

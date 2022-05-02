@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { LoaibangcapEntity } from '../loaibangcap/loaibangcap.entity';
 import { UserEntity } from '../user/user.entity';
 
@@ -6,7 +6,7 @@ import { UserEntity } from '../user/user.entity';
 export class NhanvienbangcapEntity  {
 
 
-  @PrimaryColumn({ name: 'ID_auto' })
+  @PrimaryGeneratedColumn({ name: 'ID_auto' })
   id: number;
 
   @Column({ name: 'ID_NhanVien' })

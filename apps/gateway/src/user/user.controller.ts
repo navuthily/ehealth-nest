@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   HttpCode,
@@ -19,25 +20,21 @@ import { UserDto } from './dto/user-dto';
 import { UsersPageOptionsDto } from './dto/users-page-options.dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
-import { Crud, CrudController } from '@nestjsx/crud';
+import { Crud, CrudController , CrudRequest, Override, ParsedBody, ParsedRequest} from '@nestjsx/crud';
+import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
 
 @Crud({
   model: {
     type: UserEntity,
   },
-
-
   query: {
-    limit:20,
+    // limit:20,
     join: {
       chucvu: {
         eager:false
       },
       chucdanh: {
-        eager: true,
-      }, 
-      thoihanhopdong: {
-        eager: true
+        eager: false,
       }, 
       dmhopdong: {
         eager: false
@@ -113,5 +110,20 @@ export class UserController implements CrudController<UserEntity> {
     private readonly translationService: TranslationService,
     public service: UserService
   ) {}
+  get base(): CrudController<UserEntity> {
+    return this;
+  }
+  @Override()
+  async createOne(
+    @Body() userDto: UserDto,
+  ): Promise<UserDto> {
 
+    const createdUser = await this.userService.createUser(
+      userDto
+    );
+
+    return createdUser.toDto({
+      isActive: true,
+    });
+  }
 }

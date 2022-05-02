@@ -10,38 +10,20 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ApolloServerPluginLandingPageGraphQLPlayground } from 'apollo-server-core';
 import { decode } from 'jsonwebtoken';
-import { DanhSachCanLamSangModule } from './danhsachcanlamsang/danhsachcanlamsang.module';
-import { DanhSachLamSangModule } from './danhsachlamsang/danhsachlamsang.module';
-import { DMLoaiKhamModule } from './dmloaikham/dmloaikham.module';
+
 import { GoogleNotificationModule } from './google-notification/google-notification.module';
-import { ThuocModule } from './thuoc/thuoc.module';
-import { XmlBHYTModule } from './xml-bhyt/xml-bhyt.module';
 import { LanguageThongtinbenhvienModule } from './language-thongtinbenhvien/language-thongtinbenhvien.module';
-import { LienKetMoiQuanHeBenhNhanModule } from './lienket-moiquanhebenhnhan/lienket-moiquanhebenhnhan.module';
-import { GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule } from './goikhamchitiet-appbenhnhan-loaikham-chitiet/goikhamchitiet-appbenhnhan-loaikham-chitiet.module';
-import { GoiKhamModule } from './goikham/goikham.module';
-import { DMReportModule } from './dm_report/dm_report.module';
-import { GD2DatLichOnlineModule } from './gd2_datlichonline/gd2_datlichonline.module';
-import { ThongTinLuotKhamModule } from './thongtinluotkham/thongtinluotkham.module';
-import { BenhAnNoiTruModule } from './benhannoitru/benhannoitru.module';
-import { DMPhongBanModule } from './dm_phongban/dm_phongban.module';
-import { ThucDonModule } from './thucdon/thucdon.module';
-import { SuatAnModule } from './suatan/suatan.module';
+
 import { AuthModule } from './auth/auth.module';
 import { I18nJsonParser, I18nModule } from 'nestjs-i18n';
 import { join } from 'path';
 import { UserModule } from './user/user.module';
 import { UserEntity } from './user/user.entity';
-import { SuatAn } from './suatan/suatan.entity';
-import { ChiTietSuatAnModule } from './chitietsuatan/chitietsuatan.module';
-import { ChiTietSuatAn } from './chitietsuatan/chitietsuatan.entity';
-import { VatTu } from './vattu/vattu.entity';
+
 import { ChucvuModule } from './chucvu/chucvu.module';
 import { ChucvuEntity } from './chucvu/chucvu.entity';
 import { ChucdanhEntity } from './chucdanh/chucdanh.entity';
 import { ChucdanhModule } from './chucdanh/chucdanh.module';
-import { ThoihanhopdongModule } from './thoihanhopdong/thoihanhopdong.module';
-import { ThoihanhopdongEntity } from './thoihanhopdong/thoihanhopdong.entity';
 import { DmhopdongModule } from './dmhopdong/dmhopdong.module';
 import { DmhopdongEntity } from './dmhopdong/dmhopdong.entity';
 import { DmtrinhdoEntity } from './dmtrinhdo/dmtrinhdo.entity';
@@ -74,51 +56,13 @@ import { DmtinhthanhphoEntity } from './dmtinhthanhpho/dmtinhthanhpho.entity';
 import { DmtinhthanhphoModule } from './dmtinhthanhpho/dmtinhthanhpho.module';
 import { PhamvichungchihanhngheEntity } from './phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
 import { PhamvichungchihanhngheModule } from './phamvichungchihanhnghe/phamvichungchihanhnghe.module';
-import { DiemthianhvanEntity } from './diemthianhvan/diemthianhvan.entity';
-import { DiemthianhvanModule } from './diemthianhvan/diemthianhvan.module';
+
 import { LoaibangcapModule } from './loaibangcap/loaibangcap.module';
 import { NhanvienbangcapModule } from './nhanvienbangcap/nhanvienbangcap.module';
 import { LoaibangcapEntity } from './loaibangcap/loaibangcap.entity';
 import { NhanvienbangcapEntity } from './nhanvienbangcap/nhanvienbangcap.entity';
-import { LichSuChamDiemCap1Module } from './LichSuChamDiemCap1/lichsuchamdiemcap1.module';
-import { LichSuChamDiemCap1 } from './LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
-import { CauHinhToolCap1Entity } from './cauhinhtoolcap1/cauhinhtoolcap1.entity';
-import { DinhNghiaLoaiCongThucEntity } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.entity';
-import { LichSuChamDiemCap2Entity } from './lichsuchamdiemcap2/lichsuchamdiemcap2.entity';
-import { DinhNghiaLoaiCongThucModule } from './dinhnghialoaicongthuc/dinhnghialoaicongthuc.module';
-import { DMbenhnhanModule } from './dmbenhnhan/dmbenhnhan.module';
-import { DMbenhnhanEntity } from './dmbenhnhan/dmbenhnhan.entity';
-import { DMngonnguModule } from './ngonngu/ngonngu.module';
-import { DMlanguageEntity } from './ngonngu/ngonngu.entity';
-import { DMlabelEntity } from './dmlabel/dmlabel.entity';
-import { DMlabellanguageEntity } from './dmlabellanguage/dmlabellanguage.entity';
-import { CauHinhToolCap3Entity } from './cauhinhtoolcap3/cauhinhtoolcap3.entity';
-import { CauHinhToolCap2Entity } from './cauhinhtoolcap2/cauhinhtoolcap2.entity';
-import { DauVaoCap1Entity } from './dauvaocap1/dauvaocap1.entity';
-import { DauVaoCap2Entity } from './dauvaocap2/dauvaocap2.entity';
-import { DauVaoCap3Entity } from './dauvaocap3/dauvaocap3.entity';
-import { DanhMucLoaiDinhNghiaEntity } from './danhmucloaidinhnghia/danhmucloaidinhnghia.entity';
-import { LichSuChamDiemCap2Module } from './lichsuchamdiemcap2/lichsuchamdiemcap2.module';
-import { CauHinhToolCap1Module } from './cauhinhtoolcap1/cauhinhtoolcap1.module';
-import { CauHinhToolCap2Module } from './cauhinhtoolcap2/cauhinhtoolcap2.module';
-import { CauHinhToolCap3Module } from './cauhinhtoolcap3/cauhinhtoolcap3.module';
-import { CauHinhDiemChamCap1Module } from './cauhinhdiemchamcap1/cauhinhchamdiemcap1.module';
-import { CauHinhDiemChamCap1Entity } from './cauhinhdiemchamcap1/cauhinhdiemchamcap1.entity';
-import { CauHinhDiemChamCap2Entity } from './cauhinhdiemchamcap2/cauhinhdiemchamcap2.entity';
-import { DauVaoCap1Module } from './dauvaocap1/dauvaocap1.module';
-import { ToDieuTriModule } from './todieutri/todieutri.module';
-import { ToDieuTriEntity } from './todieutri/todieutri.entity';
-import { ToDieuTriChiTietEntity } from './todieutrichitiet/todieutrichitiet.entity';
-import { ToDieuTriChiTietModule } from './todieutrichitiet/todieutrichitiet.module';
-import { DonthuocEntity } from './donthuoc/donthuoc.entity';
-import { DonthuocModule } from './donthuoc/donthuoc.module';
-import { DonthuocchitietEntity } from './donthuocchitiet/donthuocchitiet.entity';
-import { DonthuocchitietModule } from './donthuocchitiet/donthuocchitiet.module';
-import { DMThuocEntity } from './thuoc/thuoc.entity';
-import { DonthuoctralaiEntity } from './donthuoctralai/donthuoctralai.entity';
-import { DonthuoctralaichitietEntity } from './donthuoctralaichitiet/donthuoctralaichitiet.entity';
-import { DonthuoctralaiModule } from './donthuoctralai/donthuoctralai.module';
-
+import { TemplateHdModule } from './templatehd/templatehd.module';
+import { TemplateHdEntity } from './templatehd/templatehd.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
 require('dotenv').config();
 
@@ -153,45 +97,11 @@ class AuthenticatedDataSource extends RemoteGraphQLDataSource {
   ],
   exports: [GATEWAY_BUILD_SERVICE],
 })
-class BuildServiceModule { }
+class BuildServiceModule {}
 
 @Module({
   imports: [
-    GraphQLGatewayModule.forRootAsync({
-      useFactory: async () => ({
-        gateway: {
-          serviceList: [
-            {
-              name: 'SV_EHEALTH',
-              url: `${process.env.SV_EHEALTH_IP}:${process.env.SV_EHEALTH_PORT}/graphql`,
-            },
-            {
-              name: 'SV_FAMILY',
-              url: `${process.env.SV_FAMILY_IP}:${process.env.SV_FAMILY_PORT}/graphql`,
-            },
-            {
-              name: 'SV_THANHVIEN',
-              url: `${process.env.SV_THANHVIEN_IP}:${process.env.SV_THANHVIEN_PORT}/graphql`,
-            },
-          ],
-        },
-        server: {
-          context: ({ request }) => {
-            return {
-              jwt: request?.headers?.authorization,
-            };
-          },
-          cors: false,
-          plugins: [
-            ApolloServerPluginLandingPageGraphQLPlayground({
-              cdnUrl: `${process.env.SV_GATEWAY_IP}:${process.env.SV_GATEWAY_PORT}`,
-            }),
-          ],
-        },
-      }),
-      imports: [BuildServiceModule],
-      inject: [GATEWAY_BUILD_SERVICE],
-    }),
+
     BullModule.forRoot({
       redis: {
         host: 'localhost',
@@ -209,86 +119,61 @@ class BuildServiceModule { }
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_EHEALTH_') };
         configDB.entities = [
-        
           UserEntity,
-          ChucvuEntity, ChucdanhEntity,
-          ThoihanhopdongEntity,
-          DmhopdongEntity, DmtrinhdoEntity,
-          DmdantocEntity, DmquoctichEntity,
-          DmloaitinhluongEntity, DmnganhangEntity,
-          DmdonviEntity, DmbophanEntity,
-          DmphongbanEntity, DmloaikhoiEntity,TinhtranghonnhanEntity,
-          NhanvienhopdongEntity,DmloaihopdongEntity,
-          ChuyenkhoaEntity, DmtinhthanhphoEntity,
-          PhamvichungchihanhngheEntity,DiemthianhvanEntity,
-          LoaibangcapEntity, NhanvienbangcapEntity,
-          LichSuChamDiemCap1, CauHinhToolCap1Entity,
-          DinhNghiaLoaiCongThucEntity,LichSuChamDiemCap2Entity,
-          DMbenhnhanEntity, CauHinhToolCap3Entity,
-          CauHinhToolCap2Entity, DauVaoCap1Entity,CauHinhToolCap1Entity,
-          DauVaoCap2Entity,DauVaoCap3Entity,
-          DanhMucLoaiDinhNghiaEntity,CauHinhDiemChamCap1Entity,
-          CauHinhDiemChamCap2Entity, ToDieuTriEntity,
-          ToDieuTriChiTietEntity,DonthuocEntity,
-          DonthuocchitietEntity,DMThuocEntity,
-          DonthuoctralaiEntity,DonthuoctralaichitietEntity
+          ChucvuEntity,
+          ChucdanhEntity,
+          DmhopdongEntity,
+          DmtrinhdoEntity,
+          DmdantocEntity,
+          DmquoctichEntity,
+          DmloaitinhluongEntity,
+          DmnganhangEntity,
+          DmdonviEntity,
+          DmbophanEntity,
+          DmphongbanEntity,
+          DmloaikhoiEntity,
+          TinhtranghonnhanEntity,
+          NhanvienhopdongEntity,
+          DmloaihopdongEntity,
+          ChuyenkhoaEntity,
+          DmtinhthanhphoEntity,
+          PhamvichungchihanhngheEntity,
+          LoaibangcapEntity,
+          NhanvienbangcapEntity,
+          LoaibangcapEntity,
+          NhanvienbangcapEntity,
+          TemplateHdEntity,
         ];
         configDB.logging = true;
-        // configDB.cache = {
-        //   type: 'redis',
-        //   options: {
-        //     host: "localhost",
-        //     port: 6379
-        //   }
-        // }
-
-
-
         return configDB;
       },
       inject: [ApiConfigService],
     }),
-    //---------------
     TypeOrmModule.forRootAsync({
       imports: [SharedModule],
-      name : "SV_FAMILY_",
+      name: 'SV_FAMILY_',
       useFactory: (configService: ApiConfigService) => {
         const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
-        configDB.entities = [
-        
-          // UserEntity,
-          SuatAn,ChiTietSuatAn, VatTu
-  
-        ];
-
+        configDB.entities = [];
         configDB.logging = true;
         return configDB;
       },
       inject: [ApiConfigService],
     }),
-
-      //server thanhvien
-    TypeOrmModule.forRootAsync({
-      imports: [SharedModule],
-      name : "SV_THANHVIEN_",
-      useFactory: (configService: ApiConfigService) => {
-        const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
-        configDB.entities = [
-        
-          DMlanguageEntity, DMlabelEntity,DMlabellanguageEntity
-         
-  
-        ];
-
-        // configDB.logging = true;
-        return configDB;
-      },
-      inject: [ApiConfigService],
-    }),
-
-
-
-
+    // TypeOrmModule.forRootAsync({
+    //   imports: [SharedModule],
+    //   name: 'SV_THANHVIEN_',
+    //   useFactory: (configService: ApiConfigService) => {
+    //     const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
+    //     configDB.entities = [
+    //       DMlanguageEntity,
+    //       DMlabelEntity,
+    //       DMlabellanguageEntity,
+    //     ];
+    //     return configDB;
+    //   },
+    //   inject: [ApiConfigService],
+    // }),
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,
@@ -305,45 +190,32 @@ class BuildServiceModule { }
     ScheduleModule.forRoot(),
     UserModule,
     GoogleNotificationModule,
-    XmlBHYTModule,
-    ThuocModule,
-    DanhSachLamSangModule,
-    DanhSachCanLamSangModule,
+
     LanguageThongtinbenhvienModule,
-    LienKetMoiQuanHeBenhNhanModule,
-    DMLoaiKhamModule,
-    LanguageThongtinbenhvienModule,
-    GoiKhamChiTietAppBenhNhanLoaiKhamChiTietModule,
-    GoiKhamModule,
-    DMReportModule,
-    GD2DatLichOnlineModule,
-    ThongTinLuotKhamModule,
-    BenhAnNoiTruModule,    
-    DMPhongBanModule,
-    ThucDonModule,
-    SuatAnModule,
+
     AuthModule,
     ChucvuModule,
     ChucdanhModule,
-    ThoihanhopdongModule,
-    DmhopdongModule, DmtrinhdoModule, 
-    DmdantocModule, DmquoctichModule,
-    DmloaitinhluongModule,DmnganhangModule,
-    DmdonviModule, DmbophanModule,
-    DmphongbanModule, DmloaikhoiModule,
-    TinhtranghonnhanModule, 
-    NhanvienhopdongModule, DmloaihopdongModule, 
-    ChuyenkhoaModule, DmtinhthanhphoModule,
-    PhamvichungchihanhngheModule,DiemthianhvanModule,
-    LoaibangcapModule, NhanvienbangcapModule,
-    LichSuChamDiemCap1Module, DinhNghiaLoaiCongThucModule,
-    DMbenhnhanModule,DMngonnguModule,
-    LichSuChamDiemCap2Module, CauHinhToolCap1Module,
-    CauHinhToolCap2Module,CauHinhToolCap3Module,
-    CauHinhDiemChamCap1Module, DauVaoCap1Module,
-    ToDieuTriModule, ToDieuTriChiTietModule,
-    DonthuocModule,DonthuocchitietModule,
-    DonthuoctralaiModule
+    DmhopdongModule,
+    DmtrinhdoModule,
+    DmdantocModule,
+    DmquoctichModule,
+    DmloaitinhluongModule,
+    DmnganhangModule,
+    DmdonviModule,
+    DmbophanModule,
+    DmphongbanModule,
+    DmloaikhoiModule,
+    TinhtranghonnhanModule,
+    NhanvienhopdongModule,
+    DmloaihopdongModule,
+    ChuyenkhoaModule,
+    DmtinhthanhphoModule,
+    PhamvichungchihanhngheModule,
+    LoaibangcapModule,
+    NhanvienbangcapModule,
+    NhanvienbangcapModule,
+    TemplateHdModule,
   ],
 })
 export class AppModule {}

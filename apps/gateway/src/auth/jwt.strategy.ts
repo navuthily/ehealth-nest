@@ -24,21 +24,24 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     id: string;
     role: RoleType;
     type: TokenType;
-  }): Promise<UserEntity> {
+  }){
+    // console.log(args);
+    
     // if (args.type !== TokenType.ACCESS_TOKEN) {
     //   throw new UnauthorizedException();
     // }
     // console.log(args);
+    // console.log(args, "mm");
+    
+    // const user = await this.userService.findOne({
+    //   id: args.id,
+    //   //   role: args.role,
+    // });
 
-    const user = await this.userService.findOne({
-      id: args.id,
-      //   role: args.role,
-    });
+    // if (!user) {
+    //   throw new UnauthorizedException();
+    // }
 
-    if (!user) {
-      throw new UnauthorizedException();
-    }
-
-    return user;
+    return  args;
   }
 }

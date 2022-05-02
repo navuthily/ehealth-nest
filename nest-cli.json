@@ -9,33 +9,6 @@
   "monorepo": false,
   "root": "apps/gateway",
   "projects": {
-    "service-ehealth": {
-      "type": "application",
-      "root": "apps/service-ehealth",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-ehealth/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-ehealth/tsconfig.json"
-      }
-    },
-    "service-family": {
-      "type": "application",
-      "root": "apps/service-family",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-family/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-family/tsconfig.json"
-      }
-    },
-    "service-thanhvien": {
-      "type": "application",
-      "root": "apps/service-thanhvien",
-      "entryFile": "main",
-      "sourceRoot": "apps/service-thanhvien/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/service-thanhvien/tsconfig.json"
-      }
-    },
     "gateway": {
       "type": "application",
       "root": "apps/gateway",

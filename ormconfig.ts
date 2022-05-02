@@ -1,4 +1,4 @@
-import './src/boilerplate.polyfill';
+// import './src/boilerplate.polyfill';
 
 import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
@@ -14,13 +14,13 @@ const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } =
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
     // namingStrategy: new SnakeNamingStrategy(),
-    // subscribers: [UserSubscriber],
+    // subscribers: [TGLHKNSubscriber],
     entities: ['src/modules/**/*.entity{.ts,.js}'],
     migrations: ['src/database/migrations/*{.ts,.js}'],
     seeds: ['src/database/seeds/**/*{.ts,.js}'],
     factories: ['src/database/factories/**/*{.ts,.js}'],
     options: { encrypt: false },
-    migrationsRun: false,
+    migrationsRun: true,
   };
 
 module.exports = configs;

@@ -19,7 +19,7 @@ export class AuthService {
   ) {}
 
   async createToken(user: UserEntity | UserDto): Promise<TokenPayloadDto> {
-    // console.log(user);
+    console.log(user);
 
     return new TokenPayloadDto({
       expiresIn: this.configService.authConfig.jwtExpirationTime,
@@ -27,15 +27,19 @@ export class AuthService {
         id: user.id,
         holotNhanVien: user.holotNhanVien,
         tenNhanVien: user.tennhanvien,
+        role: user.role,
       }, {secret: process.env.JWT_SECRET_KEY}),
     });
   }
 
   async validateUser(userLoginDto: UserLoginDto): Promise<UserEntity> {
+    
     const user = await this.userService.findOne({
       username: userLoginDto.username,
-      disable:false
     });
+
+    console.log("////////", user)
+    
     const isPasswordValid = await UtilsProvider.validateHash(
       userLoginDto.password,
       user?.password,

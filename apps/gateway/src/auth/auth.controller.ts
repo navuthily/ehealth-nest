@@ -42,7 +42,9 @@ export class AuthController {
   async userLogin(
     @Body() userLoginDto: UserLoginDto,
   ): Promise<LoginPayloadDto> {
+    console.log(userLoginDto,'USER.....................')
     const userEntity = await this.authService.validateUser(userLoginDto);
+// console.log(userEntity, 'Thong tin nguoi dung')
 
     const token = await this.authService.createToken(userEntity);
 
@@ -52,14 +54,15 @@ export class AuthController {
   @Post('register')
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ type: UserDto, description: 'Successfully Registered' })
-  @ApiFile({ name: 'avatar' })
+  // @ApiFile({ name: 'avatar' })
   async userRegister(
     @Body() userRegisterDto: UserRegisterDto,
-    @UploadedFile() file: IFile,
+    // @UploadedFile() file: IFile,
   ): Promise<UserDto> {
-    const createdUser = await this.userService.createUser(
+
+    const createdUser = await this.userService.reigisterUser(
       userRegisterDto,
-      file,
+      // file,
     );
 
     return createdUser.toDto({

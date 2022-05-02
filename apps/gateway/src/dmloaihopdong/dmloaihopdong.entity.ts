@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany, PrimaryColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { NhanvienhopdongEntity } from '../nhanvienhopdong/nhanvienhopdong.entity';
 import { UserEntity } from '../user/user.entity';
 
@@ -6,7 +6,7 @@ import { UserEntity } from '../user/user.entity';
 export class DmloaihopdongEntity  {
 
 
-  @PrimaryColumn({ name: 'ID_LoaiHopDong' })
+  @PrimaryGeneratedColumn({ name: 'ID_LoaiHopDong' })
   id: number;
 
   @Column({ name: 'TenLoaiHopDong' })

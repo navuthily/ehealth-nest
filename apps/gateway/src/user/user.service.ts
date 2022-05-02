@@ -1,4 +1,3 @@
-import { Injectable } from '@nestjs/common';
 import type { FindConditions } from 'typeorm';
 
 import type { PageDto } from '@libs/common/dto/page.dto';
@@ -9,12 +8,14 @@ import { AwsS3Service } from '@libs/shared/services/aws-s3.service';
 import { ValidatorService } from '@libs/shared/services/validator.service';
 import type { Optional } from '@libs/types';
 import type { UserRegisterDto } from '../auth/dto/UserRegisterDto';
-import type { UserDto } from './dto/user-dto';
-import type { UsersPageOptionsDto } from './dto/users-page-options.dto';
+import { UserDto } from './dto/user-dto';
+import type { UsersPageOptionsDto } from './dto/users-page-options.dto';          
 import type { UserEntity } from './user.entity';
 import { UserRepository } from './user.repository';
 import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {
@@ -22,23 +23,40 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     public readonly userRepository: UserRepository,
     public readonly validatorService: ValidatorService,
     public readonly awsS3Service: AwsS3Service,
-    @InjectRepository(UserRepository) repo
+    @InjectRepository(UserRepository) repo,
+
+
   ) {
     super(repo);
   }
-  async createUser(
+  async reigisterUser(
     userRegisterDto: UserRegisterDto,
-    file: IFile,
+    // file: IFile,
   ): Promise<UserEntity> {
+    const usercheck = await this.userRepository.findOne({username:userRegisterDto.username});
+    if(usercheck) throw new BadRequestException('user ready exist')
     const user = this.userRepository.create(userRegisterDto);
 
-    if (file && !this.validatorService.isImage(file.mimetype)) {
-      throw new FileNotImageException();
-    }
+    // if (file && !this.validatorService.isImage(file.mimetype)) {
+    //   throw new FileNotImageException();
+    // }
 
     return this.userRepository.save(user);
   }
+  async createUser(
+    userDto: UserDto,
+    // file: IFile,
+  ): Promise<UserEntity> {
+    const usercheck = await this.userRepository.findOne({username:userDto.username});
+    if(usercheck) throw new BadRequestException('user ready exist')
+    const user = this.userRepository.create(userDto);
 
+    // if (file && !this.validatorService.isImage(file.mimetype)) {
+    //   throw new FileNotImageException();
+    // }
+
+    return this.userRepository.save(user);
+  }
   async getUser(userId: number): Promise<UserDto> {
     const queryBuilder = this.userRepository.createQueryBuilder('dm_nhanvien');
 
@@ -51,5 +69,10 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     }
 
     return userEntity.toDto();
+  }
+
+
+  getAllNhanVien(){
+    return this.repo.find()
   }
 }

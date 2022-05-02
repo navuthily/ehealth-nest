@@ -1,17 +1,15 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { ApiProperty } from '@nestjs/swagger';
 import { IsString } from 'class-validator';
-
+import { Trim } from '@libs/decorators/transforms.decorator';
 @ObjectType('UserLoginDto')
 export class UserLoginDto {
-  @IsString()
-  //   @IsEmail()
   @ApiProperty()
-  @Field({ nullable: true })
+  @IsString()
+  @Trim()
   readonly username: string;
 
+  @ApiProperty({ minLength: 6 })
   @IsString()
-  @ApiProperty()
-  @Field({ nullable: true })
   readonly password: string;
 }

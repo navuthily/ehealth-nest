@@ -1,5 +1,12 @@
 import { Exclude } from 'class-transformer';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 import { AbstractEntity } from '@libs/common/abstract.entity';
 import { UseDto } from '@libs/decorators/use-dto.decorator';
@@ -7,7 +14,6 @@ import type { UserDtoOptions } from './dto/user-dto';
 import { UserDto } from './dto/user-dto';
 import { ChucvuEntity } from '../chucvu/chucvu.entity';
 import { ChucdanhEntity } from '../chucdanh/chucdanh.entity';
-import { ThoihanhopdongEntity } from '../thoihanhopdong/thoihanhopdong.entity';
 import { DmhopdongEntity } from '../dmhopdong/dmhopdong.entity';
 import { DmtrinhdoEntity } from '../dmtrinhdo/dmtrinhdo.entity';
 import { DmdantocEntity } from '../dmdantoc/dmdantoc.entity';
@@ -23,22 +29,14 @@ import { NhanvienhopdongEntity } from '../nhanvienhopdong/nhanvienhopdong.entity
 import { ChuyenkhoaEntity } from '../chuyenkhoa/chuyenkhoa.entity';
 import { DmtinhthanhphoEntity } from '../dmtinhthanhpho/dmtinhthanhpho.entity';
 import { PhamvichungchihanhngheEntity } from '../phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
-import { DiemthianhvanEntity } from '../diemthianhvan/diemthianhvan.entity';
 import { NhanvienbangcapEntity } from '../nhanvienbangcap/nhanvienbangcap.entity';
-import { LichSuChamDiemCap1 } from '../LichSuChamDiemCap1/lichsuchamdiemcap1.entity';
-import { ToDieuTriChiTietEntity } from '../todieutrichitiet/todieutrichitiet.entity';
+
+import { TemplateHdEntity } from '../templatehd/templatehd.entity';
+import { RoleType } from '@libs/common/constants/role-type';
 
 @Entity({ name: 'DM_NhanVien' })
 @UseDto(UserDto)
 export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
-  // @Column({ name: 'ID_NhanVien' })
-  // nhanvienId?: number; 
-
-  // @Column({ nullable: true })
-  // createdBy: string;
-
-  // @Column({ nullable: true })
-  // updatedBy: string;
 
   @Column({ nullable: true, name: 'MaNV' })
   maNhanVien?: string;
@@ -160,9 +158,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'PassWord' })
   password?: string;
 
-  @Column({ nullable: true, name: 'Disable' })
-  disable?: boolean;
-
   @Column({ nullable: true, name: 'HideLich' })
   hideLich?: boolean;
 
@@ -198,9 +193,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @Column({ nullable: true, name: 'Id_HopDong' })
   hopdongId?: number;
-
-  @Column({ nullable: true, name: 'Id_ThoiHanHopDong' })
-  thoihanHopDongId?: number;
 
   @Column({ nullable: true, name: 'NgayBatDauHopDong' })
   ngaybatdauHopDong?: Date;
@@ -301,94 +293,119 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'IsHuongLSP' })
   isLuongLSP?: boolean;
 
-  @ManyToOne(() => ChucvuEntity, chucvu => chucvu.nhanviens)
-  @JoinColumn({ name: "ID_ChucVu" })
-  chucvu: ChucvuEntity
-
-  @ManyToOne(() => ChucdanhEntity, chucdanh => chucdanh.nhanviens)
-  @JoinColumn({ name: "ID_ChucDanh" })
-  chucdanh: ChucdanhEntity
-
-  @ManyToOne(() => ThoihanhopdongEntity, thoihanhopdong => thoihanhopdong.nhanviens)
-  @JoinColumn({ name: "ID_ThoiHanHopDong" })
-  thoihanhopdong: ChucdanhEntity
-  
-  @ManyToOne(() => DmhopdongEntity, dmhopdong => dmhopdong.nhanviens)
-  @JoinColumn({ name: "Id_HopDong" })
-  dmhopdong: DmhopdongEntity
-  
-  @ManyToOne(() => DmtrinhdoEntity, dmtrinhdo => dmtrinhdo.nhanviens)
-  @JoinColumn({ name: "ID_TrinhDo" })
-  dmtrinhdo: DmtrinhdoEntity  
-
-  @ManyToOne(() => DmdantocEntity, dmdantoc => dmdantoc.nhanviens)
-  @JoinColumn({ name: "ID_DanToc" })
-  dmdantoc: DmdantocEntity  
-
-  @ManyToOne(() => DmquoctichEntity, dmquoctich =>dmquoctich.nhanviens)
-  @JoinColumn({ name: "ID_QuocTich" })
-  dmquoctich: DmquoctichEntity  
-
-  @ManyToOne(() => DmloaitinhluongEntity, dmloaitinhluong =>dmloaitinhluong.nhanviens)
-  @JoinColumn({ name: "ID_LoaiTinhLuong" })
-  dmloaitinhluong:DmloaitinhluongEntity
-
-  @ManyToOne(() => DmnganhangEntity,  dmnganhang=> dmnganhang.nhanviens)
-  @JoinColumn({ name: "ID_NganHang" })
-  dmnganhang: DmnganhangEntity  
-
-  @ManyToOne(() => DmdonviEntity,  dmdonvi=> dmdonvi.nhanviens)
-  @JoinColumn({ name: "ID_DonVi" })
-  dmdonvi: DmdonviEntity
-
-  @ManyToOne(() => DmbophanEntity,  dmbophan=> dmbophan.nhanviens)
-  @JoinColumn({ name: "ID_BoPhan" })
-  dmbophan: DmbophanEntity
-
-  @ManyToOne(() => DmphongbanEntity,  dmphongban=> dmphongban.nhanviens)
-  @JoinColumn({ name: "ID_PhongBan" })
-  dmphongban: DmphongbanEntity
-
-  @ManyToOne(() => DmloaikhoiEntity,  dmloaikhoi=>  dmloaikhoi.nhanviens)
-  @JoinColumn({ name: "ID_LoaiKhoi" })
-  dmloaikhoi: DmloaikhoiEntity
-
-  @ManyToOne(() => TinhtranghonnhanEntity, tinhtranghonnhan=>  tinhtranghonnhan.nhanviens)
-  @JoinColumn({ name: "ID_TinhTrangHonNhan" })
-  tinhtranghonnhan: TinhtranghonnhanEntity
-
-  @ManyToOne(() => ChuyenkhoaEntity, chuyenkhoa=>  chuyenkhoa.nhanviens)
-  @JoinColumn({ name: "ID_ChuyenKhoa" })
-  chuyenkhoa: ChuyenkhoaEntity
-
-  @OneToMany(() => NhanvienhopdongEntity, nhanvienhopdongs => nhanvienhopdongs.nhanvien)
-  nhanvienhopdongs: NhanvienhopdongEntity[]
-  @OneToMany(() => NhanvienbangcapEntity, nhanvienbangcaps => nhanvienbangcaps.nhanvien)
-  nhanvienbangcaps: NhanvienbangcapEntity[]
-
-  @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens)
-  @JoinColumn({ name: "NoiCapCMND" })
-  nccmnd: DmtinhthanhphoEntity
-
-  @ManyToOne(() => DmtinhthanhphoEntity, dmtinhtp=>  dmtinhtp.nhanviens2)
-  @JoinColumn({ name: "NoiCapChungChiHanhNghe" })
-  nccchn: DmtinhthanhphoEntity
-
-  @ManyToOne(() => PhamvichungchihanhngheEntity, phamvichungchihanhnghe => phamvichungchihanhnghe.nhanviens)
-  @JoinColumn({ name: "PhamViHoatDongChungChiHanhNghe" })
-  phamvichungchihanhnghe: PhamvichungchihanhngheEntity
-
-  @ManyToOne(() => PhamvichungchihanhngheEntity, phamvihanhnghebosung => phamvihanhnghebosung.nhanviens)
-  @JoinColumn({ name: "PhamViHanhNgheBoSung" })
-  phamvihanhnghebosung: PhamvichungchihanhngheEntity
-  @OneToMany(() => DiemthianhvanEntity, dienthianhvans => dienthianhvans.nhanvien)
-  dienthianhvans: DiemthianhvanEntity[]
-
-  @OneToMany(() => LichSuChamDiemCap1, lichsuchamdiemcap1s => lichsuchamdiemcap1s.nhanvien)
-  lichsuchamdiemcap1s: LichSuChamDiemCap1[]
-
-  @OneToMany(() => ToDieuTriChiTietEntity, todieutrichitiet => todieutrichitiet.nhanvien)
-  todieutrichitiets: ToDieuTriChiTietEntity[]
+  @Column({ nullable: true, name: 'role', default: 'USER' })
+  role: string;
 
 
+  @ManyToOne(() => ChucvuEntity, (chucvu) => chucvu.nhanviens)
+  @JoinColumn({ name: 'ID_ChucVu' })
+  chucvu: ChucvuEntity;
+
+  @ManyToOne(() => ChucdanhEntity, (chucdanh) => chucdanh.nhanviens)
+  @JoinColumn({ name: 'ID_ChucDanh' })
+  chucdanh: ChucdanhEntity;
+
+
+
+  @ManyToOne(() => DmhopdongEntity, (dmhopdong) => dmhopdong.nhanviens)
+  @JoinColumn({ name: 'Id_HopDong' })
+  dmhopdong: DmhopdongEntity;
+
+  @ManyToOne(() => DmtrinhdoEntity, (dmtrinhdo) => dmtrinhdo.nhanviens)
+  @JoinColumn({ name: 'ID_TrinhDo' })
+  dmtrinhdo: DmtrinhdoEntity;
+
+  @ManyToOne(() => DmdantocEntity, (dmdantoc) => dmdantoc.nhanviens)
+  @JoinColumn({ name: 'ID_DanToc' })
+  dmdantoc: DmdantocEntity;
+
+  @ManyToOne(() => DmquoctichEntity, (dmquoctich) => dmquoctich.nhanviens)
+  @JoinColumn({ name: 'ID_QuocTich' })
+  dmquoctich: DmquoctichEntity;
+
+  @ManyToOne(
+    () => DmloaitinhluongEntity,
+    (dmloaitinhluong) => dmloaitinhluong.nhanviens,
+  )
+  @JoinColumn({ name: 'ID_LoaiTinhLuong' })
+  dmloaitinhluong: DmloaitinhluongEntity;
+
+  @ManyToOne(() => DmnganhangEntity, (dmnganhang) => dmnganhang.nhanviens)
+  @JoinColumn({ name: 'ID_NganHang' })
+  dmnganhang: DmnganhangEntity;
+
+  @ManyToOne(() => DmdonviEntity, (dmdonvi) => dmdonvi.nhanviens)
+  @JoinColumn({ name: 'ID_DonVi' })
+  dmdonvi: DmdonviEntity;
+
+  @ManyToOne(() => DmbophanEntity, (dmbophan) => dmbophan.nhanviens)
+  @JoinColumn({ name: 'ID_BoPhan' })
+  dmbophan: DmbophanEntity;
+
+  @ManyToOne(() => DmphongbanEntity, (dmphongban) => dmphongban.nhanviens)
+  @JoinColumn({ name: 'ID_PhongBan' })
+  dmphongban: DmphongbanEntity;
+
+  @ManyToOne(() => DmloaikhoiEntity, (dmloaikhoi) => dmloaikhoi.nhanviens)
+  @JoinColumn({ name: 'ID_LoaiKhoi' })
+  dmloaikhoi: DmloaikhoiEntity;
+
+  @ManyToOne(
+    () => TinhtranghonnhanEntity,
+    (tinhtranghonnhan) => tinhtranghonnhan.nhanviens,
+  )
+  @JoinColumn({ name: 'Id_TinhTrangHonNhan' })
+  tinhtranghonnhan?: TinhtranghonnhanEntity;
+
+  @ManyToOne(() => ChuyenkhoaEntity, (chuyenkhoa) => chuyenkhoa.nhanviens)
+  @JoinColumn({ name: 'ID_ChuyenKhoa' })
+  chuyenkhoa: ChuyenkhoaEntity;
+
+  @OneToMany(
+    () => NhanvienhopdongEntity,
+    (nhanvienhopdongs) => nhanvienhopdongs.nhanvien,
+  )
+  nhanvienhopdongs: NhanvienhopdongEntity[];
+
+
+  @OneToMany(
+    () => NhanvienbangcapEntity,
+    (nhanvienbangcaps) => nhanvienbangcaps.nhanvien,
+  )
+  nhanvienbangcaps: NhanvienbangcapEntity[];
+
+  @ManyToOne(() => DmtinhthanhphoEntity, (dmtinhtp) => dmtinhtp.nhanviens)
+  @JoinColumn({ name: 'NoiCapCMND' })
+  nccmnd: DmtinhthanhphoEntity;
+
+  @ManyToOne(() => DmtinhthanhphoEntity, (dmtinhtp) => dmtinhtp.nhanviens2)
+  @JoinColumn({ name: 'NoiCapChungChiHanhNghe' })
+  nccchn: DmtinhthanhphoEntity;
+
+  @ManyToOne(
+    () => PhamvichungchihanhngheEntity,
+    (phamvichungchihanhnghe) => phamvichungchihanhnghe.nhanviens,
+  )
+  @JoinColumn({ name: 'PhamViHoatDongChungChiHanhNghe' })
+  phamvichungchihanhnghe: PhamvichungchihanhngheEntity;
+
+  @ManyToOne(
+    () => PhamvichungchihanhngheEntity,
+    (phamvihanhnghebosung) => phamvihanhnghebosung.nhanviens,
+  )
+  @JoinColumn({ name: 'PhamViHanhNgheBoSung' })
+  phamvihanhnghebosung: PhamvichungchihanhngheEntity;
+
+  @OneToMany(() => TemplateHdEntity, (temp) => temp.nguoitao)
+  temps: TemplateHdEntity[];
+  @OneToMany(() => TemplateHdEntity, (temp) => temp.nguoisua)
+  temp: TemplateHdEntity[];
+
+  @OneToMany(() => NhanvienhopdongEntity, (nhanvienhd) => nhanvienhd.nguoitao)
+  nhanvienhd: NhanvienhopdongEntity[];
+  @OneToMany(
+    () => NhanvienhopdongEntity,
+    (nhanvienhopdong) => nhanvienhopdong.nguoisua,
+  )
+  nhanvienhopdong: NhanvienhopdongEntity[];
 }

@@ -21,6 +21,6 @@
       "@libs/*": ["libs/*"],
     }
   },
-  "include": ["src/**/*", "test/**/*", "ormconfig.ts", "libs/common"],
+  "include": ["src/**/*", "test/**/*", "ormconfig.ts", "libs/common", "libs/entity-subscribers"],
   "exclude": ["node_modules", "dist"]
 }
