@@ -13,7 +13,7 @@ export abstract class AbstractEntity<
   O = never,
 > {
   @PrimaryGeneratedColumn({ name: 'ID_NhanVien' })
-  id: string;
+  id: number;
 
   @Column({ nullable: true, type: 'datetime2' })
   createdAt: Date;

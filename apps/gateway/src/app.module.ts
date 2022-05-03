@@ -24,14 +24,9 @@ import { ChucvuModule } from './chucvu/chucvu.module';
 import { ChucvuEntity } from './chucvu/chucvu.entity';
 import { ChucdanhEntity } from './chucdanh/chucdanh.entity';
 import { ChucdanhModule } from './chucdanh/chucdanh.module';
-import { DmhopdongModule } from './dmhopdong/dmhopdong.module';
-import { DmhopdongEntity } from './dmhopdong/dmhopdong.entity';
 import { DmtrinhdoEntity } from './dmtrinhdo/dmtrinhdo.entity';
 import { DmtrinhdoModule } from './dmtrinhdo/dmtrinhdo.module';
-import { DmdantocModule } from './dmdantoc/dmdantoc.module';
-import { DmdantocEntity } from './dmdantoc/dmdantoc.entity';
-import { DmquoctichModule } from './dmquoctich/dmquoctich.module';
-import { DmquoctichEntity } from './dmquoctich/dmquoctich.entity';
+
 import { DmloaitinhluongEntity } from './dmloaitinhluong/dmloaitinhluong.entity';
 import { DmloaitinhluongModule } from './dmloaitinhluong/dmloaitinhluong.module';
 import { DmnganhangModule } from './dmnganhang/dmnganhang.module';
@@ -44,16 +39,14 @@ import { DmphongbanEntity } from './dmphongban/dmphongban.entity';
 import { DmphongbanModule } from './dmphongban/dmphongban.module';
 import { DmloaikhoiModule } from './dmloaikhoi/dmloaikhoi.module';
 import { DmloaikhoiEntity } from './dmloaikhoi/dmloaikhoi.entity';
-import { TinhtranghonnhanModule } from './tinhtranghonnhan/tinhtranghonnhan.module';
-import { TinhtranghonnhanEntity } from './tinhtranghonnhan/tinhtranghonnhan.entity';
+
 import { NhanvienhopdongEntity } from './nhanvienhopdong/nhanvienhopdong.entity';
 import { NhanvienhopdongModule } from './nhanvienhopdong/nhanvienhopdong.module';
 import { DmloaihopdongEntity } from './dmloaihopdong/dmloaihopdong.entity';
 import { DmloaihopdongModule } from './dmloaihopdong/dmloaihopdong.module';
 import { ChuyenkhoaModule } from './chuyenkhoa/chuyenkhoa.module';
 import { ChuyenkhoaEntity } from './chuyenkhoa/chuyenkhoa.entity';
-import { DmtinhthanhphoEntity } from './dmtinhthanhpho/dmtinhthanhpho.entity';
-import { DmtinhthanhphoModule } from './dmtinhthanhpho/dmtinhthanhpho.module';
+
 import { PhamvichungchihanhngheEntity } from './phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
 import { PhamvichungchihanhngheModule } from './phamvichungchihanhnghe/phamvichungchihanhnghe.module';
 
@@ -101,7 +94,6 @@ class BuildServiceModule {}
 
 @Module({
   imports: [
-
     BullModule.forRoot({
       redis: {
         host: 'localhost',
@@ -122,21 +114,17 @@ class BuildServiceModule {}
           UserEntity,
           ChucvuEntity,
           ChucdanhEntity,
-          DmhopdongEntity,
           DmtrinhdoEntity,
-          DmdantocEntity,
-          DmquoctichEntity,
+
           DmloaitinhluongEntity,
           DmnganhangEntity,
           DmdonviEntity,
           DmbophanEntity,
           DmphongbanEntity,
           DmloaikhoiEntity,
-          TinhtranghonnhanEntity,
           NhanvienhopdongEntity,
           DmloaihopdongEntity,
           ChuyenkhoaEntity,
-          DmtinhthanhphoEntity,
           PhamvichungchihanhngheEntity,
           LoaibangcapEntity,
           NhanvienbangcapEntity,
@@ -196,21 +184,16 @@ class BuildServiceModule {}
     AuthModule,
     ChucvuModule,
     ChucdanhModule,
-    DmhopdongModule,
     DmtrinhdoModule,
-    DmdantocModule,
-    DmquoctichModule,
     DmloaitinhluongModule,
     DmnganhangModule,
     DmdonviModule,
     DmbophanModule,
     DmphongbanModule,
     DmloaikhoiModule,
-    TinhtranghonnhanModule,
     NhanvienhopdongModule,
     DmloaihopdongModule,
     ChuyenkhoaModule,
-    DmtinhthanhphoModule,
     PhamvichungchihanhngheModule,
     LoaibangcapModule,
     NhanvienbangcapModule,

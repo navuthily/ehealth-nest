@@ -8,7 +8,7 @@ import type { AbstractEntity } from '../abstract.entity';
 export class AbstractDto {
   //   @ApiProperty()
   @FilterableField({ nullable: true })
-  id: string;
+  id: number;
 
   //   @ApiProperty()
   @FilterableField({ nullable: true })

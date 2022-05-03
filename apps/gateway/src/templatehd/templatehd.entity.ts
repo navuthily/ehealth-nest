@@ -10,18 +10,18 @@ import { UserEntity } from '../user/user.entity';
 
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
-  @Column({ name: 'noidung' })
+  @Column({nullable:true, name: 'noidung' })
   noidung?: string;
-  @Column({ name: 'loaitemplate' })
+  @Column({nullable:true, name: 'loaitemplate' })
   loaitemplate?: string;
 // thoi gian, nguoi tao update
-  @Column({ name: 'created_by' })
+  @Column({nullable:true, name: 'created_by' })
   createdBy?: number;
-  @Column({ name: 'updated_by' })
+  @Column({ nullable:true,name: 'updated_by' })
   updatedBy?: number;
-  @Column({ name: 'created_at' })
+  @Column({nullable:true, name: 'created_at' })
   createdAt?: Date;
-  @Column({ name: 'updated_at' })
+  @Column({ nullable:true,name: 'updated_at' })
   updatedAt?: Date;
   @ManyToOne(() => UserEntity, nhanvien=>  nhanvien.temps)
   @JoinColumn({ name: "created_by" })

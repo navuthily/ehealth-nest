@@ -10,10 +10,7 @@ export class ChucvuEntity  {
 
   @Column({ name: 'TenChucVu' })
   tenchucvu?: string;
-  
 
-  @Column({ name: 'Active' })
-  active?: number;
 
   @OneToMany(() => UserEntity, nhanvien => nhanvien.chucvu)
   nhanviens: UserEntity[]

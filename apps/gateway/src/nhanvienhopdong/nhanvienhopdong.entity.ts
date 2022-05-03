@@ -14,29 +14,31 @@ export class NhanvienhopdongEntity {
   @PrimaryGeneratedColumn({ name: 'ID_auto' })
   id: number;
 
-  @Column({ name: 'ID_NhanVien' })
+  
+  @Column({nullable:true, name: 'nhanvien_id' })
   nhanvienId: number;
-  @Column({ name: 'ID_LoaiHopDong' })
+
+
+  @Column({nullable:true, name: 'ID_LoaiHopDong' })
   loaihopdongId: number;
-  //
-  @Column({ name: 'noidung' })
-  noidunghopdong: string;
-  @Column({ name: 'NgayBatDau' })
+  @Column({nullable:true, name: 'noidung' })
+  noidunghopdong?: string;
+  @Column({nullable:true, name: 'NgayBatDau' })
   ngaybatdau: Date;
 
-  @Column({ name: 'NgayKetThuc' })
+  @Column({ nullable:true,name: 'NgayKetThuc' })
   ngayketthuc: Date;
 
-  @Column({ name: 'Ghichu' })
+  @Column({ nullable:true,name: 'Ghichu' })
   ghichu: string;
 
-  @Column({ name: 'created_by' })
+  @Column({nullable:true, name: 'created_by' })
   createdBy?: number;
-  @Column({ name: 'updated_by' })
+  @Column({nullable:true, name: 'updated_by' })
   updatedBy?: number;
-  @Column({ name: 'created_at' })
+  @Column({nullable:true, name: 'created_at' })
   createdAt?: Date;
-  @Column({ name: 'updated_at' })
+  @Column({nullable:true, name: 'updated_at' })
   updatedAt?: Date;
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhopdongs)
   @JoinColumn({ name: 'created_by' })
@@ -45,8 +47,10 @@ export class NhanvienhopdongEntity {
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhopdong)
   @JoinColumn({ name: 'updated_by' })
   nguoisua: UserEntity;
+
+
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhd)
-  @JoinColumn({ name: 'ID_NhanVien' })
+  @JoinColumn({ name: 'nhanvienId' })
   nhanvien: UserEntity;
 
   @ManyToOne(

@@ -31,10 +31,10 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
     // limit:20,
     join: {
       chucvu: {
-        eager:false
+        eager:true
       },
       chucdanh: {
-        eager: false,
+        eager: true,
       }, 
       dmhopdong: {
         eager: false
@@ -42,12 +42,7 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
       dmtrinhdo: {
         eager: false
       },  
-      dmdantoc: {
-        eager: false
-      },   
-      dmquoctich: {
-        eager: false
-      }, 
+
       dmloaitinhluong:{
         eager: false
       },
@@ -66,9 +61,7 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
       dmloaikhoi:{
         eager:false
       },
-      tinhtranghonnhan:{
-        eager:false
-      },
+
       nhanvienhopdongs:{
         eager:false
       },
@@ -78,21 +71,14 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
       chuyenkhoa:{
         eager:false
       },
-      nccchn:{
-        eager:false
-      },
-      nccmnd:{
-        eager:false
-      },
+
       phamvichungchihanhnghe:{
         eager:false
       },
       phamvihanhnghebosung:{
         eager:false
       },
-      dienthianhvans:{
-        eager:false
-      },
+
       nhanvienbangcaps:{
         eager:false
       },
@@ -121,7 +107,6 @@ export class UserController implements CrudController<UserEntity> {
     const createdUser = await this.userService.createUser(
       userDto
     );
-
     return createdUser.toDto({
       isActive: true,
     });

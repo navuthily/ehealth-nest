@@ -152,8 +152,6 @@ export class ApiConfigService {
     if (isNil(value)) {
       throw new Error(key + ' environment variable does not set'); // probably we should call process.exit() too to avoid locking the service
     }
-
     return value;
   }
 }
-// Na

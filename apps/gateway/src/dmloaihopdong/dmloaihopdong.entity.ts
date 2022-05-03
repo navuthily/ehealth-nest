@@ -11,10 +11,7 @@ export class DmloaihopdongEntity  {
 
   @Column({ name: 'TenLoaiHopDong' })
   tenloaihopdong?: string;
-  
 
-  @Column({ name: 'Active' })
-  active?: number;
 
   @OneToMany(() => NhanvienhopdongEntity, nhanvienhopdong => nhanvienhopdong.loaihopdong)
   nhanvienhopdongs:  NhanvienhopdongEntity[]

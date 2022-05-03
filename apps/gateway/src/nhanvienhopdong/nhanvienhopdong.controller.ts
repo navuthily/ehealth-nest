@@ -27,13 +27,15 @@ import { RolesGuard } from '@libs/guards/roles.guard';
   },
   query:{
     join:{
-      loaihopdong:{eager:true}
+      loaihopdong:{eager:true},
+      nhanvien:{eager:true},
     }
+    
   },
   routes: {
-    getOneBase: {
-      decorators: [Roles(RoleType.ADMIN)],
-    },
+    // getOneBase: {
+    //   decorators: [Roles(RoleType.ADMIN)],
+    // },
     deleteOneBase: {
       decorators: [Roles(RoleType.ADMIN)],
     },
@@ -50,8 +52,8 @@ import { RolesGuard } from '@libs/guards/roles.guard';
 
 })
 @Controller('nhanvienhopdong')
-@UseGuards(AuthGuard(), RolesGuard)
-@ApiBearerAuth()
+// @UseGuards(AuthGuard(), RolesGuard)
+// @ApiBearerAuth()
 @ApiTags('nhanvienhopdong')
 @UsePipes(new ValidationPipe())
 export class NhanvienhopdongController
