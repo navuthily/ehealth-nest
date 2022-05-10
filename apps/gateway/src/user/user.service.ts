@@ -15,7 +15,7 @@ import { UserRepository } from './user.repository';
 import { TypeOrmCrudService } from "@nestjsx/crud-typeorm";
 import { InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-
+import ses = require('node-ses');
 
 @Injectable()
 export class UserService extends TypeOrmCrudService<UserEntity> {
@@ -25,7 +25,6 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     public readonly awsS3Service: AwsS3Service,
     @InjectRepository(UserRepository) repo,
 
-
   ) {
     super(repo);
   }
@@ -33,7 +32,7 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
     userRegisterDto: UserRegisterDto,
     // file: IFile,
   ): Promise<UserEntity> {
-    const usercheck = await this.userRepository.findOne({username:userRegisterDto.username});
+    const usercheck = await this.userRepository.findOne({email:userRegisterDto.email});
     if(usercheck) throw new BadRequestException('user ready exist')
     const user = this.userRepository.create(userRegisterDto);
 
@@ -43,18 +42,35 @@ export class UserService extends TypeOrmCrudService<UserEntity> {
 
     return this.userRepository.save(user);
   }
+  
   async createUser(
     userDto: UserDto,
     // file: IFile,
   ): Promise<UserEntity> {
-    const usercheck = await this.userRepository.findOne({username:userDto.username});
-    if(usercheck) throw new BadRequestException('user ready exist')
+
+    const usercheckEmail = await this.userRepository.findOne({ email:userDto.email});
+    if(usercheckEmail) throw new BadRequestException(`user with email ${userDto.email} ready exist`)
     const user = this.userRepository.create(userDto);
 
     // if (file && !this.validatorService.isImage(file.mimetype)) {
     //   throw new FileNotImageException();
     // }
-
+    const client = ses.createClient({
+      key: process.env.KEY_SES ||'',
+      secret: process.env.SECRET_SES||'' ,
+    });
+    client.sendEmail(
+      {
+        to:userDto.email,
+        from: 'testing@nana21.online ',
+        subject: 'greetings',
+        message: `your <b>message</b> goes here ${userDto.email} - Your password is ${userDto.password}`,
+        altText: 'plain text',
+      },
+      function(err, data, res) {
+        console.log(data, 'aaaa');
+      },
+    );
     return this.userRepository.save(user);
   }
   async getUser(userId: number): Promise<UserDto> {

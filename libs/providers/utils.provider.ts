@@ -1,5 +1,5 @@
 /* eslint-disable padding-line-between-statements */
-// import bcrypt from 'bcrypt';
+// import * as bcrypt from 'bcrypt';
 
 import type { Optional } from '../types';
 
@@ -39,7 +39,7 @@ export class UtilsProvider {
       return Promise.resolve(false);
     }
 
-    // return bcrypt.compare(password, hash);
+    //return bcrypt.compare(password, hash);
     if (password !== hash) {
       return Promise.resolve(false);
     }

@@ -7,9 +7,9 @@ export class UserLoginDto {
   @ApiProperty()
   @IsString()
   @Trim()
-  readonly username: string;
+  email: string;
 
   @ApiProperty({ minLength: 6 })
   @IsString()
-  readonly password: string;
+  password: string;
 }

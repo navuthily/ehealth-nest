@@ -27,8 +27,8 @@ import { RolesGuard } from '@libs/guards/roles.guard';
   },
   query:{
     join:{
-      loaihopdong:{eager:true},
-      nhanvien:{eager:true},
+      loaihopdong:{eager:false},
+      nhanvien:{eager:false},
     }
     
   },

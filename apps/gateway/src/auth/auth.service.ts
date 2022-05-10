@@ -35,7 +35,7 @@ export class AuthService {
   async validateUser(userLoginDto: UserLoginDto): Promise<UserEntity> {
     
     const user = await this.userService.findOne({
-      username: userLoginDto.username,
+      email: userLoginDto.email,
     });
 
     console.log("////////", user)

@@ -29,8 +29,7 @@ import { DmtrinhdoModule } from './dmtrinhdo/dmtrinhdo.module';
 
 import { DmloaitinhluongEntity } from './dmloaitinhluong/dmloaitinhluong.entity';
 import { DmloaitinhluongModule } from './dmloaitinhluong/dmloaitinhluong.module';
-import { DmnganhangModule } from './dmnganhang/dmnganhang.module';
-import { DmnganhangEntity } from './dmnganhang/dmnganhang.entity';
+
 import { DmdonviEntity } from './dmdonvi/dmdonvi.entity';
 import { DmdonviModule } from './dmdonvi/dmdonvi.module';
 import { DmbophanModule } from './dmbophan/dmbophan.module';
@@ -47,13 +46,6 @@ import { DmloaihopdongModule } from './dmloaihopdong/dmloaihopdong.module';
 import { ChuyenkhoaModule } from './chuyenkhoa/chuyenkhoa.module';
 import { ChuyenkhoaEntity } from './chuyenkhoa/chuyenkhoa.entity';
 
-import { PhamvichungchihanhngheEntity } from './phamvichungchihanhnghe/phamvichungchihanhnghe.entity';
-import { PhamvichungchihanhngheModule } from './phamvichungchihanhnghe/phamvichungchihanhnghe.module';
-
-import { LoaibangcapModule } from './loaibangcap/loaibangcap.module';
-import { NhanvienbangcapModule } from './nhanvienbangcap/nhanvienbangcap.module';
-import { LoaibangcapEntity } from './loaibangcap/loaibangcap.entity';
-import { NhanvienbangcapEntity } from './nhanvienbangcap/nhanvienbangcap.entity';
 import { TemplateHdModule } from './templatehd/templatehd.module';
 import { TemplateHdEntity } from './templatehd/templatehd.entity';
 // import { GetIDLoaiQuanHeQuanHeBenhNhanModule } from './idloaiquanhe-moiquanhebenhnhan/idloaiquanhe-moiquanhebenhnhan.module';
@@ -117,7 +109,6 @@ class BuildServiceModule {}
           DmtrinhdoEntity,
 
           DmloaitinhluongEntity,
-          DmnganhangEntity,
           DmdonviEntity,
           DmbophanEntity,
           DmphongbanEntity,
@@ -125,11 +116,7 @@ class BuildServiceModule {}
           NhanvienhopdongEntity,
           DmloaihopdongEntity,
           ChuyenkhoaEntity,
-          PhamvichungchihanhngheEntity,
-          LoaibangcapEntity,
-          NhanvienbangcapEntity,
-          LoaibangcapEntity,
-          NhanvienbangcapEntity,
+
           TemplateHdEntity,
         ];
         configDB.logging = true;
@@ -186,7 +173,6 @@ class BuildServiceModule {}
     ChucdanhModule,
     DmtrinhdoModule,
     DmloaitinhluongModule,
-    DmnganhangModule,
     DmdonviModule,
     DmbophanModule,
     DmphongbanModule,
@@ -194,10 +180,7 @@ class BuildServiceModule {}
     NhanvienhopdongModule,
     DmloaihopdongModule,
     ChuyenkhoaModule,
-    PhamvichungchihanhngheModule,
-    LoaibangcapModule,
-    NhanvienbangcapModule,
-    NhanvienbangcapModule,
+
     TemplateHdModule,
   ],
 })

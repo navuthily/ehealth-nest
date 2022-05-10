@@ -23,11 +23,7 @@ export class UserRegisterDto {
   @Trim()
   readonly holotNhanVien: string;
 
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  @Trim()
-  readonly username: string;
+
 
   @ApiProperty()
   @IsString()

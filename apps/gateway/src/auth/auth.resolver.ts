@@ -15,11 +15,11 @@ export class AuthResolver {
   @Mutation((returns) => LoginPayloadDto)
   // @UseGuards(JwtAuthGuard)
   async login(
-    @Args('username') username: string,
+    @Args('email') email: string,
     @Args('password') password: string,
   ): Promise<LoginPayloadDto> {
     const userEntity = await this.authService.validateUser({
-      username,
+      email,
       password,
     });
     const token = await this.authService.createToken(userEntity);

@@ -31,10 +31,10 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
     // limit:20,
     join: {
       chucvu: {
-        eager:true
+        eager:false
       },
       chucdanh: {
-        eager: true,
+        eager: false,
       }, 
       dmhopdong: {
         eager: false
@@ -72,19 +72,8 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
         eager:false
       },
 
-      phamvichungchihanhnghe:{
-        eager:false
-      },
-      phamvihanhnghebosung:{
-        eager:false
-      },
 
-      nhanvienbangcaps:{
-        eager:false
-      },
-      'nhanvienbangcaps.loaibangcap':{
-        eager:false
-      },
+
     }
   }
 })
