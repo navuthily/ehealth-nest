@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { UserEntity } from '../user/user.entity';
@@ -17,10 +19,16 @@ export class ChucdanhEntity {
   @Column({ name: 'ten_chuc_danh' })
   tenchucdanh?: string;
 
-  @Column({ nullable: true, name: 'created_at' })
+  @CreateDateColumn({
+    nullable: true,
+    name: 'created_at',
+  })
   createdAt?: Date;
 
-  @Column({ nullable: true, name: 'updated_at' })
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt?: Date;
 
   @Column({ nullable: true, name: 'created_by' })

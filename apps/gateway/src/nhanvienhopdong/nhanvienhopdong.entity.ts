@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { DmloaihopdongEntity } from '../dmloaihopdong/dmloaihopdong.entity';
 import { UserEntity } from '../user/user.entity';
@@ -33,12 +35,22 @@ export class NhanvienhopdongEntity {
 
   @Column({nullable:true, name: 'created_by' })
   createdBy?: number;
+
   @Column({nullable:true, name: 'updated_by' })
   updatedBy?: number;
-  @Column({nullable:true, name: 'created_at' })
+
+  @CreateDateColumn({
+    nullable: true,
+    name: 'created_at',
+  })
   createdAt?: Date;
-  @Column({nullable:true, name: 'updated_at' })
+
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt?: Date;
+  
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhopdongs)
   @JoinColumn({ name: 'created_by' })
   nguoitao: UserEntity;

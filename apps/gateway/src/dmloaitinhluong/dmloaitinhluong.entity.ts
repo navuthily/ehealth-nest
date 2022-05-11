@@ -1,4 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+
 import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'LoaiTinhLuong' })
@@ -8,13 +18,19 @@ export class DmloaitinhluongEntity {
 
   @Column({ name: 'ten_loai_tinh_luong' })
   tenloaitinhluong?: string;
-  
-  @Column({nullable:true, name: 'created_at' })
+
+  @CreateDateColumn({
+    nullable: true,
+    name: 'created_at',
+  })
   createdAt?: Date;
-  
-  @Column({ nullable:true,name: 'updated_at' })
+
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt?: Date;
-  
+
   @Column({ nullable: true, name: 'created_by' })
   createdBy?: number;
 

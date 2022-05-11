@@ -103,7 +103,7 @@ export class ApiConfigService {
       },
       // subscribers: [UserSubscriber],
       migrationsRun: false,
-      synchronize: false, // Create table
+      synchronize: true, // Create table
       logging: 'all',
       namingStrategy: new SnakeNamingStrategy(),
       options: { encrypt: false },

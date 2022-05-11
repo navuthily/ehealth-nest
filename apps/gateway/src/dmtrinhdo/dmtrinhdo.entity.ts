@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
@@ -15,11 +17,17 @@ export class DmtrinhdoEntity {
 
   @Column({ name: 'ten_trinh_do' })
   tentrinhdo?: string;
-
-  @Column({ nullable: true, name: 'created_at' })
+  
+  @CreateDateColumn({
+    nullable: true,
+    name: 'created_at',
+  })
   createdAt?: Date;
 
-  @Column({ nullable: true, name: 'updated_at' })
+  @UpdateDateColumn({
+    nullable: true,
+    name: 'updated_at',
+  })
   updatedAt?: Date;
 
   @Column({ nullable: true, name: 'created_by' })

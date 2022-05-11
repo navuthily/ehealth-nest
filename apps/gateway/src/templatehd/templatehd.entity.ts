@@ -1,5 +1,5 @@
 import { AbstractEntity } from '@libs/common/abstract.entity';
-import { Column, Entity, JoinColumn, ManyToOne,PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne,PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 import { TemplatehdDTO } from './dto/templatehd-dto';
 import type { TemplatehdDtoOptions } from  './dto/templatehd-dto';
 import { UseDto } from '@libs/decorators/use-dto.decorator';
@@ -14,12 +14,18 @@ import { UserEntity } from '../user/user.entity';
   noidung?: string;
   @Column({nullable:true, name: 'ten_mau_hop_dong' })
   loaitemplate?: string;
-// thoi gian, nguoi tao update
 
-  @Column({nullable:true, name: 'created_at' })
-  createdAt?: Date;
-  @Column({ nullable:true,name: 'updated_at' })
-  updatedAt?: Date;
+@CreateDateColumn({
+  nullable: true,
+  name: 'created_at',
+})
+createdAt?: Date;
+
+@UpdateDateColumn({
+  nullable: true,
+  name: 'updated_at',
+})
+updatedAt?: Date;
 
   @Column({nullable:true, name: 'created_by' })
   createdBy?: number;

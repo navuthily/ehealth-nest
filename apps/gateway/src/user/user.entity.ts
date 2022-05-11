@@ -226,7 +226,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @OneToMany(() => DmloaikhoiEntity, (cd) => cd.nguoisua)
   nguoisualoaikhoi: DmloaikhoiEntity[];
-  //
 
   @OneToMany(() => DmloaitinhluongEntity, (cd) => cd.nguoitao)
   nguoitaoloaitinhluong: DmloaitinhluongEntity[];
