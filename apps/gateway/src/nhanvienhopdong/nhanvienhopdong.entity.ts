@@ -9,9 +9,9 @@ import {
 import { DmloaihopdongEntity } from '../dmloaihopdong/dmloaihopdong.entity';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'GD2_NhanVien_HopDong' })
+@Entity({ name: 'NhanVienHopDong' })
 export class NhanvienhopdongEntity {
-  @PrimaryGeneratedColumn({ name: 'ID_auto' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   
@@ -19,17 +19,16 @@ export class NhanvienhopdongEntity {
   nhanvienId: number;
 
 
-  @Column({nullable:true, name: 'ID_LoaiHopDong' })
+  @Column({nullable:true, name: 'loai_hop_dong_id' })
   loaihopdongId: number;
-  @Column({nullable:true, name: 'noidung' })
+  @Column({nullable:true, name: 'noi_dung' })
   noidunghopdong?: string;
-  @Column({nullable:true, name: 'NgayBatDau' })
+  @Column({nullable:true, name: 'ngay_bat_dau' })
   ngaybatdau: Date;
 
-  @Column({ nullable:true,name: 'NgayKetThuc' })
-  ngayketthuc: Date;
+  @Column({ nullable:true,name: 'ngay_ket_thuc'})
 
-  @Column({ nullable:true,name: 'Ghichu' })
+  @Column({ nullable:true,name: 'ghi_chu' })
   ghichu: string;
 
   @Column({nullable:true, name: 'created_by' })
@@ -50,13 +49,13 @@ export class NhanvienhopdongEntity {
 
 
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhd)
-  @JoinColumn({ name: 'nhanvienId' })
+  @JoinColumn({ name: 'nhanvien_id' })
   nhanvien: UserEntity;
 
   @ManyToOne(
     () => DmloaihopdongEntity,
     (loaihopdong) => loaihopdong.nhanvienhopdongs,
   )
-  @JoinColumn({ name: 'ID_LoaiHopDong' })
+  @JoinColumn({ name: 'loai_hop_dong_id' })
   loaihopdong: DmloaihopdongEntity;
 }

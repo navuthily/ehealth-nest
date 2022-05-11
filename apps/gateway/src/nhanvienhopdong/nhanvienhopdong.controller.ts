@@ -1,4 +1,3 @@
-
 import { AuthGuard } from '@libs/guards/auth.guard';
 import {
   Controller,
@@ -21,16 +20,17 @@ import { NhanvienhopdongEntity } from './nhanvienhopdong.entity';
 import { RoleType } from '@libs/common/constants/role-type';
 import { Roles } from '@libs/decorators/roles.decorator';
 import { RolesGuard } from '@libs/guards/roles.guard';
+import { CreateInterceptor } from '../interceptor/created-interceptor';
+import { UpdateInterceptor } from '../interceptor/updated-interceptor';
 @Crud({
   model: {
     type: NhanvienhopdongEntity,
   },
-  query:{
-    join:{
-      loaihopdong:{eager:false},
-      nhanvien:{eager:false},
-    }
-    
+  query: {
+    join: {
+      loaihopdong: { eager: false },
+      nhanvien: { eager: false },
+    },
   },
   routes: {
     // getOneBase: {
@@ -44,27 +44,25 @@ import { RolesGuard } from '@libs/guards/roles.guard';
     },
     updateOneBase: {
       decorators: [Roles(RoleType.ADMIN)],
+      interceptors: [new UpdateInterceptor()],
     },
-    createOneBase:{
+    createOneBase: {
       decorators: [Roles(RoleType.ADMIN)],
-    }
+      interceptors: [new CreateInterceptor()],
+    },
   },
-
 })
 @Controller('nhanvienhopdong')
-// @UseGuards(AuthGuard(), RolesGuard)
-// @ApiBearerAuth()
+@UseGuards(AuthGuard(), RolesGuard)
+@ApiBearerAuth()
 @ApiTags('nhanvienhopdong')
 @UsePipes(new ValidationPipe())
 export class NhanvienhopdongController
   implements CrudController<NhanvienhopdongEntity>
 {
-  constructor(
-    public service: NhanvienhopdongService,
-  ) {}
+  constructor(public service: NhanvienhopdongService) {}
 
   get base(): CrudController<NhanvienhopdongEntity> {
     return this;
   }
-
 }

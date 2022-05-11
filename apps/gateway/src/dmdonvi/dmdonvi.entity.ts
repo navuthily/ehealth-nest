@@ -1,17 +1,29 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'GD2_DM_DonVi' })
+@Entity({ name: 'DonVi' })
 export class DmdonviEntity  {
 
 
-  @PrimaryGeneratedColumn({ name: 'Id_DonVi' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'TenDonVi' })
+  @Column({ name: 'ten_don_vi' })
   tendonvi?: string;
   
+  @Column({nullable:true, name: 'created_at' })
+  createdAt?: Date;
+  
+  @Column({ nullable:true,name: 'updated_at' })
+  updatedAt?: Date;
 
+  @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nguoitaodonvi)
+  @JoinColumn({ name: 'created_by' })
+  nguoitao: UserEntity;
+
+  @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nguoisuadonvi)
+  @JoinColumn({ name: 'updated_by' })
+  nguoisua: UserEntity;
 
   @OneToMany(() => UserEntity, nhanvien => nhanvien.dmdonvi)
   nhanviens: UserEntity[]

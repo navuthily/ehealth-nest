@@ -7,9 +7,10 @@ import {
   Param,
   ParseIntPipe,
   Query,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 import { RoleType } from '@libs/common/constants/role-type';
 import { PageDto } from '@libs/common/dto/page.dto';
@@ -22,6 +23,11 @@ import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
 import { Crud, CrudController , CrudRequest, Override, ParsedBody, ParsedRequest} from '@nestjsx/crud';
 import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
+import { Roles } from '@libs/decorators/roles.decorator';
+import { UpdateInterceptor } from '../interceptor/updated-interceptor';
+import { CreateInterceptor } from '../interceptor/created-interceptor';
+import { AuthGuard } from '@libs/guards/auth.guard';
+import { RolesGuard } from '@libs/guards/roles.guard';
 
 @Crud({
   model: {
@@ -75,10 +81,33 @@ import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
 
 
     }
-  }
+  },
+  routes: {
+    // getOneBase: {
+    //   decorators: [Roles(RoleType.ADMIN)],
+    // },
+    deleteOneBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+    },
+    getManyBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+    },
+    updateOneBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+      interceptors: [new UpdateInterceptor()],
+    },
+    createOneBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+      interceptors: [new CreateInterceptor()],
+    },
+  },
 })
 @Controller('users')
+@ApiBearerAuth()
 @ApiTags('users')
+@UseGuards(AuthGuard(), RolesGuard)
+
+
 export class UserController implements CrudController<UserEntity> {
   constructor(
     private userService: UserService,

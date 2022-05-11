@@ -12,7 +12,7 @@ export abstract class AbstractEntity<
   DTO extends AbstractDto = AbstractDto,
   O = never,
 > {
-  @PrimaryGeneratedColumn({ name: 'ID_NhanVien' })
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({ nullable: true, type: 'datetime2' })

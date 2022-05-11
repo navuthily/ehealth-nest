@@ -14,11 +14,13 @@ export class CreateInterceptor implements NestInterceptor {
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     let { body,user } = context.switchToHttp().getRequest();
+    console.log("123213",user)
 
     const {createdBy, updatedBy, createdAt, updatedAt ,...props } = body
     
     context.switchToHttp().getRequest().body = { ...props, createdBy: user.id }
 
+    
     return next
       .handle()
       .pipe();

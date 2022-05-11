@@ -119,13 +119,13 @@ export class UserDto extends AbstractDto {
   loaikhoiId?: number;
 
   @FilterableField({ nullable: true })
-  createdBy?: string;
+  createdBy?: number;
 
   @FilterableField({ nullable: true })
-  updatedBy?: string;
+  updatedBy?: number;
 
   // Sử dụng khi gọi .toDto()
-  constructor(user: UserEntity, options?: UserDtoOptions) {
+  constructor(user: UserEntity) {
     super(user);
     this.nickname = user?.nickname;
     this.holotNhanVien = user?.holotNhanVien;

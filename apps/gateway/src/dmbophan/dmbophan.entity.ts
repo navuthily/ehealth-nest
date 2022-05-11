@@ -1,19 +1,41 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'GD2_DM_BoPhan' })
-export class DmbophanEntity  {
-
-
-  @PrimaryGeneratedColumn({ name: 'Id_BoPhan' })
+@Entity({ name: 'BoPhan' })
+export class DmbophanEntity {
+  @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ name: 'TenBoPhan' })
+  @Column({ name: 'ten_bo_phan' })
   tenbophan?: string;
+
+  @Column({ nullable: true, name: 'created_at' })
+  createdAt?: Date;
+
+  @Column({ nullable: true, name: 'updated_at' })
+  updatedAt?: Date;
   
+  @Column({ nullable: true, name: 'created_by' })
+  createdBy?: number;
 
+  @Column({ nullable: true, name: 'updated_by' })
+  updatedBy?: number;
 
-  @OneToMany(() => UserEntity, nhanvien => nhanvien.dmbophan)
-  nhanviens: UserEntity[]
+  @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nguoitaobophan)
+  @JoinColumn({ name: 'created_by' })
+  nguoitao: UserEntity;
 
+  @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nguoisuabophan)
+  @JoinColumn({ name: 'updated_by' })
+  nguoisua: UserEntity;
+
+  @OneToMany(() => UserEntity, (nhanvien) => nhanvien.dmbophan)
+  nhanviens: UserEntity[];
 }
