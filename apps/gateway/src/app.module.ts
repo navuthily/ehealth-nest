@@ -30,8 +30,6 @@ import { DmtrinhdoModule } from './dmtrinhdo/dmtrinhdo.module';
 import { DmloaitinhluongEntity } from './dmloaitinhluong/dmloaitinhluong.entity';
 import { DmloaitinhluongModule } from './dmloaitinhluong/dmloaitinhluong.module';
 
-import { DmdonviEntity } from './dmdonvi/dmdonvi.entity';
-import { DmdonviModule } from './dmdonvi/dmdonvi.module';
 import { DmbophanModule } from './dmbophan/dmbophan.module';
 import { DmbophanEntity } from './dmbophan/dmbophan.entity';
 import { DmphongbanEntity } from './dmphongban/dmphongban.entity';
@@ -109,7 +107,6 @@ class BuildServiceModule {}
           DmtrinhdoEntity,
 
           DmloaitinhluongEntity,
-          DmdonviEntity,
           DmbophanEntity,
           DmphongbanEntity,
           DmloaikhoiEntity,
@@ -173,7 +170,6 @@ class BuildServiceModule {}
     ChucdanhModule,
     DmtrinhdoModule,
     DmloaitinhluongModule,
-    DmdonviModule,
     DmbophanModule,
     DmphongbanModule,
     DmloaikhoiModule,

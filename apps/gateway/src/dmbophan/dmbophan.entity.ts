@@ -8,6 +8,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { DmphongbanEntity } from '../dmphongban/dmphongban.entity';
 import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'BoPhan' })
@@ -17,6 +18,9 @@ export class DmbophanEntity {
 
   @Column({ name: 'ten_bo_phan' })
   tenbophan?: string;
+
+  @Column({ name: 'phong_ban_id' })
+  phongbanId: number;
 
   @CreateDateColumn({
     nullable: true,
@@ -46,4 +50,8 @@ export class DmbophanEntity {
 
   @OneToMany(() => UserEntity, (nhanvien) => nhanvien.dmbophan)
   nhanviens: UserEntity[];
+  
+  @ManyToOne(() => DmphongbanEntity, (pb) => pb.bophans)
+  @JoinColumn({ name: 'phong_ban_id' })
+  phongban: DmphongbanEntity;
 }

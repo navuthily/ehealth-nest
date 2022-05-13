@@ -1,9 +1,9 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { DmbophanEntity } from '../dmbophan/dmbophan.entity';
 import { UserEntity } from '../user/user.entity';
 
 @Entity({ name: 'PhongBan' })
 export class DmphongbanEntity  {
-
 
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -37,7 +37,7 @@ export class DmphongbanEntity  {
   @JoinColumn({ name: 'updated_by' })
   nguoisua: UserEntity;
 
-  @OneToMany(() => UserEntity, nhanvien => nhanvien.dmphongban)
-  nhanviens: UserEntity[]
-
+  @OneToMany(() => DmbophanEntity, bophan => bophan.phongban)
+  bophans: DmbophanEntity[]
+  
 }

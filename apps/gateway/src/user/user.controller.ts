@@ -55,15 +55,11 @@ import { RolesGuard } from '@libs/guards/roles.guard';
       dmnganhang:{
         eager:false
       },   
-      dmdonvi:{
-        eager:false
-      },         
+        
       dmbophan:{
         eager:false
       },
-      dmphongban:{
-        eager:false
-      }, 
+
       dmloaikhoi:{
         eager:false
       },
@@ -72,6 +68,9 @@ import { RolesGuard } from '@libs/guards/roles.guard';
         eager:false
       },
       'nhanvienhopdongs.loaihopdong':{
+        eager:false
+      },
+      'dmbophan.phongban':{
         eager:false
       },
       chuyenkhoa:{

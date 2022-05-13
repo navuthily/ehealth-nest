@@ -17,6 +17,14 @@ import { AuthGuard } from '@libs/guards/auth.guard';
   model: {
     type: DmbophanEntity,
   },
+  query: {
+    // limit:20,
+    join: {
+      phongban: {
+        eager:false
+      }
+    }
+  },
   routes: {
     // getOneBase: {
     //   decorators: [Roles(RoleType.ADMIN)],

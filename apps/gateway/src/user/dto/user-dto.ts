@@ -1,17 +1,10 @@
 import {
-  BeforeCreateOne,
-  BeforeUpdateOne,
-  CreateOneInputType,
+
   FilterableField,
   PagingStrategies,
   QueryOptions,
-  UpdateOneInputType,
 } from '@nestjs-query/query-graphql';
 import { ObjectType } from '@nestjs/graphql';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { AbstractUserInput } from '@libs/common/dto/abstract-user.input';
-import { UserContext } from '../../auth/auth.interfaces';
-
 import { AbstractDto } from '@libs/common/dto/abstract.dto';
 import type { UserEntity } from '../user.entity';
 
@@ -95,13 +88,7 @@ export class UserDto extends AbstractDto {
   trinhdoId?: number;
 
   @FilterableField({ nullable: true })
-  donviId?: number;
-
-  @FilterableField({ nullable: true })
   bophanId?: number;
-
-  @FilterableField({ nullable: true })
-  phongbanId?: number;
 
   @FilterableField({ nullable: true })
   chucvuId?: number;
@@ -130,7 +117,6 @@ export class UserDto extends AbstractDto {
     this.nickname = user?.nickname;
     this.holotNhanVien = user?.holotNhanVien;
     this.tennhanvien = user?.tennhanvien;
-    this.phongbanId = user?.phongbanId;
     // this.isActive = options?.isActive;
   }
 }

@@ -9,7 +9,6 @@ import { ChucvuEntity } from '../chucvu/chucvu.entity';
 import { ChucdanhEntity } from '../chucdanh/chucdanh.entity';
 import { DmtrinhdoEntity } from '../dmtrinhdo/dmtrinhdo.entity';
 import { DmloaitinhluongEntity } from '../dmloaitinhluong/dmloaitinhluong.entity';
-import { DmdonviEntity } from '../dmdonvi/dmdonvi.entity';
 import { DmbophanEntity } from '../dmbophan/dmbophan.entity';
 import { DmphongbanEntity } from '../dmphongban/dmphongban.entity';
 import { DmloaikhoiEntity } from '../dmloaikhoi/dmloaikhoi.entity';
@@ -91,14 +90,9 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'trinh_do_id' })
   trinhdoId?: number;
 
-  @Column({ nullable: true, name: 'don_vi_id' })
-  donviId?: number;
-
   @Column({ nullable: true, name: 'bo_phan_id' })
   bophanId?: number;
 
-  @Column({ nullable: true, name: 'phong_ban_id' })
-  phongbanId?: number;
 
   @Column({ nullable: true, name: 'chuc_vu_id' })
   chucvuId?: number;
@@ -142,17 +136,11 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @JoinColumn({ name: 'loai_tinh_luong_id' })
   dmloaitinhluong: DmloaitinhluongEntity;
 
-  @ManyToOne(() => DmdonviEntity, (dmdonvi) => dmdonvi.nhanviens)
-  @JoinColumn({ name: 'don_vi_id' })
-  dmdonvi: DmdonviEntity;
 
   @ManyToOne(() => DmbophanEntity, (dmbophan) => dmbophan.nhanviens)
   @JoinColumn({ name: 'bo_phan_id' })
   dmbophan: DmbophanEntity;
 
-  @ManyToOne(() => DmphongbanEntity, (dmphongban) => dmphongban.nhanviens)
-  @JoinColumn({ name: 'phong_ban_id' })
-  dmphongban: DmphongbanEntity;
 
   @ManyToOne(() => DmloaikhoiEntity, (dmloaikhoi) => dmloaikhoi.nhanviens)
   @JoinColumn({ name: 'loai_khoi_id' })
@@ -208,12 +196,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @OneToMany(() => DmbophanEntity, (cd) => cd.nguoisua)
   nguoisuabophan: DmbophanEntity[];
-
-  @OneToMany(() => DmdonviEntity, (cd) => cd.nguoitao)
-  nguoitaodonvi: DmdonviEntity[];
-
-  @OneToMany(() => DmdonviEntity, (cd) => cd.nguoisua)
-  nguoisuadonvi: DmdonviEntity[];
 
   @OneToMany(() => DmloaihopdongEntity, (cd) => cd.nguoitao)
   nguoitaoloaihopdong: DmloaihopdongEntity[];
