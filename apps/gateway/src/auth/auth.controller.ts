@@ -42,9 +42,7 @@ export class AuthController {
   async userLogin(
     @Body() userLoginDto: UserLoginDto,
   ): Promise<LoginPayloadDto> {
-    console.log(userLoginDto,'USER.....................')
     const userEntity = await this.authService.validateUser(userLoginDto);
-// console.log(userEntity, 'Thong tin nguoi dung')
 
     const token = await this.authService.createToken(userEntity);
 

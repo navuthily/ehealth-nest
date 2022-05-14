@@ -21,7 +21,14 @@ import { UserDto } from './dto/user-dto';
 import { UsersPageOptionsDto } from './dto/users-page-options.dto';
 import { UserEntity } from './user.entity';
 import { UserService } from './user.service';
-import { Crud, CrudController , CrudRequest, Override, ParsedBody, ParsedRequest} from '@nestjsx/crud';
+import {
+  Crud,
+  CrudController,
+  CrudRequest,
+  Override,
+  ParsedBody,
+  ParsedRequest,
+} from '@nestjsx/crud';
 import { UserRegisterDto } from '../auth/dto/UserRegisterDto';
 import { Roles } from '@libs/decorators/roles.decorator';
 import { UpdateInterceptor } from '../interceptor/updated-interceptor';
@@ -37,54 +44,51 @@ import { RolesGuard } from '@libs/guards/roles.guard';
     // limit:20,
     join: {
       chucvu: {
-        eager:false
+        eager: false,
       },
       chucdanh: {
         eager: false,
-      }, 
+      },
       dmhopdong: {
-        eager: false
-      }, 
+        eager: false,
+      },
       dmtrinhdo: {
-        eager: false
-      },  
-
-      dmloaitinhluong:{
-        eager: false
-      },
-      dmnganhang:{
-        eager:false
-      },   
-        
-      dmbophan:{
-        eager:false
+        eager: false,
       },
 
-      dmloaikhoi:{
-        eager:false
+      dmloaitinhluong: {
+        eager: false,
+      },
+      dmnganhang: {
+        eager: false,
       },
 
-      nhanvienhopdongs:{
-        eager:false
-      },
-      'nhanvienhopdongs.loaihopdong':{
-        eager:false
-      },
-      'dmbophan.phongban':{
-        eager:false
-      },
-      chuyenkhoa:{
-        eager:false
+      dmbophan: {
+        eager: false,
       },
 
+      dmloaikhoi: {
+        eager: false,
+      },
 
-
-    }
+      nhanvienhopdongs: {
+        eager: false,
+      },
+      'nhanvienhopdongs.loaihopdong': {
+        eager: false,
+      },
+      'dmbophan.phongban': {
+        eager: false,
+      },
+      chuyenkhoa: {
+        eager: false,
+      },
+    },
   },
   routes: {
-    // getOneBase: {
-    //   decorators: [Roles(RoleType.ADMIN)],
-    // },
+    getOneBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+    },
     deleteOneBase: {
       decorators: [Roles(RoleType.ADMIN)],
     },
@@ -105,25 +109,18 @@ import { RolesGuard } from '@libs/guards/roles.guard';
 @ApiBearerAuth()
 @ApiTags('users')
 @UseGuards(AuthGuard(), RolesGuard)
-
-
 export class UserController implements CrudController<UserEntity> {
   constructor(
     private userService: UserService,
     private readonly translationService: TranslationService,
-    public service: UserService
+    public service: UserService,
   ) {}
   get base(): CrudController<UserEntity> {
     return this;
   }
   @Override()
-  async createOne(
-    @Body() userDto: UserDto,
-  ): Promise<UserDto> {
-
-    const createdUser = await this.userService.createUser(
-      userDto
-    );
+  async createOne(@Body() userDto: UserDto): Promise<UserDto> {
+    const createdUser = await this.userService.createUser(userDto);
     return createdUser.toDto({
       isActive: true,
     });

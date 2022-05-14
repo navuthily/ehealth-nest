@@ -33,9 +33,9 @@ import { UpdateInterceptor } from '../interceptor/updated-interceptor';
     },
   },
   routes: {
-    // getOneBase: {
-    //   decorators: [Roles(RoleType.ADMIN)],
-    // },
+    getOneBase: {
+      decorators: [Roles(RoleType.ADMIN)],
+    },
     deleteOneBase: {
       decorators: [Roles(RoleType.ADMIN)],
     },

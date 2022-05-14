@@ -93,7 +93,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'bo_phan_id' })
   bophanId?: number;
 
-
   @Column({ nullable: true, name: 'chuc_vu_id' })
   chucvuId?: number;
 
@@ -109,11 +108,9 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'loai_khoi_id' })
   loaikhoiId?: number;
 
-
-
   @Column({ nullable: true, name: 'created_by' })
   createdBy?: number;
-  
+
   @Column({ nullable: true, name: 'updated_by' })
   updatedBy?: number;
 
@@ -136,11 +133,9 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @JoinColumn({ name: 'loai_tinh_luong_id' })
   dmloaitinhluong: DmloaitinhluongEntity;
 
-
   @ManyToOne(() => DmbophanEntity, (dmbophan) => dmbophan.nhanviens)
   @JoinColumn({ name: 'bo_phan_id' })
   dmbophan: DmbophanEntity;
-
 
   @ManyToOne(() => DmloaikhoiEntity, (dmloaikhoi) => dmloaikhoi.nhanviens)
   @JoinColumn({ name: 'loai_khoi_id' })
@@ -170,8 +165,6 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
     (nhanvienhopdong) => nhanvienhopdong.nguoisua,
   )
   nhanvienhopdong: NhanvienhopdongEntity[];
-
-
 
   @OneToMany(() => ChucvuEntity, (cv) => cv.nguoitao)
   nguoitaochucvu: ChucvuEntity[];
@@ -226,5 +219,4 @@ export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
 
   @OneToMany(() => DmtrinhdoEntity, (cd) => cd.nguoisua)
   nguoisuatrinhdo: DmtrinhdoEntity[];
-
 }

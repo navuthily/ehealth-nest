@@ -38,8 +38,6 @@ export class AuthService {
       email: userLoginDto.email,
     });
 
-    console.log("////////", user)
-    
     const isPasswordValid = await UtilsProvider.validateHash(
       userLoginDto.password,
       user?.password,

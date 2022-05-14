@@ -14,10 +14,5 @@ describe('AuthController', () => {
     }).compile();
   });
 
-  // describe('root', () => {
-  //   it('should return "http://localhost"', () => {
-  //     const appController = app.get<AuthController>(AuthController);
-  //     expect(appController.root()).toBe('http://localhost');
-  //   });
-  // });
+
 });
