@@ -10,7 +10,7 @@ import { UserEntity } from '../user/user.entity';
 
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
-  @Column({nullable:true, name: 'noi_dung' })
+  @Column({nullable:true, name: 'noi_dung', type:'nvarchar',length:'max' })
   noidung?: string;
   @Column({nullable:true, name: 'ten_mau_hop_dong' })
   loaitemplate?: string;

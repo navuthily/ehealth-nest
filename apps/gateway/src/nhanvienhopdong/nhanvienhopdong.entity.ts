@@ -23,7 +23,7 @@ export class NhanvienhopdongEntity {
 
   @Column({nullable:true, name: 'loai_hop_dong_id' })
   loaihopdongId: number;
-  @Column({nullable:true, name: 'noi_dung' })
+  @Column({nullable:true, name: 'noi_dung', type:'nvarchar',length:'max' })
   noidunghopdong?: string;
   @Column({nullable:true, name: 'ngay_bat_dau' })
   ngaybatdau: Date;
