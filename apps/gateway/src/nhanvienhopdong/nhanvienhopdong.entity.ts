@@ -26,10 +26,11 @@ export class NhanvienhopdongEntity {
   @Column({nullable:true, name: 'noi_dung', type:'nvarchar',length:'max' })
   noidunghopdong?: string;
   @Column({nullable:true, name: 'ngay_bat_dau' })
-  ngaybatdau: Date;
+  ngaybatdauhopdong: Date;
 
+  
   @Column({ nullable:true,name: 'ngay_ket_thuc'})
-
+  ngayketthuchopdong: Date;
   @Column({ nullable:true,name: 'ghi_chu' })
   ghichu: string;
 
