@@ -1,0 +1,22 @@
+{
+  "language": "ts",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/gateway",
+  "compilerOptions": {
+    "plugins": ["@nestjs/swagger/plugin"],
+    "tsConfigPath": "apps/gateway/tsconfig.json"
+  },
+  "monorepo": false,
+  "root": "apps/gateway",
+  "projects": {
+    "gateway": {
+      "type": "application",
+      "root": "apps/gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/gateway/tsconfig.json"
+      }
+    }
+  }
+}

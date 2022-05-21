@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": false,
+    "noImplicitAny": false,
+    "removeComments": true,
+    "noLib": false,
+    "allowSyntheticDefaultImports": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "ES2017",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": true,
+    "strictNullChecks": true,
+    "moduleResolution": "node",
+    "paths": {
+      "@libs/*": ["libs/*"],
+    }
+  },
+  "include": ["src/**/*", "test/**/*", "ormconfig.ts", "libs/common", "libs/entity-subscribers"],
+  "exclude": ["node_modules", "dist"]
+}
