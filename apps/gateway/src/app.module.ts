@@ -121,17 +121,7 @@ class BuildServiceModule {}
       },
       inject: [ApiConfigService],
     }),
-    TypeOrmModule.forRootAsync({
-      imports: [SharedModule],
-      name: 'SV_FAMILY_',
-      useFactory: (configService: ApiConfigService) => {
-        const configDB = { ...configService.typeOrmConfig('SV_FAMILY_') };
-        configDB.entities = [];
-        configDB.logging = true;
-        return configDB;
-      },
-      inject: [ApiConfigService],
-    }),
+
     // TypeOrmModule.forRootAsync({
     //   imports: [SharedModule],
     //   name: 'SV_THANHVIEN_',

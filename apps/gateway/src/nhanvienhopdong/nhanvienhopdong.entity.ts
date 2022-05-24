@@ -11,33 +11,35 @@ import {
 import { DmloaihopdongEntity } from '../dmloaihopdong/dmloaihopdong.entity';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'NhanVienHopDong' })
+@Entity({ name: 'nhanvienhopdong' })
 export class NhanvienhopdongEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  
-  @Column({nullable:true, name: 'nhanvien_id' })
+  @Column({ nullable: true, name: 'nhanvien_id' })
   nhanvienId: number;
 
-
-  @Column({nullable:true, name: 'loai_hop_dong_id' })
+  @Column({ nullable: true, name: 'loai_hop_dong_id' })
   loaihopdongId: number;
-  @Column({nullable:true, name: 'noi_dung', type:'nvarchar',length:'max' })
+  @Column({
+    nullable: true,
+    name: 'noi_dung',
+    type: 'varchar',
+    length: '65535',
+  })
   noidunghopdong?: string;
-  @Column({nullable:true, name: 'ngay_bat_dau' })
+  @Column({ nullable: true, name: 'ngay_bat_dau' })
   ngaybatdauhopdong: Date;
 
-  
-  @Column({ nullable:true,name: 'ngay_ket_thuc'})
+  @Column({ nullable: true, name: 'ngay_ket_thuc' })
   ngayketthuchopdong: Date;
-  @Column({ nullable:true,name: 'ghi_chu' })
+  @Column({ nullable: true, name: 'ghi_chu' })
   ghichu: string;
 
-  @Column({nullable:true, name: 'created_by' })
+  @Column({ nullable: true, name: 'created_by' })
   createdBy?: number;
 
-  @Column({nullable:true, name: 'updated_by' })
+  @Column({ nullable: true, name: 'updated_by' })
   updatedBy?: number;
 
   @CreateDateColumn({
@@ -51,7 +53,7 @@ export class NhanvienhopdongEntity {
     name: 'updated_at',
   })
   updatedAt?: Date;
-  
+
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhopdongs)
   @JoinColumn({ name: 'created_by' })
   nguoitao: UserEntity;
@@ -59,7 +61,6 @@ export class NhanvienhopdongEntity {
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhopdong)
   @JoinColumn({ name: 'updated_by' })
   nguoisua: UserEntity;
-
 
   @ManyToOne(() => UserEntity, (nhanvien) => nhanvien.nhanvienhd)
   @JoinColumn({ name: 'nhanvien_id' })

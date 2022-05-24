@@ -3,7 +3,6 @@ import {
   BeforeUpdate,
   Column,
   PrimaryGeneratedColumn,
-
 } from 'typeorm';
 import type { Constructor } from '../types';
 import type { AbstractDto } from './dto/abstract.dto';
@@ -15,10 +14,10 @@ export abstract class AbstractEntity<
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
-  @Column({ nullable: true, type: 'datetime2' })
+  @Column({ nullable: true, type: 'datetime' })
   createdAt: Date;
 
-  @Column({ nullable: true, type: 'datetime2' })
+  @Column({ nullable: true, type: 'datetime' })
   updatedAt: Date;
 
   @BeforeInsert()

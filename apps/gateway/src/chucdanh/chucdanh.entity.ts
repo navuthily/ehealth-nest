@@ -11,7 +11,7 @@ import {
 
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'ChucDanh' })
+@Entity({ name: 'chucdanh' })
 export class ChucdanhEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

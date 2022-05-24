@@ -18,7 +18,7 @@ import { ChuyenkhoaEntity } from '../chuyenkhoa/chuyenkhoa.entity';
 import { TemplateHdEntity } from '../templatehd/templatehd.entity';
 import { DmloaihopdongEntity } from '../dmloaihopdong/dmloaihopdong.entity';
 
-@Entity({ name: 'NhanVien' })
+@Entity({ name: 'nhanvien' })
 @UseDto(UserDto)
 export class UserEntity extends AbstractEntity<UserDto, UserDtoOptions> {
   @Column({ nullable: true, name: 'ho_lot' })

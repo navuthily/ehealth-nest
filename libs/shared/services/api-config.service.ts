@@ -72,7 +72,7 @@ export class ApiConfigService {
 
         return entity as string;
       });
-      
+
       const migrationContext = require.context(
         './../../database/migrations',
         false,
@@ -92,21 +92,17 @@ export class ApiConfigService {
       migrations,
       keepConnectionAlive: !this.isTest,
       dropSchema: this.isTest,
-      type: 'mssql',
-      host: this.getString(serverName + 'DB_HOST'),
-      port: this.getNumber('DB_PORT'),
-      username: this.getString(serverName + 'DB_USERNAME'),
-      password: this.getString(serverName + 'DB_PASSWORD'),
-      database: this.getString(serverName + 'DB_DATABASE'),
-      pool: {
-        max: 10,
-      },
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '',
+      database: 'authentication',
       // subscribers: [UserSubscriber],
       migrationsRun: false,
       synchronize: false, // Create table
       logging: 'all',
       namingStrategy: new SnakeNamingStrategy(),
-      options: { encrypt: false },
     };
   }
 

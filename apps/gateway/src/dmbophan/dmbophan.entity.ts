@@ -11,7 +11,7 @@ import {
 import { DmphongbanEntity } from '../dmphongban/dmphongban.entity';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'BoPhan' })
+@Entity({ name: 'bophan' })
 export class DmbophanEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
@@ -33,7 +33,7 @@ export class DmbophanEntity {
     name: 'updated_at',
   })
   updatedAt?: Date;
-  
+
   @Column({ nullable: true, name: 'created_by' })
   createdBy?: number;
 
@@ -50,7 +50,7 @@ export class DmbophanEntity {
 
   @OneToMany(() => UserEntity, (nhanvien) => nhanvien.dmbophan)
   nhanviens: UserEntity[];
-  
+
   @ManyToOne(() => DmphongbanEntity, (pb) => pb.bophans)
   @JoinColumn({ name: 'phong_ban_id' })
   phongban: DmphongbanEntity;

@@ -11,7 +11,7 @@ import {
 
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'LoaiTinhLuong' })
+@Entity({ name: 'loaitinhluong' })
 export class DmloaitinhluongEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;

@@ -10,14 +10,14 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 
-@Entity({ name: 'TrinhDo' })
+@Entity({ name: 'trinhdo' })
 export class DmtrinhdoEntity {
   @PrimaryGeneratedColumn({ name: 'id' })
   id: number;
 
   @Column({ name: 'ten_trinh_do' })
   tentrinhdo?: string;
-  
+
   @CreateDateColumn({
     nullable: true,
     name: 'created_at',
