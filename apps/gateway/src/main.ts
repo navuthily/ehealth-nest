@@ -94,7 +94,12 @@ async function bootstrap() {
     },
   });
 
-  app.enableCors();
+  // app.enableCors();
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   app.useStaticAssets(resolve('./dist/public'));
   //app.setGlobalPrefix('/api')
   const port = process.env.PORT || 3000;
