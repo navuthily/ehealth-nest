@@ -75,7 +75,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://nhaxe-b3567.firebaseio.com',
   });
-  app.listen(`${process.env.SV_GATEWAY_PORT}` || 8000);
+  app.listen(`${process.env.PORT}` || 8000);
   return app;
 }
 void bootstrap();
