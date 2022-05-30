@@ -20,11 +20,9 @@ import {
   patchTypeORMRepositoryWithBaseRepository,
 } from 'typeorm-transactional-cls-hooked';
 
-
 async function bootstrap(): Promise<NestFastifyApplication> {
   initializeTransactionalContext();
   patchTypeORMRepositoryWithBaseRepository();
-
 
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
@@ -32,7 +30,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
       logger: {
         file: '../../text.txt', // Will use pino.destination()
       },
-    })
+    }),
     // { cors: true },
   );
 
@@ -42,7 +40,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     origin: true,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-  })
+  });
 
   app.use(
     rateLimit({
@@ -51,20 +49,12 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     }),
   );
 
-
-
   const config = new DocumentBuilder()
     .setTitle('APIs')
     .setDescription('The APIs description')
     .addBearerAuth()
     .setVersion('1.0')
     .build();
-    // .setTitle('Cats example')
-    // .setDescription('The cats API description')
-    // .setVersion('1.0')
-    // .addBearerAuth()
-    // .addTag('cats')
-    // .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
@@ -73,22 +63,6 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     prefix: '/',
   });
 
-  // app.useGlobalPipes(
-  //   new ValidationPipe({
-  //     whitelist: true,
-  //     errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
-  //     transform: true,
-  //     dismissDefaultMessages: true,
-  //     exceptionFactory: (errors) => new UnprocessableEntityException(errors),
-  //   }),
-  // );
-
-  // app
-  //   .getHttpAdapter()
-  //   .getInstance()
-  //   .addHook('onRoute', (opts) => {
-  //     console.log(opts.url);
-  //   });
   app.useGlobalInterceptors(new LoggingInterceptor());
   const serviceAccount: ServiceAccount = {
     projectId: 'nhaxe-b3567',
@@ -101,7 +75,7 @@ async function bootstrap(): Promise<NestFastifyApplication> {
     credential: admin.credential.cert(serviceAccount),
     databaseURL: 'https://nhaxe-b3567.firebaseio.com',
   });
-  app.listen(`${process.env.SV_GATEWAY_PORT}`, '0.0.0.0');
+  app.listen(`${process.env.SV_GATEWAY_PORT}` || 8000);
   return app;
 }
 void bootstrap();
