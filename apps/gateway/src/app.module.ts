@@ -122,20 +122,6 @@ class BuildServiceModule {}
       inject: [ApiConfigService],
     }),
 
-    // TypeOrmModule.forRootAsync({
-    //   imports: [SharedModule],
-    //   name: 'SV_THANHVIEN_',
-    //   useFactory: (configService: ApiConfigService) => {
-    //     const configDB = { ...configService.typeOrmConfig('SV_THANHVIEN_') };
-    //     configDB.entities = [
-    //       DMlanguageEntity,
-    //       DMlabelEntity,
-    //       DMlabellanguageEntity,
-    //     ];
-    //     return configDB;
-    //   },
-    //   inject: [ApiConfigService],
-    // }),
     I18nModule.forRootAsync({
       useFactory: (configService: ApiConfigService) => ({
         fallbackLanguage: configService.fallbackLanguage,

@@ -20,8 +20,7 @@ export class TemplateHdEntity {
   @Column({
     nullable: true,
     name: 'noi_dung',
-    type: 'varchar',
-    length: '65535',
+    type: 'text',
   })
   noidung?: string;
   @Column({ nullable: true, name: 'ten_mau_hop_dong' })

@@ -24,8 +24,7 @@ export class NhanvienhopdongEntity {
   @Column({
     nullable: true,
     name: 'noi_dung',
-    type: 'varchar',
-    length: '65535',
+    type: 'text',
   })
   noidunghopdong?: string;
   @Column({ nullable: true, name: 'ngay_bat_dau' })
