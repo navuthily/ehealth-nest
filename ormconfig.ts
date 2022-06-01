@@ -8,11 +8,11 @@ import type { TypeOrmModuleOptions } from '@nestjs/typeorm';
 const configs: TypeOrmModuleOptions & { seeds: string[]; factories: string[] } =
   {
     type: 'mysql',
-    host: 'bpuquygpfgcgeo4fjkks-mysql.services.clever-cloud.com',
+    host: 'bp9aco9m7rh7y0yzzash-mysql.services.clever-cloud.com',
     port: 3306,
-    username: 'ufaqi3gzlmpfuwdr',
-    password: 'tHU17ojPwILywzgTuHf5',
-    database: 'bpuquygpfgcgeo4fjkks',
+    username: 'u1gr5f9dbcrwagwh',
+    password: '6Z0hbQeGj9FoXQQR3oJD',
+    database: 'bp9aco9m7rh7y0yzzash',
     // namingStrategy: new SnakeNamingStrategy(),
     // subscribers: [TGLHKNSubscriber],
     entities: ['src/modules/**/*.entity{.ts,.js}'],

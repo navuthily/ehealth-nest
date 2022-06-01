@@ -79,7 +79,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const options = new DocumentBuilder()
-    .setTitle('User authentication')
+    .setTitle('User bp9aco9m7rh7y0yzzash')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('user')
