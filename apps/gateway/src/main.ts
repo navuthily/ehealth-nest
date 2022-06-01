@@ -79,7 +79,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   const options = new DocumentBuilder()
-    .setTitle('User authentication')
+    .setTitle('User bp9aco9m7rh7y0yzzash')
     .setDescription('The cats API description')
     .setVersion('1.0')
     .addTag('user')
@@ -94,7 +94,12 @@ async function bootstrap() {
     },
   });
 
-  app.enableCors();
+  // app.enableCors();
+  app.enableCors({
+    origin: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true,
+  });
   app.useStaticAssets(resolve('./dist/public'));
   //app.setGlobalPrefix('/api')
   const port = process.env.PORT || 3000;
